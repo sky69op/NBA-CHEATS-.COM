@@ -8,19 +8,23 @@ const art = [
   '/images/nba-2k27/nba2k27-main.webp',
   '/images/nba-2k27/nba2k27-attributes.webp',
   '/images/nba-2k27/nba2k27-misc.webp',
-  '/images/nba-2k27/nba2k27-main-product-card.png',
+  '/images/nba-2k27/nba2k27-main-product-card.webp',
 ];
 type Draft = { slug: string; title: string; tag: string; desc: string; href: string; art?: string; body: BlogBlock[] };
 const p = (text: string): BlogBlock => ({ type: 'p', text });
 const h = (text: string): BlogBlock => ({ type: 'h2', text });
 const list = (...items: string[]): BlogBlock => ({ type: 'ul', items });
-const post = (draft: Draft, index: number): BlogPostFull => ({
+const post = (draft: Draft, index: number): BlogPostFull => {
+  const image = draft.art ?? art[index % art.length];
+  const wideArt = /(?:nba2k27-main-product-card|cloud-dma-concept-v2)\.webp$/.test(image);
+  return {
   slug: draft.slug, title: draft.title, h1: draft.title, tag: draft.tag, desc: draft.desc,
   metaTitle: draft.title, metaDescription: draft.desc, date, readTime: '6 min', featured: true,
-  author: 'NBA2K27 Cheats Editorial', image: draft.art ?? art[index % art.length],
-  imageAlt: 'NBA 2K27 editorial basketball illustration.', imageWidth: 1330, imageHeight: 840,
+  author: 'NBA2K27 Cheats Editorial', image,
+  imageAlt: 'NBA 2K27 editorial basketball illustration.', imageWidth: wideArt ? 1672 : 1330, imageHeight: wideArt ? 941 : 840,
   body: [...draft.body, { type: 'cta', title: 'Check the current listing', text: 'Review the selected product page and confirm current scope before purchasing.', href: draft.href }],
-});
+  };
+};
 
 const drafts: Draft[] = [
   {
@@ -221,7 +225,7 @@ const drafts: Draft[] = [
   {
     slug: 'cloud-dma-nba-2k27-product-questions', title: 'Cloud DMA for NBA 2K27: Questions to Resolve Before Purchase', tag: 'Cloud DMA',
     desc: 'Cloud DMA is a high-intent NBA 2K27 product term. Use this question set to clarify function, requirements, and limits first.', href: '/cloud-dma/',
-    art: '/images/nba-2k27/cloud-dma-concept-v2.png',
+    art: '/images/nba-2k27/cloud-dma-concept-v2.webp',
     body: [
       p('Cloud DMA appears in NBA 2K27 product searches alongside terms such as remote access, DMA, hardware, and cloud setup. Those terms are not a product specification. The current seller must explain what its specific Cloud DMA listing is, what it requires, and what it does not claim to do.'),
       h('Clarify the category before comparing it'),
@@ -235,7 +239,7 @@ const drafts: Draft[] = [
   {
     slug: 'cloud-dma-vs-hwid-spoofer-nba-2k27', title: 'Cloud DMA vs HWID Spoofer for NBA 2K27: Different Product Questions', tag: 'Cloud DMA',
     desc: 'Cloud DMA and HWID Spoofer are different NBA 2K27 product categories. Compare their stated scope without assuming shared functionality.', href: '/cloud-dma/',
-    art: '/images/nba-2k27/cloud-dma-concept-v2.png',
+    art: '/images/nba-2k27/cloud-dma-concept-v2.webp',
     body: [
       p('Cloud DMA and HWID Spoofer are often grouped together in search results because both appear in broader cheat-market vocabulary. Grouping them does not make them interchangeable. Each listing needs its own explanation of function, prerequisites, platform scope, plan terms, and limitations.'),
       h('Compare claims, not labels'),
@@ -314,7 +318,7 @@ const drafts: Draft[] = [
   {
     slug: 'hwid-and-account-appeals-different-questions', title: 'HWID and Account Appeals: Why They Are Different Questions', tag: 'HWID Spoofer',
     desc: 'Learn why an account appeal and a hardware question require different evidence, and what to confirm before buying either product.', href: '/hwid-spoofer/',
-    art: '/images/nba-2k27/cloud-dma-concept-v2.png',
+    art: '/images/nba-2k27/cloud-dma-concept-v2.webp',
     body: [
       p('An account restriction and a hardware-related question are not interchangeable. UGC concerns appeal context; HWID Spoofer is a separate utility whose current scope and NBA 2K27 applicability must be confirmed with support.'),
       h('Start with what is actually known'),

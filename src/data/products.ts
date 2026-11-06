@@ -302,7 +302,7 @@ const showcaseSlides = slide(...SHOWCASE_GALLERY_KEYS);
 /** Product-detail/catalog-only image. It is deliberately not part of the homepage hero slider. */
 const eliteProductSlides: ProductSlide[] = [
   {
-    src: '/images/nba-2k27/nba2k27-main-product-card.png',
+    src: '/images/nba-2k27/nba2k27-main-product-card.webp',
     width: 1672,
     height: 941,
     alt: 'Original violet basketball and hoop illustration for NBA2K27 Cheats.',
@@ -367,7 +367,7 @@ const ugcShowcaseSlides: ProductSlide[] = [
 
 const cloudDmaShowcaseSlides: ProductSlide[] = [
   {
-    src: '/images/nba-2k27/cloud-dma-concept-v2.png',
+    src: '/images/nba-2k27/cloud-dma-concept-v2.webp',
     width: 1672,
     height: 941,
     alt: 'Conceptual purple cloud infrastructure illustration above a single desktop computer.',

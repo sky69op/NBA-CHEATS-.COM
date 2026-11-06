@@ -107,28 +107,26 @@ const inlineResponsiveHint = ['/forum/', '/faq/', '/about/'].includes(layoutBase
       themeClass: THEME_CONTROLLER_OPTIONS.className,
       defaultTheme: THEME_CONTROLLER_OPTIONS.defaultTheme,
     }}>
-      {`(() => {
-  document.documentElement.classList.add('js');
-  const darkHex = '#0a0614';
-  const lightHex = '#f4f0fb';
-  let theme = defaultTheme;
-  try {
-    const stored = window.localStorage.getItem(storageKey);
-    if (stored === 'dark' || stored === 'light' || stored === 'system') theme = stored;
-    else window.localStorage.setItem(storageKey, defaultTheme);
-  } catch (e) {
-    /* private mode */
-  }
-  const resolved =
-    theme === 'system'
-      ? typeof window.matchMedia === 'function' && window.matchMedia('(prefers-color-scheme: dark)').matches
-        ? 'dark'
-        : 'light'
-      : theme;
-  document.documentElement.classList.toggle(themeClass, resolved === 'dark');
-  const meta = document.getElementById('sw-theme-color');
-  if (meta) meta.setAttribute('content', resolved === 'dark' ? darkHex : lightHex);
-})();`}
+      document.documentElement.classList.add('js');
+      const darkHex = '#0a0614';
+      const lightHex = '#f4f0fb';
+      let theme = defaultTheme;
+      try {
+        const stored = window.localStorage.getItem(storageKey);
+        if (stored === 'dark' || stored === 'light' || stored === 'system') theme = stored;
+        else window.localStorage.setItem(storageKey, defaultTheme);
+      } catch (e) {
+        /* private mode */
+      }
+      const resolved =
+        theme === 'system'
+          ? typeof window.matchMedia === 'function' && window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light'
+          : theme;
+      document.documentElement.classList.toggle(themeClass, resolved === 'dark');
+      const meta = document.getElementById('sw-theme-color');
+      if (meta) meta.setAttribute('content', resolved === 'dark' ? darkHex : lightHex);
     </script>
     <ThemeInitScript
       defaultTheme={THEME_CONTROLLER_OPTIONS.defaultTheme}

@@ -319,7 +319,7 @@ export const en: Translations = {
       'cloud-dma': {
         showcaseHeading: 'Concept illustration',
         overviewSubtitle:
-          'A placeholder illustration and the unanswered requirements to resolve with support before checkout.',
+          'A conceptual cloud-infrastructure illustration. Confirm current requirements and NBA 2K27 applicability with support before checkout.',
         highlights: {
           eyebrow: 'Requirements',
           title: 'Cloud DMA prerequisites',

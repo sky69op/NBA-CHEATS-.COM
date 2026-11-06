@@ -191,10 +191,10 @@ export const deBlogArticles: BlogPostFull[] = [
     "readTime": "6 min",
     "featured": true,
     "author": "NBA2K27 Cheats Redaktion",
-    "image": "/images/nba-2k27/nba2k27-main-product-card.png",
+    "image": "/images/nba-2k27/nba2k27-main-product-card.webp",
     "imageAlt": "NBA 2K27 redaktionelle Basketballillustration.",
-    "imageWidth": 1330,
-    "imageHeight": 840,
+    "imageWidth": 1672,
+    "imageHeight": 941,
     "body": [
       {
         "type": "p",
@@ -427,10 +427,10 @@ export const deBlogArticles: BlogPostFull[] = [
     "readTime": "6 min",
     "featured": true,
     "author": "NBA2K27 Cheats Redaktion",
-    "image": "/images/nba-2k27/nba2k27-main-product-card.png",
+    "image": "/images/nba-2k27/nba2k27-main-product-card.webp",
     "imageAlt": "NBA 2K27 redaktionelle Basketballillustration.",
-    "imageWidth": 1330,
-    "imageHeight": 840,
+    "imageWidth": 1672,
+    "imageHeight": 941,
     "body": [
       {
         "type": "p",
@@ -663,10 +663,10 @@ export const deBlogArticles: BlogPostFull[] = [
     "readTime": "6 min",
     "featured": true,
     "author": "NBA2K27 Cheats Redaktion",
-    "image": "/images/nba-2k27/nba2k27-main-product-card.png",
+    "image": "/images/nba-2k27/nba2k27-main-product-card.webp",
     "imageAlt": "NBA 2K27 redaktionelle Basketballillustration.",
-    "imageWidth": 1330,
-    "imageHeight": 840,
+    "imageWidth": 1672,
+    "imageHeight": 941,
     "body": [
       {
         "type": "p",
@@ -900,10 +900,10 @@ export const deBlogArticles: BlogPostFull[] = [
     "readTime": "6 min",
     "featured": true,
     "author": "NBA2K27 Cheats Redaktion",
-    "image": "/images/nba-2k27/cloud-dma-concept-v2.png",
+    "image": "/images/nba-2k27/cloud-dma-concept-v2.webp",
     "imageAlt": "NBA 2K27 redaktionelle Basketballillustration.",
-    "imageWidth": 1330,
-    "imageHeight": 840,
+    "imageWidth": 1672,
+    "imageHeight": 941,
     "body": [
       {
         "type": "p",
@@ -959,10 +959,10 @@ export const deBlogArticles: BlogPostFull[] = [
     "readTime": "6 min",
     "featured": true,
     "author": "NBA2K27 Cheats Redaktion",
-    "image": "/images/nba-2k27/cloud-dma-concept-v2.png",
+    "image": "/images/nba-2k27/cloud-dma-concept-v2.webp",
     "imageAlt": "NBA 2K27 redaktionelle Basketballillustration.",
-    "imageWidth": 1330,
-    "imageHeight": 840,
+    "imageWidth": 1672,
+    "imageHeight": 941,
     "body": [
       {
         "type": "p",
@@ -1136,10 +1136,10 @@ export const deBlogArticles: BlogPostFull[] = [
     "readTime": "6 min",
     "featured": true,
     "author": "NBA2K27 Cheats Redaktion",
-    "image": "/images/nba-2k27/nba2k27-main-product-card.png",
+    "image": "/images/nba-2k27/nba2k27-main-product-card.webp",
     "imageAlt": "NBA 2K27 redaktionelle Basketballillustration.",
-    "imageWidth": 1330,
-    "imageHeight": 840,
+    "imageWidth": 1672,
+    "imageHeight": 941,
     "body": [
       {
         "type": "p",
@@ -1301,10 +1301,10 @@ export const deBlogArticles: BlogPostFull[] = [
     "readTime": "6 min",
     "featured": true,
     "author": "NBA2K27 Cheats Redaktion",
-    "image": "/images/nba-2k27/cloud-dma-concept-v2.png",
+    "image": "/images/nba-2k27/cloud-dma-concept-v2.webp",
     "imageAlt": "NBA 2K27 redaktionelle Basketballillustration.",
-    "imageWidth": 1330,
-    "imageHeight": 840,
+    "imageWidth": 1672,
+    "imageHeight": 941,
     "body": [
       {
         "type": "p",
@@ -1354,10 +1354,10 @@ export const deBlogArticles: BlogPostFull[] = [
     "readTime": "6 min",
     "featured": true,
     "author": "NBA2K27 Cheats Redaktion",
-    "image": "/images/nba-2k27/nba2k27-main-product-card.png",
+    "image": "/images/nba-2k27/nba2k27-main-product-card.webp",
     "imageAlt": "NBA 2K27 redaktionelle Basketballillustration.",
-    "imageWidth": 1330,
-    "imageHeight": 840,
+    "imageWidth": 1672,
+    "imageHeight": 941,
     "body": [
       {
         "type": "p",
