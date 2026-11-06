@@ -1,0 +1,45 @@
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# environment variables
+.env
+.env.production
+.env.*
+!.env.example
+.dev.vars
+.dev.vars.*
+.wrangler/
+
+# macOS-specific files
+.DS_Store
+
+# jetbrains setting folder
+.idea/
+
+# local SEO audit outputs (not part of the site)
+part14-*
+
+# Cursor editor rules (local conversion notes)
+.cursor/
+
+# local Lighthouse / CWV audit outputs (not part of the site)
+lighthouse-*.json
+lh-*.json
+lh-tmp.json
+cwv-*.json
+lh-q*.png
+
+# Conversion-only content drafts; approved provenance is kept in content/manifest.json.
+.content/

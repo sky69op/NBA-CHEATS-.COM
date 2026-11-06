@@ -1,0 +1,300 @@
+---
+import '../../styles/catalog.css';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import SectionHeader from '../../components/SectionHeader.astro';
+import SiteFaqSection from '../../components/SiteFaqSection.astro';
+import ResponsiveImage from '../../components/ResponsiveImage.astro';
+import Icon from '../../components/icons/Icon.astro';
+import { Badge } from '@/components/starwind/badge';
+import { Button } from '@/components/starwind/button';
+import { getCatalog } from '../../data/catalog';
+import { getCatalogCopy } from '../../data/catalogCopy';
+import { getSiteFaqs } from '../../data/faq';
+import { formatPlanPrice } from '../../data/productPricing';
+import { resolvePageSeo } from '../../config/seo';
+import { PRODUCTS_HUB_PATH } from '../../config/site';
+import { breadcrumbSchema, collectionPageSchema, faqPageSchema, itemListSchema } from '../../utils/schema';
+import { ROUTES } from '../../utils/path';
+import { useLocale } from '../../i18n';
+
+const { locale, t, lp } = useLocale(Astro.currentLocale);
+const copy = getCatalogCopy(locale);
+const seo = resolvePageSeo(PRODUCTS_HUB_PATH, locale);
+const catalog = getCatalog(locale);
+const featured = catalog.find((entry) => entry.page.kind === 'tier');
+const utilities = catalog.filter((entry) => entry.page.kind === 'utility');
+const bySlug = new Map(catalog.map((entry) => [entry.slug, entry]));
+
+const productsLabel = t.nav.find((link) => link.id === 'products')?.label ?? copy.menuHeading;
+const breadcrumbs = [
+  { name: t.common.breadcrumbHome, path: '/' },
+  { name: productsLabel, path: PRODUCTS_HUB_PATH },
+];
+
+// Items for products that are not sold are already dropped by getSiteFaqs.
+const faqIds = ['products-page', 'ugc-vs-hwid', 'skin-visible', 'ugc-guarantee', 'after-buy', 'license-move', 'status'];
+const siteFaqs = getSiteFaqs(locale);
+const faqs = faqIds.flatMap((id) => siteFaqs.filter((item) => item.id === id));
+
+const priceRow = {
+  label: copy.priceLabel,
+  values: Object.fromEntries(
+    catalog.map((entry) => [
+      entry.slug,
+      `${formatPlanPrice(entry.fromPriceUsd)} ${copy.perMonth}${
+        entry.lifetimePriceUsd ? ` · ${formatPlanPrice(entry.lifetimePriceUsd)} ${copy.lifetime.toLowerCase()}` : ''
+      }`,
+    ]),
+  ),
+};
+const compareRows = [copy.compareRows[0]!, priceRow, ...copy.compareRows.slice(1)];
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  jsonLd={[
+    collectionPageSchema({ name: copy.title, description: seo.description, url: lp(PRODUCTS_HUB_PATH), locale }),
+    itemListSchema({
+      name: copy.title,
+      items: catalog.map((entry) => ({ name: entry.page.title, url: lp(entry.path) })),
+    }),
+    faqPageSchema(
+      faqs.map((f, i) => ({ num: String(i + 1).padStart(2, '0'), q: f.q, a: f.a.replace(/<[^>]+>/g, '') })),
+      locale,
+    ),
+    breadcrumbSchema(breadcrumbs, locale),
+  ]}
+>
+  <section class="catalog-hero border-b border-border py-8 md:py-12">
+    <div class="mx-auto max-w-6xl px-5">
+      <Breadcrumbs items={breadcrumbs} />
+      <div class="mt-6">
+        <SectionHeader eyebrow={copy.eyebrow} title={copy.title} desc={copy.subtitle} titleId="catalog-title" level="h1" wide />
+      </div>
+      <ul class="catalog-trust mt-8 list-none p-0" aria-label={copy.eyebrow}>
+        {
+          copy.trust.map((item) => (
+            <li class="catalog-trust__item">
+              <Icon name="circleCheck" size={16} class="icon-app--primary" />
+              <span>{item}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  {
+    featured && (
+      <section class="py-12 md:py-16" aria-labelledby="catalog-featured-title">
+        <div class="mx-auto max-w-6xl px-5">
+          <article class="catalog-featured" data-reveal>
+            <a href={lp(featured.path)} class="catalog-featured__media" tabindex="-1" aria-hidden="true">
+              {featured.page.images[0] && (
+                <ResponsiveImage
+                  src={featured.page.images[0].src}
+                  alt={featured.page.images[0].alt}
+                  width={featured.page.images[0].width ?? 960}
+                  height={featured.page.images[0].height ?? 540}
+                  loading="eager"
+                  fetchPriority="high"
+                  sizes="(min-width: 1024px) 560px, 100vw"
+                  phoneWidth={400}
+                  class="catalog-featured__img"
+                />
+              )}
+            </a>
+            <div class="catalog-featured__body">
+              <div class="flex flex-wrap items-center gap-2">
+                <Badge>{copy.featuredEyebrow}</Badge>
+                {featured.page.badge && <Badge variant="warning">{featured.page.badge}</Badge>}
+              </div>
+              <h2 id="catalog-featured-title" class="catalog-featured__title">
+                <a href={lp(featured.path)}>Cheats: {copy.featuredEyebrow}: {featured.page.title}</a>
+              </h2>
+              <p class="catalog-featured__desc">{featured.page.desc}</p>
+              <ul class="catalog-featured__features list-none p-0">
+                {featured.page.features.map((feature) => (
+                  <li>
+                    <Icon name="check" size={15} class="icon-app--primary" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <div class="catalog-price">
+                <span class="catalog-price__from">{copy.from}</span>
+                <span class="catalog-price__amount">{formatPlanPrice(featured.fromPriceUsd)}</span>
+                <span class="catalog-price__unit">{copy.perMonth}</span>
+                {featured.lifetimePriceUsd && (
+                  <span class="catalog-price__alt">
+                    {copy.lifetime} {formatPlanPrice(featured.lifetimePriceUsd)}
+                  </span>
+                )}
+              </div>
+              <div>
+                <Button as="a" href={lp(featured.path)} variant="primary" size="lg" class="w-full rounded-xl">
+                  {t.products.viewDetails}: {featured.shortName}
+                  <Icon name="arrowRight" size={17} />
+                </Button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    )
+  }
+
+  {utilities.length > 0 && (
+  <section class="border-t border-border bg-muted/20 py-14 md:py-18" aria-labelledby="catalog-utilities-title">
+    <div class="mx-auto max-w-6xl px-5">
+      <SectionHeader eyebrow={copy.utilitiesEyebrow} title={copy.utilitiesTitle} desc={copy.utilitiesDesc} titleId="catalog-utilities-title" />
+      <div
+        class:list={[
+          'mt-10 grid grid-cols-1 gap-4',
+          utilities.length === 2 && 'md:grid-cols-2',
+          utilities.length >= 3 && 'md:grid-cols-3',
+          utilities.length === 1 && 'mx-auto max-w-md',
+        ]}
+        data-reveal-stagger
+      >
+        {
+          utilities.map((entry) => (
+            <article class="catalog-card">
+              <header class="catalog-card__head">
+                <span class="catalog-card__icon">
+                  <Icon name={entry.icon} size={20} class="icon-app--primary" />
+                </span>
+                <div class="min-w-0">
+                  {entry.page.category && <p class="catalog-card__category">{entry.page.category}</p>}
+                  <h3 class="catalog-card__title">
+                    <a href={lp(entry.path)}>{entry.page.title}</a>
+                  </h3>
+                </div>
+              </header>
+              <p class="catalog-card__desc">{entry.page.desc}</p>
+              <ul class="catalog-card__features list-none p-0">
+                {entry.page.features.slice(0, 4).map((feature) => (
+                  <li>
+                    <Icon name="check" size={14} class="icon-app--primary" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              <div class="catalog-card__foot">
+                <div class="catalog-price catalog-price--compact">
+                  <span class="catalog-price__from">{copy.from}</span>
+                  <span class="catalog-price__amount">{formatPlanPrice(entry.fromPriceUsd)}</span>
+                  <span class="catalog-price__unit">{copy.perMonth}</span>
+                </div>
+                <Button as="a" href={lp(entry.path)} variant="primary" size="sm" class="w-full rounded-lg">
+                  {t.products.viewDetails}: {entry.shortName}
+                </Button>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+  )}
+
+  {catalog.length > 1 && (
+  <section class="border-t border-border py-14 md:py-18" aria-labelledby="catalog-chooser-title">
+    <div class="mx-auto max-w-6xl px-5">
+      <SectionHeader eyebrow={copy.chooserEyebrow} title={copy.chooserTitle} desc={copy.chooserDesc} titleId="catalog-chooser-title" />
+      <ul class="fill-grid fill-grid--wide mt-10 list-none gap-3 p-0" data-reveal-stagger>
+        {
+          copy.scenarios.map((scenario) => {
+            const entry = bySlug.get(scenario.slug);
+            if (!entry) return null;
+            return (
+              <li>
+                <a href={lp(entry.path)} class="catalog-scenario group">
+                  <span class="catalog-scenario__icon">
+                    <Icon name={entry.icon} size={18} class="icon-app--primary" />
+                  </span>
+                  <span class="min-w-0 flex-1">
+                    <span class="catalog-scenario__need">{scenario.need}</span>
+                    <span class="catalog-scenario__answer">{scenario.answer}</span>
+                  </span>
+                  <Icon name="arrowRight" size={17} class="catalog-scenario__arrow" />
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+  </section>
+  )}
+
+  <section class="border-t border-border bg-muted/20 py-14 md:py-18" aria-labelledby="catalog-compare-title">
+    <div class="mx-auto max-w-6xl px-5">
+      <SectionHeader eyebrow={copy.compareEyebrow} title={copy.compareTitle} desc={copy.compareDesc} titleId="catalog-compare-title" />
+      <div class="catalog-compare mt-10" data-reveal>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col"><span class="sr-only">{copy.compareEyebrow}</span></th>
+              {
+                catalog.map((entry) => (
+                  <th scope="col">
+                    <a href={lp(entry.path)} class="catalog-compare__product">
+                      <Icon name={entry.icon} size={16} class="icon-app--primary" />
+                      {entry.shortName}
+                    </a>
+                  </th>
+                ))
+              }
+            </tr>
+          </thead>
+          <tbody>
+            {
+              compareRows.map((row) => (
+                <tr>
+                  <th scope="row">{row.label}</th>
+                  {catalog.map((entry) => (
+                    <td>{row.values[entry.slug] ?? '—'}</td>
+                  ))}
+                </tr>
+              ))
+            }
+            <tr class="catalog-compare__actions">
+              <th scope="row"><span class="sr-only">{t.products.viewDetails}</span></th>
+              {
+                catalog.map((entry) => (
+                  <td>
+                    <a href={lp(entry.path)} class="catalog-compare__buy">
+                      {t.products.viewDetails}: {entry.shortName}
+                    </a>
+                  </td>
+                ))
+              }
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <SiteFaqSection id="faq" items={faqs} titleId="catalog-faq" class="border-t border-border bg-background" />
+
+  <section class="border-t border-border py-14 md:py-16" aria-labelledby="catalog-cta-title">
+    <div class="mx-auto max-w-6xl px-5">
+      <div class="catalog-cta" data-reveal>
+        <div>
+          <h2 id="catalog-cta-title" class="catalog-cta__title">{copy.ctaTitle}</h2>
+          <p class="catalog-cta__desc">{copy.ctaDesc}</p>
+        </div>
+        <div class="flex shrink-0 flex-col gap-2 sm:flex-row">
+          <Button as="a" href={lp(ROUTES.support)} variant="primary" size="lg" class="rounded-xl">
+            <Icon name="headphones" size={17} />
+            {copy.ctaSupport}
+          </Button>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

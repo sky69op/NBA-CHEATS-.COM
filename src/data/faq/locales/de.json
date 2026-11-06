@@ -1,0 +1,142 @@
+[
+  {
+    "id": "status",
+    "q": "Wo finde ich aktuelle NBA-2K27-Produktinformationen?",
+    "a": "Lesen Sie die passende Produktseite und kontaktieren Sie den Support zu Verfügbarkeit oder aktuellen Anforderungen, bevor Sie zur Kasse gehen."
+  },
+  {
+    "id": "after-buy",
+    "q": "Was passiert nach dem Kauf?",
+    "a": "Der Checkout öffnet den aktuellen Kaufvorgang. Lesen Sie die gültigen Bedingungen und Voraussetzungen vor der Zahlung."
+  },
+  {
+    "id": "ban-risk",
+    "q": "Kann Drittanbieter-Software zu NBA 2K27 zu Kontomaßnahmen führen?",
+    "a": "Ja. Publisher- und Plattformregeln können unbefugte Drittanbieter-Software einschränken. Lesen Sie die offiziellen NBA-2K27- und Plattformbedingungen vor der Zahlung."
+  },
+  {
+    "id": "platforms",
+    "q": "Welche Plattformen werden unterstützt?",
+    "a": "Prüfen Sie die aktuelle Produktseite und die Herstellerdokumentation zu unterstützten Betriebssystemen und Anforderungen."
+  },
+  {
+    "id": "license-move",
+    "q": "Kann ich meine Lizenz auf einen neuen PC übertragen?",
+    "a": "Lizenz- und Geräterichtlinien sind auf dieser Website nicht dokumentiert. Fragen Sie den Support vor der Zahlung nach aktuellen Regeln zu Umzug, Reset oder Hardware."
+  },
+  {
+    "id": "products-page",
+    "q": "Wo sind Produkte und Utilities aufgelistet?",
+    "a": "Der NBA-2K27-Katalog steht auf der <a href=\"/products/\">Produktseite NBA2K27 CHEATS</a>: {productList}. Jede Seite beschreibt Funktionen und leitet zur sicheren Kasse weiter."
+  },
+  {
+    "id": "ugc-what",
+    "q": "Was macht UGC mit einem eingeschränkten Konto?",
+    "a": "Der <a href=\"/ugc/\">UGC-Beschwerde-Workflow</a> (Unban & Governance Control) hilft, einen Einspruch zu strukturieren. Der Publisher entscheidet; ein Erfolg ist nicht zugesagt."
+  },
+  {
+    "id": "ugc-guarantee",
+    "q": "Verspricht UGC, eine Sperre aufzuheben?",
+    "a": "Nein. UGC formatiert Nachweise und Text. Ein Prüfer entscheidet pro Fall. Manche Sperren werden nie aufgehoben. Eine Rücknahme wird nicht versprochen."
+  },
+  {
+    "id": "ugc-vs-hwid",
+    "q": "Liegt ein Kontolimit oder eine Sperre auf diesem PC vor?",
+    "a": "Profil- oder Kontobeschränkungen gehören zum <a href=\"/ugc/\">UGC-Beschwerdebereich</a>. Hardwarefragen sind getrennt; der <a href=\"/hwid-spoofer/\">HWID-Spoofer-Leistungsumfang</a> verspricht keinen Kontoausgang."
+  },
+  {
+    "id": "utility-requirements",
+    "q": "Welche Windows-Einstellung brauchen die Utilities?",
+    "a": "Die Anforderungen variieren je Produkt. Lesen Sie die aktuelle Hersteller-Produktseite und fragen Sie den Support, bevor Sie Windows oder Firmware ändern."
+  },
+  {
+    "id": "what-is-esp",
+    "q": "Was bedeuten ESP-Suchbegriffe für NBA 2K27?",
+    "a": "ESP ist ein breiter Drittanbieter-Begriff. Er ist keine Zusage zu aktuellen Funktionen, Kompatibilität oder Kontosicherheit. Lesen Sie den <a href=\"/cheats/\">aktuellen NBA-2K27-ESP-Produktumfang</a>."
+  },
+  {
+    "id": "esp-vs-aim",
+    "q": "Was ist der Unterschied zwischen ESP und Aimbot?",
+    "a": "Im allgemeinen Cheat-Vokabular stehen ESP-ähnliche Begriffe oft für Info-Overlays, Aimbot-ähnliche für Zielhilfen. Für NBA 2K27 sind beides Marketingbegriffe, bis das <a href=\"/cheats/\">aktuelle NBA2K27-CHEATS-Listing</a> nennt, was Ihr gewählter Plan umfasst."
+  },
+  {
+    "id": "elite-slots",
+    "q": "Warum wird der Cheat als privater Build verkauft?",
+    "a": "„Privat“ ist meist ein Marketinglabel. Diese Website verifiziert weder Slot-Zahlen, Patch-Geschwindigkeit noch Entwickler-Support; fragen Sie den Support, was das Label im aktuellen Listing bedeutet."
+  },
+  {
+    "id": "stream-proof",
+    "q": "Kann OBS mein Overlay aufnehmen?",
+    "a": "Das hängt von der Produktumsetzung ab und wird hier nicht geprüft. Gehen Sie davon aus, dass Stream oder Aufnahme Overlays zeigen können, bis der Support das für Ihr Setup bestätigt."
+  },
+  {
+    "id": "build-status",
+    "q": "Bleibt der Build nach jedem Patch online?",
+    "a": "Nein. Spiel- oder Schutz-Updates können die Verfügbarkeit jederzeit ändern. Lesen Sie das aktuelle Listing und offizielle Hinweise vor einer Session; wenn der Status unklar ist, fragen Sie den Support."
+  },
+  {
+    "id": "esp-safer",
+    "q": "Ist ESP unauffälliger als Aimbot?",
+    "a": "ESP kann weniger offensichtlich sein als ein maxierter Aimbot. Es bleibt ein Cheat. Aim Assist auszulassen entfernt ihn nicht aus der Anti-Cheat-Prüfung."
+  },
+  {
+    "id": "hwid-when",
+    "q": "Wann ist der HWID Spoofer die passende Produktseite?",
+    "a": "Die <a href=\"/hwid-spoofer/\">HWID-Spoofer-Produktdetails</a> gelten bei einer Hardware-ID-Sperre: andere PCs lassen den Login zu, dieser verweigert ihn. Festplatten-Serien, MACs, GPU-IDs und verwandte Werte werden erneuert; ein Cleaner ist enthalten. Ein weiterhin sanktioniertes Konto wird dadurch nicht „gelöscht“."
+  },
+  {
+    "id": "external-loader",
+    "q": "Wird der Loader in den Spieleordner injiziert?",
+    "a": "Leiten Sie die technische Methode nicht nur aus Marketing ab. Prüfen Sie den <a href=\"/cheats/\">NBA-2K27-Softwareumfang</a>; Kontosanktionen bleiben möglich."
+  },
+  {
+    "id": "blog-vs-cheats",
+    "q": "Ersetzt dieser Artikel den Live-Status-Hinweis?",
+    "a": "Nein. Ratgeber erklären ein Thema. Lesen Sie die <a href=\"/cheats/\">NBA-2K27-Produktvorgaben</a> und offizielle Spielregeln vor der Entscheidung."
+  },
+  {
+    "id": "blog-setup",
+    "q": "Wohin führen Blog-Setup-Anleitungen zum Kauf?",
+    "a": "Anleitungen verlinken die <a href=\"/cheats/\">NBA-2K27-Kaufinformationen</a>. Der Checkout läuft über unsere sichere Weiterleitung. Folgen Sie dem Lieferweg aus der aktuellen Produktdokumentation."
+  },
+  {
+    "id": "who-cheats",
+    "q": "Wer sollte NBA 2K27 Cheats prüfen?",
+    "a": "Wer Produktumfang, Voraussetzungen, Bedingungen und Risiken recherchiert, bevor er zur Kasse geht."
+  },
+  {
+    "id": "vac-update",
+    "q": "Was tun nach einem Anti-Cheat-Update?",
+    "a": "Lesen Sie das aktuelle Listing und offizielle Spiel- oder Plattformhinweise. Gehen Sie davon aus, dass Status und Kompatibilität wechseln können; bei Unklarheit warten Sie und fragen Sie den Support vor dem Start."
+  },
+  {
+    "id": "discord-help",
+    "q": "Wie bekomme ich Installationshilfe?",
+    "a": "Geben Sie Bestell-E-Mail, Windows-Version, exaktes Produkt und sichtbaren Fehlertext an. Keine Zugangsdaten teilen."
+  },
+  {
+    "id": "pmc-scav-raids",
+    "q": "Gilt eine Produktkategorie für jeden NBA-2K27-Modus?",
+    "a": "Unterstellen Sie nicht, dass eine breite Kategorie jeden Modus abdeckt. Fragen Sie den Support vor dem Kauf nach dem aktuell genannten Umfang."
+  },
+  {
+    "id": "zoom-hack",
+    "q": "Welche Optionen decken ESP und Wallhack ab?",
+    "a": "Suchseiten können Overlays unter ESP- oder „Wallhack“-Sprache bündeln. Für NBA 2K27 muss das <a href=\"/cheats/\">NBA2K27-CHEATS-Listing</a> nennen, was enthalten ist; diese Website behauptet keine konkreten Overlay-Felder."
+  },
+  {
+    "id": "trigger-bot",
+    "q": "Enthält das Produkt Silent Aimbot?",
+    "a": "Listings erwähnen manchmal Aimbot, Silent Aim oder No-Recoil-Optionen. Diese Website verifiziert keine Menüs oder Schalter; bestätigen Sie im <a href=\"/cheats/\">aktuellen NBA2K27-CHEATS-Listing</a>, was Ihr Plan umfasst."
+  },
+  {
+    "id": "private-cheats",
+    "q": "Was soll „privat“ auf einer NBA-2K27-Produktseite bedeuten?",
+    "a": "Sehen Sie „privat“ als Marketingbegriff, solange die Seite Umfang, Bedingungen und Grenzen nicht präzise erklärt."
+  },
+  {
+    "id": "faq-more",
+    "q": "Wo ist das vollständige FAQ?",
+    "a": "Kurzantworten stehen auf der Startseite und den Produktseiten. Das <a href=\"/faq/\">vollständige FAQ</a> bündelt alles; im <a href=\"/blog/\">Blog</a> erscheinen längere Anleitungen, sobald sie veröffentlicht sind."
+  }
+]

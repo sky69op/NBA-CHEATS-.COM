@@ -1,0 +1,31 @@
+---
+import ResponsiveImage from './ResponsiveImage.astro';
+import { BRAND_LOGO_ALT, BRAND_LOGO_MASTER } from '../config/brand';
+
+interface Props {
+  /** Rendered CSS pixel size (width and height). */
+  size?: number;
+  class?: string;
+  /** Header / above-the-fold: eager load, no lazy. */
+  priority?: boolean;
+  /** Override default artwork-only alt (e.g. page keyword prefix). */
+  alt?: string;
+}
+
+const { size = 32, class: className, priority = false, alt = BRAND_LOGO_ALT } = Astro.props;
+
+const brandWidths =
+  size <= 32 ? ([32, 64] as const) : size <= 48 ? ([64, 128] as const) : ([128, 512] as const);
+---
+
+<ResponsiveImage
+  src={BRAND_LOGO_MASTER}
+  alt={alt}
+  width={size}
+  height={size}
+  widths={brandWidths}
+  sizes={`${size}px`}
+  loading={priority ? 'eager' : 'lazy'}
+  fetchPriority={priority ? 'high' : undefined}
+  class={className}
+/>

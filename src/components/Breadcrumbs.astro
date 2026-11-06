@@ -1,0 +1,39 @@
+---
+import type { BreadcrumbItem } from '../utils/schema';
+import { useLocale } from '../i18n';
+import {
+  Breadcrumb,
+  BreadcrumbItem as CrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/starwind/breadcrumb';
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+const { lp } = useLocale(Astro.currentLocale);
+---
+
+<Breadcrumb class="mb-4">
+  <BreadcrumbList>
+    {items.map((item, index) => {
+      const isLast = index === items.length - 1;
+      return (
+        <>
+          <CrumbItem>
+            {isLast ? (
+              <BreadcrumbPage>{item.name}</BreadcrumbPage>
+            ) : (
+              <BreadcrumbLink href={lp(item.path)}>{item.name}</BreadcrumbLink>
+            )}
+          </CrumbItem>
+          {!isLast && <BreadcrumbSeparator />}
+        </>
+      );
+    })}
+  </BreadcrumbList>
+</Breadcrumb>

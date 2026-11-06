@@ -1,0 +1,22 @@
+---
+type RevealType = 'fade' | 'up' | 'down' | 'left' | 'right' | 'zoom';
+
+interface Props {
+  as?: keyof HTMLElementTagNameMap;
+  type?: RevealType;
+  delay?: number;
+  class?: string;
+}
+
+const { as: Tag = 'div', type = 'up', delay, class: className, ...rest } = Astro.props;
+const revealValue = type === 'up' ? true : type;
+---
+
+<Tag
+  data-reveal={revealValue}
+  {...(delay !== undefined ? { 'data-reveal-delay': String(delay) } : {})}
+  class={className}
+  {...rest}
+>
+  <slot />
+</Tag>

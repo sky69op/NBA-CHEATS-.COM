@@ -1,0 +1,272 @@
+---
+import "@/styles/starwind.css";
+import { getTranslations } from '../i18n';
+import { localizePath } from '../i18n/paths';
+import type { SiteLocale } from '../i18n/locales';
+import {
+  RSS_FEED_PATH,
+  TWITTER_CREATOR,
+  TWITTER_SITE,
+  canonicalUrl,
+  clipAtWord,
+  clipTitle,
+  DEFAULT_OG_IMAGE,
+  DEFAULT_OG_IMAGE_ALT,
+  DEFAULT_OG_IMAGE_HEIGHT,
+  DEFAULT_OG_IMAGE_WIDTH,
+  GA_MEASUREMENT_ID,
+  absoluteAssetUrl,
+} from '../config/seo';
+import { hreflangAlternatesForPath } from '../config/hreflang';
+import { resolveBrandLogoAlt } from '../config/pageKeywordAlt';
+import { normalizeSeoPath } from '../config/pageSeo';
+import { stripLocalePrefix } from '../i18n/paths';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import JsonLd from '../components/JsonLd.astro';
+import { ThemeInitScript } from '@starwind-ui/astro/theme';
+import { THEME_CONTROLLER_OPTIONS } from '../config/theme';
+import outfitLatin from '@fontsource-variable/outfit/files/outfit-latin-wght-normal.woff2?url';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  /** Defaults to the site default OG image alt when `ogImage` is unset. */
+  ogImageAlt?: string;
+  ogImageWidth?: number;
+  ogImageHeight?: number;
+  ogType?: 'website' | 'article';
+  articlePublishedTime?: string;
+  articleModifiedTime?: string;
+  noindex?: boolean;
+  /** Override the canonical path (unprefixed). Used when a locale URL duplicates English. */
+  canonicalPath?: string;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const locale = (Astro.currentLocale ?? 'en') as SiteLocale;
+const t = getTranslations(locale);
+
+const ogLocaleMap: Record<SiteLocale, string> = {
+  en: 'en_US',
+  es: 'es_ES',
+  de: 'de_DE',
+  fr: 'fr_FR',
+};
+
+const {
+  title = t.site.title,
+  description = t.site.description,
+  ogImage = DEFAULT_OG_IMAGE,
+  ogImageAlt: ogImageAltProp,
+  ogImageWidth = DEFAULT_OG_IMAGE_WIDTH,
+  ogImageHeight = DEFAULT_OG_IMAGE_HEIGHT,
+  ogType = 'website',
+  articlePublishedTime,
+  articleModifiedTime,
+  noindex = false,
+  canonicalPath,
+  jsonLd,
+} = Astro.props;
+
+const documentTitle = clipTitle(title);
+const metaDescription = clipAtWord(description);
+
+const ogImageAlt = ogImageAltProp ?? (ogImage === DEFAULT_OG_IMAGE ? DEFAULT_OG_IMAGE_ALT : documentTitle);
+
+const canonical = canonicalUrl(canonicalPath ?? localizePath(Astro.url.pathname, locale));
+const shareUrl = encodeURIComponent(canonical);
+const shareText = encodeURIComponent(documentTitle);
+const shareLabels = {
+  en: ['Share this page', 'Share this page on X', 'Share this page on Facebook'],
+  es: ['Compartir esta página', 'Compartir esta página en X', 'Compartir esta página en Facebook'],
+  de: ['Diese Seite teilen', 'Diese Seite auf X teilen', 'Diese Seite auf Facebook teilen'],
+  fr: ['Partager cette page', 'Partager cette page sur X', 'Partager cette page sur Facebook'],
+}[locale];
+const hreflangAlternates = noindex ? [] : hreflangAlternatesForPath(Astro.url.pathname);
+const ogLocaleAlternates = (['en', 'es', 'de', 'fr'] as const).filter((code) => code !== locale);
+const ogLocaleAlternateValues = ogLocaleAlternates.map((code) => ogLocaleMap[code]);
+const ogImageUrl = absoluteAssetUrl(ogImage);
+const robotsContent = noindex
+  ? 'noindex, follow'
+  : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
+
+const brandLogoAlt = resolveBrandLogoAlt(Astro.url.pathname, locale);
+const layoutBasePath = normalizeSeoPath(stripLocalePrefix(Astro.url.pathname));
+const inlineResponsiveHint = ['/forum/', '/faq/', '/about/'].includes(layoutBasePath);
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="theme-color" id="sw-theme-color" content="#0a0614" />
+    <script is:inline define:vars={{
+      storageKey: THEME_CONTROLLER_OPTIONS.storageKey,
+      themeClass: THEME_CONTROLLER_OPTIONS.className,
+      defaultTheme: THEME_CONTROLLER_OPTIONS.defaultTheme,
+    }}>
+      {`(() => {
+  document.documentElement.classList.add('js');
+  const darkHex = '#0a0614';
+  const lightHex = '#f4f0fb';
+  let theme = defaultTheme;
+  try {
+    const stored = window.localStorage.getItem(storageKey);
+    if (stored === 'dark' || stored === 'light' || stored === 'system') theme = stored;
+    else window.localStorage.setItem(storageKey, defaultTheme);
+  } catch (e) {
+    /* private mode */
+  }
+  const resolved =
+    theme === 'system'
+      ? typeof window.matchMedia === 'function' && window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light'
+      : theme;
+  document.documentElement.classList.toggle(themeClass, resolved === 'dark');
+  const meta = document.getElementById('sw-theme-color');
+  if (meta) meta.setAttribute('content', resolved === 'dark' ? darkHex : lightHex);
+})();`}
+    </script>
+    <ThemeInitScript
+      defaultTheme={THEME_CONTROLLER_OPTIONS.defaultTheme}
+      storageKey={THEME_CONTROLLER_OPTIONS.storageKey}
+      className={THEME_CONTROLLER_OPTIONS.className}
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{documentTitle}</title>
+    <meta name="description" content={metaDescription} />
+    <meta name="author" content={t.site.name} />
+    <meta name="robots" content={robotsContent} />
+    <meta name="googlebot" content={robotsContent} />
+    <link rel="canonical" href={canonical} />
+    {
+      hreflangAlternates.map((alt) => (
+        <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />
+      ))
+    }
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={`${t.site.name} Blog RSS`}
+      href={RSS_FEED_PATH}
+    />
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=6" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png?v=6" />
+    <link rel="shortcut icon" href="/favicon.ico?v=6" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=6" />
+
+    <meta property="og:title" content={documentTitle} />
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:secure_url" content={ogImageUrl} />
+    <meta property="og:image:alt" content={ogImageAlt} />
+    <meta property="og:image:width" content={String(ogImageWidth)} />
+    <meta property="og:image:height" content={String(ogImageHeight)} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={t.site.name} />
+    <meta property="og:locale" content={ogLocaleMap[locale]} />
+    {ogLocaleAlternateValues.map((alternate) => (
+      <meta property="og:locale:alternate" content={alternate} />
+    ))}
+
+    {
+      ogType === 'article' && articlePublishedTime && (
+        <>
+          <meta property="article:published_time" content={articlePublishedTime} />
+          <meta
+            property="article:modified_time"
+            content={articleModifiedTime ?? articlePublishedTime}
+          />
+          <meta property="article:author" content={t.site.name} />
+        </>
+      )
+    }
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={documentTitle} />
+    <meta name="twitter:description" content={metaDescription} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
+    {TWITTER_SITE && <meta name="twitter:site" content={TWITTER_SITE} />}
+    {TWITTER_CREATOR && <meta name="twitter:creator" content={TWITTER_CREATOR} />}
+
+    <link
+      rel="preload"
+      href={outfitLatin}
+      as="font"
+      type="font/woff2"
+      crossorigin="anonymous"
+      fetchpriority="high"
+    />
+
+    <slot name="head" />
+    {
+      inlineResponsiveHint && (
+        <style is:inline>{`@media (max-width: 768px) { #main-content { max-width: 100%; } }`}</style>
+      )
+    }
+
+  </head>
+  <body class="min-h-screen bg-background text-foreground">
+    <button type="button" class="skip-link" data-skip-to-main>{t.ui.skipLink}</button>
+    <Header brandLogoAlt={brandLogoAlt} />
+    <main id="main-content">
+      <slot />
+    </main>
+    {!noindex && (
+      <nav class="sr-only" aria-label={shareLabels[0]}>
+        <a href={`https://twitter.com/intent/tweet?url=${shareUrl}&text=${shareText}`} rel="noopener noreferrer" target="_blank">{shareLabels[1]}</a>
+        <a href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`} rel="noopener noreferrer" target="_blank">{shareLabels[2]}</a>
+      </nav>
+    )}
+    <Footer />
+    {jsonLd && <JsonLd data={jsonLd} />}
+    <script is:inline>
+      document.querySelectorAll('[data-sw-theme-control]').forEach((input) => {
+        if (input instanceof HTMLInputElement && input.type === 'checkbox') {
+          input.checked = document.documentElement.classList.contains('dark');
+        }
+      });
+    </script>
+    <script>
+      import '../scripts/site.ts';
+    </script>
+    {
+      GA_MEASUREMENT_ID && (
+        <script is:inline define:vars={{ GA_MEASUREMENT_ID }}>
+          {`(() => {
+ const loadGa = () => {
+ if (window.__gaLoaded) return;
+ window.__gaLoaded = true;
+ window.dataLayer = window.dataLayer || [];
+ function gtag() {
+ dataLayer.push(arguments);
+ }
+ gtag('js', new Date());
+ gtag('config', GA_MEASUREMENT_ID, { anonymize_ip: true });
+ const s = document.createElement('script');
+ s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_MEASUREMENT_ID;
+ s.async = true;
+ document.head.appendChild(s);
+ };
+ const onReady = () => {
+ if (typeof window.requestIdleCallback === 'function') {
+ window.requestIdleCallback(loadGa, { timeout: 4000 });
+ } else {
+ window.setTimeout(loadGa, 2500);
+ }
+ };
+ if (document.readyState === 'complete') onReady();
+ else window.addEventListener('load', onReady, { once: true });
+ })();`}
+        </script>
+      )
+    }
+  </body>
+</html>

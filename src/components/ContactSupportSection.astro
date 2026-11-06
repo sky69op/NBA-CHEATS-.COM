@@ -1,0 +1,105 @@
+---
+import '../styles/support-section.css';
+import { useLocale } from '../i18n';
+
+const { t, lp } = useLocale(Astro.currentLocale);
+import Icon from './icons/Icon.astro';
+import type { IconName } from './icons/types';
+import { HWID_CHECKOUT_PATH, PRIMARY_CHECKOUT_PATH } from '../config/checkout';
+import { HWID_SPOOFER_SLUG, isUtilityEnabled } from '../config/catalog';
+import { Button } from '@/components/starwind/button';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/starwind/card';
+
+interface Props {
+  titleId?: string;
+  showTicketTips?: boolean;
+  class?: string;
+}
+
+const { titleId = 'support-title', showTicketTips = false, class: className } = Astro.props;
+const c = t.support;
+---
+
+<section
+  id="support"
+  class:list={['support-section border-y border-border bg-muted/20 py-16 md:py-24', className]}
+  aria-labelledby={titleId}
+>
+  <div class="support-section__inner mx-auto max-w-6xl px-5">
+    <header class="section-header section-header--wide support-section__header">
+      <p class="section-header__eyebrow">{c.eyebrow}</p>
+      <h1 id={titleId} class="section-header__title text-foreground">{c.title}</h1>
+      <p class="section-header__subtitle">{c.subtitle}</p>
+    </header>
+
+    <ul class="support-section__cards">
+      {
+        c.channels.map((channel) => (
+          <li>
+            <Card class="group flex h-full flex-col transition-shadow hover:shadow-md">
+              <CardHeader class="space-y-3">
+                <div class="flex size-10 items-center justify-center rounded-lg bg-primary/10">
+                  <Icon name={channel.icon as IconName} size={22} class="support-section__icon" />
+                </div>
+                <CardTitle class="text-lg normal-case">{channel.title}</CardTitle>
+              </CardHeader>
+              <CardContent class="flex-1">
+                <p class="text-sm leading-relaxed text-muted-foreground">{channel.desc}</p>
+              </CardContent>
+              <CardFooter>
+                <div class="flex w-full flex-col gap-2">
+                  <Button
+                    as="a"
+                    href={channel.href.startsWith('/') ? lp(channel.href) : channel.href}
+                    variant="outline"
+                    size="sm"
+                    class="w-full"
+                  >
+                    {channel.linkLabel}
+                    <Icon name="arrowRight" size={17} />
+                  </Button>
+                  {channel.href === PRIMARY_CHECKOUT_PATH && isUtilityEnabled(HWID_SPOOFER_SLUG) && (
+                    <Button as="a" href={HWID_CHECKOUT_PATH} variant="outline" size="sm" class="w-full">
+                      {t.blog.buyHwidCta}
+                      <Icon name="arrowRight" size={17} />
+                    </Button>
+                  )}
+                </div>
+              </CardFooter>
+            </Card>
+          </li>
+        ))
+      }
+    </ul>
+
+    {
+      showTicketTips && (
+        <div class="support-section__tips">
+          <h2 class="support-section__tips-title">{c.ticketTitle}</h2>
+          <ul class="support-section__tips-list">
+            {c.ticketItems.map((item) => (
+              <li class="support-section__tips-item">
+                <p class="support-section__tips-item-title">{item.title}</p>
+                <p class="support-section__tips-item-desc">{item.desc}</p>
+              </li>
+            ))}
+          </ul>
+          {c.pageSections.map((section) => (
+            <div class="support-section__tips-item">
+              <h2 class="support-section__tips-title">{section.heading}</h2>
+              {section.paragraphs.map((paragraph) => (
+                <p class="support-section__tips-item-desc">{paragraph}</p>
+              ))}
+            </div>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</section>

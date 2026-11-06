@@ -1,0 +1,128 @@
+---
+import '../styles/product-cheat-page.css';
+import type { ProductPage } from '../data/products';
+import type { BreadcrumbItem } from '../utils/schema';
+import ProductScreenshotGallery from './ProductScreenshotGallery.astro';
+import { getProductFaqs } from '../data/faq';
+import SiteFaqSection from './SiteFaqSection.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import ProductDetailHeader from './product/ProductDetailHeader.astro';
+import ProductCheckoutPanel from './product/ProductCheckoutPanel.astro';
+import ProductHighlightsSection from './product/ProductHighlightsSection.astro';
+import ProductFeaturesSection from './product/ProductFeaturesSection.astro';
+import ProductDescriptionSection from './product/ProductDescriptionSection.astro';
+import ProductExperienceSection from './product/ProductExperienceSection.astro';
+import { getTranslations, useLocale } from '../i18n';
+import { HWID_SPOOFER_SLUG } from '../config/catalog';
+import { getBlogPostsBySlugs } from '../data/blog';
+import { getForumPostsBySlugs } from '../data/forum/locale';
+import ProductRelatedGuidesSection from './product/ProductRelatedGuidesSection.astro';
+import ProductRelatedDiscussionsSection from './product/ProductRelatedDiscussionsSection.astro';
+import ProductCrossSell from './product/ProductCrossSell.astro';
+import ProductMobileBuyBar from './product/ProductMobileBuyBar.astro';
+
+interface Props {
+  product: ProductPage;
+  breadcrumbs?: BreadcrumbItem[];
+}
+
+const { product, breadcrumbs } = Astro.props;
+const { t, locale } = useLocale(Astro.currentLocale);
+const relatedGuides = getBlogPostsBySlugs(product.relatedBlogSlugs, locale).slice(0, 6);
+const relatedDiscussions = getForumPostsBySlugs(product.relatedForumSlugs, locale).slice(0, 4);
+const isUtility = product.kind === 'utility';
+const utilityCopy = !isUtility
+  ? undefined
+  : product.slug === HWID_SPOOFER_SLUG
+    ? t.products.hwidPage
+    : (t.products.utilityPages?.[product.slug] ?? getTranslations('en').products.utilityPages?.[product.slug]);
+/** `product.name` is the internal tier key (icon lookup); visible copy uses the localized product name. */
+const productName = isUtility ? product.name : t.cheats.title;
+const productFaqs = getProductFaqs(locale, product.slug, product.kind);
+const descriptionBlocks = [
+  ...product.overview.paragraphs.map((text) => ({ type: 'p' as const, text })),
+  ...(product.about ?? []),
+  ...product.body,
+];
+
+const showDescToggle = descriptionBlocks.length > 2;
+---
+
+<div class="product-detail">
+<section class="product-detail-hero py-8 md:py-12">
+  <div class="mx-auto max-w-6xl px-5">
+    {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
+
+    <div class="mt-6">
+      <ProductDetailHeader product={product} />
+    </div>
+
+    <div class:list={['product-detail-hero__grid mt-10 grid items-start gap-8', utilityCopy && 'product-detail-hero__grid--no-heading']}>
+      <div class="product-detail-hero__preview min-w-0">
+        {
+          !utilityCopy && (
+            <h2 class="product-showcase-heading mb-4 font-[family-name:var(--font-heading)] text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+              {t.products.showcaseHeading}
+            </h2>
+          )
+        }
+        <ProductScreenshotGallery images={product.images} id={`gallery-${product.slug}`} />
+      </div>
+      <ProductCheckoutPanel product={product} />
+    </div>
+  </div>
+</section>
+
+<ProductHighlightsSection product={product} productName={productName} header={utilityCopy?.highlights} moreNote={utilityCopy?.highlightsMore} />
+
+<ProductDescriptionSection
+  overviewTitle={product.overview.title}
+  overviewSubtitle={utilityCopy?.overviewSubtitle}
+  blocks={descriptionBlocks}
+  showToggle={showDescToggle}
+/>
+
+<ProductFeaturesSection
+  features={product.fullFeatures}
+  productName={productName}
+  section={utilityCopy?.featuresSection}
+/>
+
+<ProductExperienceSection
+  images={product.images}
+  acquisition={product.acquisition}
+  productName={productName}
+  experience={utilityCopy?.experience}
+/>
+
+<ProductCrossSell currentSlug={product.slug} />
+
+<SiteFaqSection
+  id="faq"
+  items={productFaqs}
+  titleId={`catalog-faq-${product.slug}`}
+  class="border-t border-border bg-background"
+/>
+
+<ProductRelatedGuidesSection posts={relatedGuides} productName={productName} />
+<ProductRelatedDiscussionsSection threads={relatedDiscussions} />
+<ProductMobileBuyBar product={product} productName={productName} />
+</div>
+
+<script>
+  const initProductDetailUi = () => {
+    document.querySelectorAll('[data-desc-toggle]').forEach((btn) => {
+      if (btn.hasAttribute('data-desc-bound')) return;
+      btn.setAttribute('data-desc-bound', '');
+      btn.addEventListener('click', () => {
+        const wrap = btn.closest('[data-desc-wrap]');
+        if (!wrap) return;
+        const open = wrap.classList.toggle('open');
+        btn.textContent = open ? btn.getAttribute('data-less') ?? 'Show less' : btn.getAttribute('data-more') ?? 'Show more';
+      });
+    });
+  };
+
+  initProductDetailUi();
+  document.addEventListener('astro:after-swap', initProductDetailUi);
+</script>

@@ -1,0 +1,101 @@
+---
+import SectionHeader from '../SectionHeader.astro';
+import Icon from '../icons/Icon.astro';
+import { getCatalog } from '../../data/catalog';
+import { formatPlanPrice } from '../../data/productPricing';
+import { PRODUCTS_HUB_PATH } from '../../config/site';
+import { useLocale } from '../../i18n';
+
+interface Props {
+  currentSlug: string;
+}
+
+const { currentSlug } = Astro.props;
+const { locale, t, lp } = useLocale(Astro.currentLocale);
+const others = getCatalog(locale).filter((entry) => entry.slug !== currentSlug);
+
+const localeCopy = {
+  en: {
+    eyebrow: 'More products',
+    title: 'Pairs well with',
+    desc: 'Other tools from the same store, each with its own page and checkout.',
+    from: 'From',
+    all: 'Compare all products',
+  },
+  es: {
+    eyebrow: 'Más productos',
+    title: 'Combina bien con',
+    desc: 'Otras herramientas de la misma tienda, cada una con su página y su pago.',
+    from: 'Desde',
+    all: 'Comparar todos los productos',
+  },
+  de: {
+    eyebrow: 'Weitere Produkte',
+    title: 'Passt gut zu',
+    desc: 'Weitere Tools aus demselben Shop, jedes mit eigener Seite und Kaufabwicklung.',
+    from: 'Ab',
+    all: 'Alle Produkte vergleichen',
+  },
+  fr: {
+    eyebrow: 'Autres produits',
+    title: 'Se combine bien avec',
+    desc: 'D’autres outils de la même boutique, chacun avec sa page et son paiement.',
+    from: 'Dès',
+    all: 'Comparer tous les produits',
+  },
+};
+
+const copy = { ...localeCopy[locale] };
+const enCrossSellDesc: Record<string, string> = {
+  'hwid-spoofer': 'The other licenses sold here. Open one to see its page and its checkout.',
+  ugc: 'UGC sits beside three other licenses. Each of those has its own write-up.',
+  elite: 'Utilities sold beside the cheat. Each one keeps a separate page.',
+};
+if (locale === 'en' && enCrossSellDesc[currentSlug]) copy.desc = enCrossSellDesc[currentSlug];
+---
+
+{
+  others.length > 0 && (
+    <section class="product-cross-sell border-t border-border py-14 md:py-16" aria-labelledby="product-cross-sell-title">
+      <div class="mx-auto max-w-6xl px-5">
+        <SectionHeader eyebrow={copy.eyebrow} title={copy.title} desc={copy.desc} titleId="product-cross-sell-title" />
+
+        <ul class="fill-grid mt-10 list-none gap-4 p-0" data-reveal-stagger>
+          {others.map((entry) => (
+            <li>
+              <a
+                href={lp(entry.path)}
+                class="group flex h-full flex-col gap-3 rounded-2xl border border-border bg-card p-5 transition-colors hover:border-primary/45"
+              >
+                <span class="flex items-center gap-3">
+                  <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/12">
+                    <Icon name={entry.icon} size={19} class="icon-app--primary" />
+                  </span>
+                  <span class="min-w-0">
+                    <span class="block font-[family-name:var(--font-heading)] text-lg font-bold leading-tight text-foreground group-hover:text-primary">
+                      {entry.shortName}
+                    </span>
+                    <span class="block text-xs font-medium text-muted-foreground">
+                      {copy.from} {formatPlanPrice(entry.fromPriceUsd)}
+                    </span>
+                  </span>
+                </span>
+                <span class="text-sm leading-relaxed text-muted-foreground">{entry.page.desc}</span>
+                <span class="mt-auto inline-flex max-w-full min-w-0 items-center gap-1.5 text-sm font-semibold text-primary-text">
+                  {t.products.viewDetails}: {entry.shortName}
+                  <Icon name="arrowRight" size={15} />
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <p class="mt-10 text-center">
+          <a href={lp(PRODUCTS_HUB_PATH)} class="inline-flex min-h-11 items-center justify-center px-4 text-sm font-semibold text-primary-text hover:underline">
+            {copy.all}
+          </a>
+        </p>
+      </div>
+    </section>
+  )
+}

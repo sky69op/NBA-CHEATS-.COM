@@ -1,0 +1,155 @@
+---
+import '../../styles/forum.css';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Icon from '../../components/icons/Icon.astro';
+import { getForumPost, getForumPosts } from '../../data/forum/locale';
+import { canonicalUrl, clipAtWord, pageTitle } from '../../config/seo';
+import { editorialSeo } from '../../config/editorialSeo';
+import { breadcrumbSchema, discussionForumPostingSchema } from '../../utils/schema';
+import { useLocale } from '../../i18n';
+import { resolveCheckoutHref } from '../../config/checkout';
+import { normalizeInternalPath } from '../../utils/path';
+import { formatForumCommentRelative, formatForumRelative } from '../../utils/forumTime';
+import { getForumFaqs } from '../../data/faq';
+import SiteFaqSection from '../../components/SiteFaqSection.astro';
+
+export function getStaticPaths() {
+  return getForumPosts('en').map((post) => ({ params: { slug: post.slug } }));
+}
+
+const { locale, t, lp } = useLocale(Astro.currentLocale);
+
+function linkify(text: string): string {
+  return text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_match, label: string, href: string) => {
+    if (/^https?:\/\//i.test(href)) {
+      return `<a href="${href}" rel="noopener">${label}</a>`;
+    }
+    const normalized = normalizeInternalPath(resolveCheckoutHref(href));
+    return `<a href="${lp(normalized)}">${label}</a>`;
+  });
+}
+const f = t.pages.forum;
+const categoryLabels: Record<string, string> = {
+  ...(f.categoryLabels ?? {}),
+  General: f.categoryGeneral,
+  'Guides & Builds': f.categoryGuides,
+  'Patch Talk': f.categoryPatch,
+  Community: f.categoryCommunity,
+};
+function forumCategoryLabel(category: string): string {
+  return categoryLabels[category] ?? category;
+}
+const post = getForumPost(Astro.params.slug!, locale);
+if (!post) return Astro.redirect(lp('/forum/'));
+
+const buildNow = new Date();
+const opRelative = formatForumRelative(post.published, buildNow);
+
+const forumPosts = getForumPosts(locale);
+const path = `/forum/${post.slug}/`;
+const breadcrumbs = [
+  { name: t.common.breadcrumbHome, path: '/' },
+  { name: t.common.breadcrumbForum, path: '/forum/' },
+  { name: forumCategoryLabel(post.category), path: '/forum/' },
+  { name: post.title, path },
+];
+const relatedPosts = [
+  ...forumPosts.filter((item) => item.slug !== post.slug && item.category === post.category),
+  ...forumPosts.filter((item) => item.slug !== post.slug && item.category !== post.category),
+].slice(0, 3);
+const metadata = editorialSeo(post.slug, locale);
+const documentDescription = metadata?.description ?? clipAtWord(post.excerpt);
+---
+
+<BaseLayout
+  title={metadata?.title ?? pageTitle(post.title, undefined, locale)}
+  description={documentDescription}
+  canonicalPath={lp(path)}
+  jsonLd={[
+  discussionForumPostingSchema({
+    name: post.title,
+    text: post.body.join('\n\n'),
+    url: canonicalUrl(lp(path)),
+    author: post.author,
+    authorType: post.authorType,
+    comments: post.commentsCount,
+    published: post.published,
+    locale,
+  }),
+  breadcrumbSchema(breadcrumbs, locale),
+]}>
+  <section class="forum-page py-8 md:py-12">
+    <div class="mx-auto max-w-6xl px-5">
+      <Breadcrumbs items={breadcrumbs} />
+      <div class="forum-layout forum-layout--detail">
+        <main class="forum-main">
+          <article class:list={['forum-detail-card', post.authorType === 'Organization' && 'forum-detail-card--editorial']}>
+            {!post.authorType && (
+              <div class="forum-vote forum-vote--detail" aria-label={f.voteAria}>
+                <button class="forum-vote__up" type="button" data-vote-up aria-label={f.upvoteAria}><Icon name="chevronDown" size={17} /></button><strong data-vote-count>{post.upvotes}</strong><button type="button" disabled aria-label={f.downvoteUnavailableAria}><Icon name="chevronDown" size={17} /></button>
+              </div>
+            )}
+            <div class="forum-detail-content">
+              <div class="forum-post-meta"><span class={`forum-community-avatar tone-${post.categoryTone}`}><Icon name="users" size={15} /></span><a href={lp('/forum/')} class="forum-community-name">{f.eyebrow}: {forumCategoryLabel(post.category)}</a><span>·</span><span><Icon name="userRound" size={13} /> {f.guideTeam}</span><span>{f.guideBasedQa}</span></div>
+              <h1 class="text-foreground">{post.title}</h1>
+              <span class="forum-flair">{f.closedThread}</span>
+              <span class="forum-flair">{f.closedBy}</span>
+              {post.flair && <span class={`forum-flair tone-${post.categoryTone}`}>{post.flair}</span>}
+              <div class="forum-detail-copy">
+                <div class="forum-comment__meta"><b>u/{post.author}</b><span>·</span><span>{opRelative}</span></div>
+                {post.body.map((paragraph) => <p set:html={linkify(paragraph)} />)}
+              </div>
+              {post.sourceTitle && <p class="forum-source forum-source--detail">{f.fromGuide} <a href={lp(post.sourcePath ?? '/blog/')}>{post.sourceTitle}</a></p>}
+              <div class="forum-post-actions forum-post-actions--detail"><a href="#comments"><Icon name="messageCircle" size={16} /> {f.guideTeam} Q&amp;A</a><a href={lp(post.sourcePath ?? '/blog/')}><Icon name="navBlog" size={15} /> {f.exploreGuides}</a></div>
+              <section class="forum-comments" id="comments" aria-labelledby="comments-title">
+                <div class="forum-comments__heading"><h2 id="comments-title">{f.guideTeam} Q&amp;A</h2><span>{f.repliesClosed}</span></div>
+                {post.comments.map((comment, commentIndex) => (
+                  <article class="forum-comment">
+                    <div class="forum-comment__rail"><span class="forum-comment__avatar">{comment.author.slice(0, 1).toUpperCase()}</span><span class="forum-comment__line"></span></div>
+                    <div class="forum-comment__body">
+                      <div class="forum-comment__meta"><b>u/{comment.author}</b><span>·</span><span>{formatForumCommentRelative(post.published, commentIndex, post.comments.length, buildNow)}</span></div>
+                      <p set:html={linkify(comment.body)} />
+                      {comment.replies?.map((reply) => (
+                        <div class="forum-comment forum-comment--reply">
+                          <div class="forum-comment__rail"><span class="forum-comment__avatar">{reply.author.slice(0, 1).toUpperCase()}</span></div>
+                          <div class="forum-comment__body">
+                            <div class="forum-comment__meta"><b>u/{reply.author}</b><span>·</span><span>{formatForumCommentRelative(post.published, commentIndex, post.comments.length, buildNow)}</span></div>
+                            <p set:html={linkify(reply.body)} />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </section>
+            </div>
+          </article>
+        </main>
+        <aside class="forum-sidebar">
+          <section class="forum-side-card forum-about"><div class="forum-side-card__banner"></div><div class="forum-about__content"><div class="forum-about__title"><span class={`forum-community-avatar tone-${post.categoryTone}`}>d</span><p>{forumCategoryLabel(post.category)}</p></div><p>{f.sidebarIntro}</p><div class="forum-stats"><span><b>{forumPosts.length}</b> {f.statsDiscussions}</span><span><b>{forumPosts.filter((item) => item.category === post.category).length}</b> {f.statsTopics}</span></div><a class="forum-join" href={lp('/forum/')}>{f.browseAllCommunities}</a></div></section>
+          <section class="forum-side-card forum-related-card" aria-labelledby="forum-related-title">
+            <p class="forum-side-heading" id="forum-related-title">{f.readDiscussion}</p>
+            <ul class="forum-related-list">
+              {relatedPosts.map((item) => (
+                <li>
+                  <a href={lp(`/forum/${item.slug}/`)}>
+                    <span class="forum-related-list__category">{forumCategoryLabel(item.category)}</span>
+                    <b>{item.title}</b>
+                    <span class="forum-related-list__meta">{f.guideTeam} Q&amp;A · {f.repliesClosed} <Icon name="arrowRight" size={14} /></span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <a class="forum-related-card__all" href={lp('/forum/')}>{f.browseAllCommunities} <Icon name="arrowRight" size={14} /></a>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </section>
+  <SiteFaqSection
+    items={getForumFaqs(post.slug, locale)}
+    titleId={`forum-faq-${post.slug}`}
+    class="border-t border-border bg-muted/20"
+  />
+</BaseLayout>

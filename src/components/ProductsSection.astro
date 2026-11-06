@@ -1,0 +1,125 @@
+---
+import { useLocale } from '../i18n';
+import { getCatalog } from '../data/catalog';
+import { getCatalogCopy } from '../data/catalogCopy';
+import { formatPlanPrice } from '../data/productPricing';
+import SectionHeader from './SectionHeader.astro';
+import Icon from './icons/Icon.astro';
+import { ROUTES } from '../utils/path';
+import type { ProductPage } from '../data/products';
+import { Badge } from '@/components/starwind/badge';
+import { Button } from '@/components/starwind/button';
+
+const { locale, t, lp } = useLocale(Astro.currentLocale);
+const catalog = getCatalog(locale);
+const catalogCopy = getCatalogCopy(locale);
+const s = t.products;
+
+function cardSubtitle(product: ProductPage): string {
+  if (product.kind === 'utility') {
+    return product.subtitle;
+  }
+  const line = t.cheats.subtitle;
+  const short = line.includes('. ') ? line.split('. ')[0].trim() : line;
+  return short || product.tier || product.name;
+}
+
+function cardTags(product: ProductPage): string[] {
+  const tags: string[] = [];
+  if (product.kind === 'tier' && product.tier) tags.push(product.tier);
+  if (product.badge) tags.push(product.badge);
+  if (product.kind === 'utility' && product.category) tags.push(product.category);
+  return tags;
+}
+---
+
+<section id="products" class="py-16 md:py-24" aria-labelledby="products-title">
+  <div class="mx-auto max-w-6xl px-5">
+    <SectionHeader eyebrow={s.eyebrow} title={s.title} desc={s.subtitle} titleId="products-title" />
+
+    <div class="fill-grid fill-grid--wide mt-12 gap-4" data-reveal-stagger>
+      {
+        catalog.map((entry) => {
+          const product = entry.page;
+          const homeCard = product.kind === 'tier' ? t.cheats.items.find((item) => item.name === product.name) : undefined;
+          const cardDesc = homeCard?.homeDesc || product.desc;
+          const bullets = product.features.slice(0, 3);
+          const tags = cardTags(product);
+          const pageHref = lp(entry.path);
+          return (
+            <article
+              class="group flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-border bg-card text-left shadow-sm transition-colors hover:border-primary/35"
+            >
+              <header class="card-title-band space-y-2 px-5 py-4 sm:px-6">
+                <div class="flex items-start gap-2.5">
+                  <span class="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+                    <Icon name={entry.icon} size={18} />
+                  </span>
+                  <div class="min-w-0 space-y-1">
+                    <h3 class="font-[family-name:var(--font-heading)] text-base font-bold leading-tight text-foreground md:text-lg">
+                      <a href={pageHref} class="hover:text-primary">
+                        {product.title}<span class="sr-only"> — {s.viewDetails}</span>
+                      </a>
+                    </h3>
+                    <p class="text-sm font-medium leading-snug text-muted-foreground">
+                      {cardSubtitle(product)}
+                    </p>
+                  </div>
+                </div>
+              </header>
+
+              <div class="flex min-h-0 flex-1 flex-col gap-3 px-5 py-4 sm:px-6">
+                <p class="text-sm leading-relaxed text-muted-foreground">{product.desc}</p>
+
+                {
+                  bullets.length > 0 && (
+                    <ul class="space-y-2 text-sm text-muted-foreground">
+                      {bullets.map((b) => (
+                        <li class="flex items-start gap-2.5">
+                          <Icon name="check" size={14} class="mt-0.5 shrink-0" />
+                          <span class="leading-snug">{b}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )
+                }
+
+                <p class="mt-auto flex items-baseline gap-1.5 pt-1 text-sm text-muted-foreground">
+                  {catalogCopy.from}
+                  <span class="font-[family-name:var(--font-heading)] text-xl font-bold text-foreground">
+                    {formatPlanPrice(entry.fromPriceUsd)}
+                  </span>
+                  {catalogCopy.perMonth}
+                </p>
+
+                <div class="min-w-0">
+                  <Button as="a" href={pageHref} variant="primary" size="sm" class="w-full min-w-0">
+                    {s.viewDetails}: {entry.shortName}
+                    <Icon name="arrowRight" size={17} />
+                  </Button>
+                </div>
+              </div>
+
+              {
+                tags.length > 0 && (
+                  <div class="card-footer-band mt-auto flex flex-wrap gap-1.5 px-5 py-3 sm:px-6">
+                    {tags.map((tag) => (
+                      <Badge variant="secondary" class="text-[11px]">{tag}</Badge>
+                    ))}
+                  </div>
+                )
+              }
+            </article>
+          );
+        })
+      }
+    </div>
+
+    <div class="mt-8 flex justify-center">
+      <Button as="a" href={lp(ROUTES.productsHub)} variant="outline">
+        {catalogCopy.menuViewAll}
+        <Icon name="arrowRight" size={17} />
+      </Button>
+    </div>
+  </div>
+</section>

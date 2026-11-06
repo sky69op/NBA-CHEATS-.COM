@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { useLocale } from '../i18n';
+import { resolvePageSeo } from '../config/seo';
+import LegalPage from '../components/LegalPage.astro';
+import { breadcrumbSchema, organizationSchema, webPageSchema } from '../utils/schema';
+
+const { locale, t, lp } = useLocale(Astro.currentLocale);
+const seo = resolvePageSeo('/about/', locale);
+const content = t.legalPages.about;
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  jsonLd={[
+    organizationSchema(locale),
+    webPageSchema({
+      name: content.title,
+      description: content.description,
+      url: lp('/about/'),
+      locale,
+    }),
+    breadcrumbSchema([
+      { name: t.common.breadcrumbHome, path: '/' },
+      { name: t.common.breadcrumbAbout, path: '/about/' },
+    ], locale),
+  ]}
+>
+  <LegalPage
+    title={content.title}
+    description={content.description}
+    breadcrumbLabel={t.common.breadcrumbAbout}
+    sections={content.sections}
+  />
+</BaseLayout>

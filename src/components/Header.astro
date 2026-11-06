@@ -1,0 +1,195 @@
+---
+import { useLocale } from '../i18n';
+import { ROUTES } from '../utils/path';
+import { Button } from '@/components/starwind/button';
+import AnimatedThemeSwitch from './AnimatedThemeSwitch.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import {
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetTrigger,
+} from '@/components/starwind/sheet';
+import Icon from './icons/Icon.astro';
+import SlideRevealButton from './SlideRevealButton.astro';
+import BrandLogo from './BrandLogo.astro';
+import BrandWordmark from './BrandWordmark.astro';
+
+import type { IconName } from './icons/types';
+import type { NavId } from '../i18n/types';
+
+const { t, lp } = useLocale(Astro.currentLocale);
+
+const navIcons: Record<NavId, IconName> = {
+  products: 'navProducts',
+  hwidSpoofer: 'undetected',
+  blog: 'navBlog',
+  forum: 'messageCircle',
+  faq: 'navFaq',
+  support: 'navSupport',
+};
+
+const productUrl = lp(ROUTES.products);
+
+interface Props {
+  brandLogoAlt?: string;
+}
+
+const { brandLogoAlt } = Astro.props;
+---
+
+<header class="pointer-events-none fixed inset-x-0 top-0 z-50">
+  <div
+    class="flex justify-center px-5 pt-[max(0.75rem,env(safe-area-inset-top))] sm:pt-4"
+    data-floating-nav
+  >
+    <div
+      class="site-header pointer-events-auto relative flex h-12 w-full max-w-6xl min-w-0 items-center justify-between gap-2 rounded-2xl border border-border/70 bg-background/95 px-3 text-foreground shadow-lg shadow-black/15 backdrop-blur-xl sm:h-14 sm:px-5 lg:grid lg:h-auto lg:min-h-[3.75rem] lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:items-center lg:gap-4 lg:py-2 lg:border-border/40 lg:bg-background/35 lg:shadow-md lg:shadow-black/5 lg:backdrop-blur-2xl lg:supports-[backdrop-filter]:bg-background/25 lg:dark:border-white/10 lg:dark:bg-background/20 lg:dark:shadow-black/25"
+    >
+      <a
+        href={lp('/')}
+        class="inline-flex min-w-0 shrink-0 items-center justify-self-start gap-2.5 font-[family-name:var(--font-heading)] text-base font-bold sm:gap-3 sm:text-lg"
+        aria-label={`${t.site.name} home`}
+      >
+        <BrandLogo size={32} class="size-8 shrink-0 rounded-md" priority alt={brandLogoAlt} />
+        <BrandWordmark />
+      </a>
+
+      <nav
+        class="hidden min-w-0 flex-wrap items-center justify-center gap-x-2.5 gap-y-1 justify-self-center lg:flex xl:gap-x-5"
+        aria-label="Primary"
+      >
+        {t.nav.map((link) => {
+          const headerLabel = link.shortLabel ?? link.label;
+          const candidate = link.shortLabel ? link.label : link.ariaLabel;
+          const aria =
+            candidate && headerLabel && candidate.toLowerCase().includes(headerLabel.toLowerCase())
+              ? candidate
+              : undefined;
+          return (
+            <a
+              href={lp(link.href)}
+              class="nav-link inline-flex shrink-0 items-center gap-1 whitespace-nowrap text-xs font-extralight uppercase leading-none tracking-[0.04em] text-muted-foreground transition-colors hover:text-primary"
+              data-nav-link
+              {...(link.scrollTarget ? { 'data-scroll-target': link.scrollTarget } : {})}
+              {...(aria ? { 'aria-label': aria } : {})}
+            >
+              <Icon name={navIcons[link.id] ?? 'navFeatures'} size={15} />
+              {headerLabel}
+            </a>
+          );
+        })}
+      </nav>
+
+      <div class="flex shrink-0 items-center justify-end justify-self-end gap-1.5 sm:gap-2">
+        <div class="hidden items-center gap-2 lg:flex">
+          <div class="header-lang-slot">
+            <LanguageSwitcher variant="compact" />
+          </div>
+          <SlideRevealButton
+            href={productUrl}
+            class="header-cta shrink-0"
+          >
+            {t.ui.browseCheatsNav}
+          </SlideRevealButton>
+          <div class="nav-action-divider flex h-9 items-center px-1" aria-hidden="true">
+            <span class="block h-6 w-px bg-border/80"></span>
+          </div>
+          <AnimatedThemeSwitch size="md" ariaLabel={t.ui.themeLight} class="shrink-0" />
+        </div>
+
+        <Button
+          as="a"
+          href={productUrl}
+          variant="primary"
+          class="inline-flex h-9 shrink-0 items-center px-3 text-sm font-semibold lg:hidden"
+        >
+          {t.ui.browseCheatsNavMobile}
+        </Button>
+
+        <Sheet class="lg:hidden">
+          <SheetTrigger
+            class="inline-flex size-9 shrink-0 items-center justify-center rounded-full border border-border/80 bg-background/80 text-foreground transition-colors hover:bg-muted"
+            aria-label={t.ui.menuOpen}
+          >
+            <Icon name="menu" size={20} />
+          </SheetTrigger>
+          <SheetContent
+            side="right"
+            class="site-header-sheet w-[min(17.5rem,88vw)] gap-0 overflow-hidden rounded-none border-l p-0 sm:max-w-[17.5rem]"
+          >
+            <nav class="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto overscroll-contain px-4 pb-4 pt-3" aria-label="Mobile">
+              {t.nav.map((link) => (
+                <a
+                  href={lp(link.href)}
+                  class="nav-link flex min-h-12 w-full items-center gap-2.5 rounded-xl px-3 py-3 text-base font-medium text-foreground/80 transition-colors hover:bg-primary/15 hover:text-foreground"
+                  data-nav-link
+                  {...(link.scrollTarget ? { 'data-scroll-target': link.scrollTarget } : {})}
+                >
+                  <Icon name={navIcons[link.id] ?? 'navFeatures'} size={16} />
+                  {link.sheetLabel ?? link.label}
+                </a>
+              ))}
+            </nav>
+            <SheetFooter class="mt-0 shrink-0 gap-3 border-t border-border/50 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+              <div class="flex justify-center">
+                <AnimatedThemeSwitch size="sm" ariaLabel={t.ui.themeLight} />
+              </div>
+              <LanguageSwitcher variant="sheet" />
+            </SheetFooter>
+          </SheetContent>
+        </Sheet>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  :global(.site-header-sheet[data-slot='sheet-content']) {
+    top: var(--floating-nav-clearance);
+    right: 0;
+    bottom: 0;
+    left: auto;
+    height: calc(100dvh - var(--floating-nav-clearance));
+    max-height: none;
+  }
+
+  :global(.site-header-sheet [data-slot='sheet-close']) {
+    display: none;
+  }
+
+  :global(.site-header-sheet a.nav-link[data-nav-link].is-active) {
+    background: color-mix(in oklab, var(--color-primary) 25%, transparent);
+    color: var(--color-foreground);
+    font-weight: 600;
+    box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--color-primary) 32%, transparent);
+  }
+
+  .header-lang-slot {
+    width: 4.5rem;
+    flex: 0 0 4.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    :global(.header-cta.slide-reveal-btn) {
+      min-width: 0;
+      width: max-content;
+      max-width: 9.75rem;
+    }
+
+    :global(.header-cta .slide-reveal-btn__text) {
+      font-size: 0.8125rem;
+      padding-inline: 0.625rem calc(var(--slide-reveal-icon) + 0.25rem);
+    }
+  }
+
+  @media (min-width: 1280px) {
+    :global(.header-cta.slide-reveal-btn) {
+      max-width: 10.5rem;
+    }
+
+    :global(.header-cta .slide-reveal-btn__text) {
+      font-size: 0.875rem;
+    }
+  }
+</style>

@@ -1,0 +1,96 @@
+{
+  "eyebrow": "Tienda",
+  "title": "Productos de {gameName}: cheats y utilidades",
+  "subtitle": "Cuatro productos para {gameName}. Compare el alcance declarado, los planes y los requisitos antes del pago.",
+  "trust": [
+    "Fines de producto distintos",
+    "Planes mensuales o de por vida",
+    "Pago con plan seleccionado",
+    "Confirmación de alcance necesaria"
+  ],
+  "featuredEyebrow": "Producto principal",
+  "from": "Desde",
+  "priceLabel": "Precio",
+  "lifetime": "De por vida",
+  "perMonth": "/ mes",
+  "utilitiesEyebrow": "Utilidades",
+  "utilitiesTitle": "Productos aparte para revisar",
+  "utilitiesDesc": "Cada utilidad tiene su propio propósito, términos de plan, límites y pago. No infiera los requisitos de un producto a partir de otro.",
+  "chooserEyebrow": "¿No está seguro?",
+  "chooserTitle": "¿Qué producto necesito?",
+  "chooserDesc": "Empiece por el propósito del producto y confirme el alcance del listado actual antes del pago.",
+  "scenarios": [
+    {
+      "slug": "elite",
+      "need": "Quiero revisar el listado específico del juego NBA2K27 CHEATS y los detalles actuales del producto.",
+      "answer": "{cheatProduct}"
+    },
+    {
+      "slug": "hwid-spoofer",
+      "need": "Quiero revisar una utilidad HWID aparte y confirmar su alcance real y aplicabilidad a NBA 2K27.",
+      "answer": "HWID Spoofer"
+    },
+    {
+      "slug": "ugc",
+      "need": "Necesito un producto de apelación de cuenta y entiendo que la plataforma decide el resultado.",
+      "answer": "UGC"
+    },
+    {
+      "slug": "cloud-dma",
+      "need": "Necesito confirmar los requisitos y la función actuales de Cloud DMA en la página del producto.",
+      "answer": "Cloud DMA"
+    }
+  ],
+  "compareEyebrow": "Comparar",
+  "compareTitle": "Compare productos lado a lado",
+  "compareDesc": "Compare términos de plan y propósito declarado. Requisitos, entrega y compatibilidad deben confirmarse en el listado actual del producto.",
+  "compareRows": [
+    {
+      "label": "Ideal para",
+      "values": {
+        "elite": "Investigación de producto NBA 2K27",
+        "hwid-spoofer": "Investigación de utilidad de hardware aparte",
+        "ugc": "Investigación de apelación de cuenta",
+        "cloud-dma": "Investigación de producto Cloud DMA"
+      }
+    },
+    {
+      "label": "Entrega",
+      "values": {
+        "elite": "Confirmar en el pago",
+        "hwid-spoofer": "Confirmar en el pago",
+        "ugc": "Confirmar en el pago",
+        "cloud-dma": "Confirmar en el pago"
+      }
+    },
+    {
+      "label": "Windows",
+      "values": {
+        "elite": "No facilitado",
+        "hwid-spoofer": "No facilitado",
+        "ugc": "No facilitado",
+        "cloud-dma": "No facilitado"
+      }
+    },
+    {
+      "label": "Ajustes de seguridad",
+      "values": {
+        "elite": "Confirmar en el pago",
+        "hwid-spoofer": "Confirmar en el pago",
+        "ugc": "Confirmar en el pago",
+        "cloud-dma": "Confirmar en el pago"
+      }
+    }
+  ],
+  "ctaTitle": "¿Aún decidiendo?",
+  "ctaDesc": "Use soporte para confirmar el alcance, los requisitos y los términos del plan antes del pago.",
+  "ctaSupport": "Preguntar a soporte",
+  "menuHeading": "Productos",
+  "menuViewAll": "Comparar todos los productos",
+  "menuTaglines": {
+    "elite": "Plan e investigación de producto NBA 2K27",
+    "hwid-spoofer": "Alcance HWID a confirmar",
+    "ugc": "Contexto de apelación de cuenta",
+    "cloud-dma": "Requisitos Cloud DMA a confirmar"
+  }
+}

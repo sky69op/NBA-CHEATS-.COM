@@ -1,0 +1,94 @@
+---
+import SectionHeader from '../SectionHeader.astro';
+import { Button } from '@/components/starwind/button';
+import { Prose } from '@/components/starwind/prose';
+
+interface Block {
+  type: 'h2' | 'p';
+  text: string;
+}
+
+interface Props {
+  overviewTitle?: string;
+  overviewSubtitle?: string;
+  blocks: Block[];
+  showToggle: boolean;
+}
+
+import { linkifyMarkdown } from '../../utils/linkify';
+import { useLocale } from '../../i18n';
+
+const { overviewTitle, overviewSubtitle, blocks, showToggle } = Astro.props;
+const { locale } = useLocale(Astro.currentLocale);
+
+const ui = {
+  en: {
+    eyebrow: 'Overview',
+    fallbackTitle: 'Product description',
+    fallbackSubtitle: 'Review the stated product scope, requirements, official rules, and support notes before checkout.',
+    showMore: 'Show more',
+    showLess: 'Show less',
+  },
+  es: {
+    eyebrow: 'Resumen',
+    fallbackTitle: 'Descripción del producto',
+    fallbackSubtitle: 'Cómo encajan los módulos, los presets y las comprobaciones del día del parche en las incursiones.',
+    showMore: 'Mostrar más',
+    showLess: 'Mostrar menos',
+  },
+  de: {
+    eyebrow: 'Überblick',
+    fallbackTitle: 'Produktbeschreibung',
+    fallbackSubtitle: 'Wie Module, Presets und die Statusprüfung am Patch-Tag in die Raids passen.',
+    showMore: 'Mehr anzeigen',
+    showLess: 'Weniger anzeigen',
+  },
+  fr: {
+    eyebrow: 'Aperçu',
+    fallbackTitle: 'Description du produit',
+    fallbackSubtitle: 'Comment les modules, les préréglages et les vérifications du jour de patch s’intègrent aux raids.',
+    showMore: 'Afficher plus',
+    showLess: 'Afficher moins',
+  },
+}[locale];
+---
+
+<section
+  class="border-t border-border bg-background py-12 md:py-16"
+  aria-labelledby="product-description-title"
+>
+  <div class="mx-auto max-w-6xl px-5">
+    <SectionHeader
+      eyebrow={ui.eyebrow}
+      title={overviewTitle ?? ui.fallbackTitle}
+      desc={overviewSubtitle ?? ui.fallbackSubtitle}
+      titleId="product-description-title"
+      wide
+    />
+
+    <div class:list={['desc-wrap product-detail__narrow mt-8', showToggle && 'collapsible']} data-desc-wrap>
+      <Prose class="description-content max-w-none">
+        {blocks.map((block) =>
+          block.type === 'h2' ? <h2>{block.text}</h2> : <p set:html={linkifyMarkdown(block.text)} />,
+        )}
+      </Prose>
+      {
+        showToggle && (
+          <div class="mt-6 flex justify-start lg:justify-center">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              class="rounded-full"
+              data-desc-toggle
+              data-more={ui.showMore}
+              data-less={ui.showLess}
+            >
+              {ui.showMore}
+            </Button>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</section>

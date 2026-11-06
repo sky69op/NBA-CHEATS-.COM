@@ -1,0 +1,205 @@
+---
+import ResponsiveImage from './ResponsiveImage.astro';
+import { HERO_IMAGE_SIZES, HERO_IMAGE_WIDTHS } from '../utils/responsiveImage';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/starwind/carousel';
+import { useLocale } from '../i18n';
+
+interface Slide {
+  src: string;
+  alt: string;
+  caption: string;
+  captionDesc: string;
+  width?: number;
+  height?: number;
+}
+
+interface Props {
+  images: Slide[];
+  id: string;
+  variant?: 'default' | 'hero';
+  class?: string;
+}
+
+const { images, id, class: className } = Astro.props;
+const { locale } = useLocale(Astro.currentLocale);
+const sliderUi = {
+  en: { region: 'Gameplay preview', dots: 'Slide indicators', slide: (n: number, total: number) => `Show slide ${n} of ${total}` },
+  es: { region: 'Vista previa de juego', dots: 'Indicadores de diapositiva', slide: (n: number, total: number) => `Mostrar diapositiva ${n} de ${total}` },
+  de: { region: 'Gameplay-Vorschau', dots: 'Folienanzeigen', slide: (n: number, total: number) => `Folie ${n} von ${total} anzeigen` },
+  fr: { region: 'Aperçu en jeu', dots: 'Indicateurs de diapositive', slide: (n: number, total: number) => `Afficher la diapositive ${n} sur ${total}` },
+}[locale];
+const count = images.length;
+const multiple = count > 1;
+const tabId = (index: number) => `${id}-tab-${index}`;
+const panelId = (index: number) => `${id}-panel-${index}`;
+---
+
+<div
+  class:list={[
+    'hero-slider relative w-full rounded-xl border border-border bg-card p-2 shadow-sm',
+    className,
+  ]}
+  id={id}
+  data-hero-slider={multiple ? '' : undefined}
+  data-slides={count}
+  role={multiple ? 'region' : undefined}
+  aria-roledescription={multiple ? 'carousel' : undefined}
+  aria-label={multiple ? sliderUi.region : undefined}
+>
+  <Carousel
+    autoInit={false}
+    opts={{
+      loop: multiple,
+      align: 'start',
+      dragFree: false,
+    }}
+    class="hero-slider__frame"
+  >
+    <CarouselContent class="hero-slider__content">
+      {
+        images.map((img, i) => (
+          <CarouselItem class="hero-slider__item">
+            <figure
+              id={multiple ? panelId(i) : undefined}
+              class="hero-slider__slide aspect-[16/10] overflow-hidden rounded-lg bg-muted/30"
+              role={multiple ? 'tabpanel' : undefined}
+              aria-roledescription={multiple ? 'slide' : undefined}
+              aria-labelledby={multiple ? tabId(i) : undefined}
+              aria-hidden={multiple ? (i === 0 ? 'false' : 'true') : undefined}
+              data-hero-panel={multiple ? i : undefined}
+              tabindex={multiple ? (i === 0 ? 0 : -1) : undefined}
+            >
+              <ResponsiveImage
+                src={img.src}
+                alt={img.alt}
+                width={img.width ?? 960}
+                height={img.height ?? 540}
+                widths={HERO_IMAGE_WIDTHS}
+                loading={i === 0 ? 'eager' : 'lazy'}
+                fetchPriority={i === 0 ? 'high' : 'low'}
+                sizes={HERO_IMAGE_SIZES}
+                desktopOnly
+                class="h-full w-full object-cover"
+              />
+            </figure>
+          </CarouselItem>
+        ))
+      }
+    </CarouselContent>
+  </Carousel>
+  {
+    multiple && (
+      <div class="hero-slider__dots" role="tablist" aria-label={sliderUi.dots}>
+        {images.map((_, i) => (
+          <button
+            type="button"
+            id={tabId(i)}
+            class="hero-slider__dot"
+            role="tab"
+            data-hero-dot={i}
+            aria-label={sliderUi.slide(i + 1, count)}
+            aria-controls={panelId(i)}
+            aria-selected={i === 0 ? 'true' : 'false'}
+            tabindex={i === 0 ? 0 : -1}
+          >
+            <span class="hero-slider__dot-fill" aria-hidden="true" />
+          </button>
+        ))}
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .hero-slider__frame {
+    width: 100%;
+  }
+
+  .hero-slider__content {
+    cursor: grab;
+    touch-action: pan-y pinch-zoom;
+  }
+
+  .hero-slider__content:active {
+    cursor: grabbing;
+  }
+
+  .hero-slider__item {
+    flex: 0 0 100%;
+    min-width: 0;
+  }
+
+  .hero-slider__slide {
+    margin: 0;
+  }
+
+  .hero-slider__dots {
+    position: absolute;
+    left: 50%;
+    bottom: 0.65rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.3rem 0.45rem;
+    border-radius: 999px;
+    border: 1px solid rgb(255 255 255 / 12%);
+    background: rgb(0 0 0 / 48%);
+    backdrop-filter: blur(6px);
+    transform: translateX(-50%);
+    pointer-events: auto;
+  }
+
+  .hero-slider__dot {
+    position: relative;
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 0.25rem;
+    border-radius: 999px;
+    border: 0;
+    padding: 0;
+    overflow: hidden;
+    background: rgb(255 255 255 / 22%);
+    transition: background-color 0.2s ease;
+  }
+
+  .hero-slider__dot-fill {
+    position: absolute;
+    inset: 0;
+    display: block;
+    border-radius: inherit;
+    background: var(--primary-text, var(--primary));
+    transform: scaleX(0);
+    transform-origin: left center;
+    animation: none;
+  }
+
+  .hero-slider__dot.is-active {
+    background: rgb(255 255 255 / 14%);
+  }
+
+  .hero-slider__dot:not(.is-active) .hero-slider__dot-fill {
+    transform: scaleX(0);
+    animation: none;
+  }
+
+  .hero-slider[data-hero-timer-ready] .hero-slider__dot.is-active .hero-slider__dot-fill {
+    animation: hero-slider-dot-progress var(--hero-autoplay, 3s) linear forwards;
+  }
+
+  .hero-slider__dot:focus-visible {
+    outline: 2px solid var(--primary-text, var(--primary));
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-slider__content {
+      cursor: default;
+    }
+
+    .hero-slider__dot.is-active .hero-slider__dot-fill {
+      animation: none;
+      transform: scaleX(1);
+    }
+  }
+</style>

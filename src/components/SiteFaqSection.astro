@@ -1,0 +1,87 @@
+---
+import type { SiteFaqItem, FaqTopic } from '../data/faq';
+import FaqSection from './FaqSection.astro';
+import { useLocale } from '../i18n';
+import {
+  SITE_FAQ_FILTER_TOPICS,
+  SITE_FAQ_SECTION_COPY,
+  CONTEXTUAL_FAQ_SECTION_COPY,
+  faqFilterTopicsForItems,
+} from '../data/faq';
+
+interface Props {
+  items: SiteFaqItem[];
+  id?: string;
+  titleId?: string;
+  class?: string;
+  /** Full /faq/ experience, all topics chip bar */
+  variant?: 'full' | 'contextual';
+  filterTopics?: FaqTopic[];
+}
+
+const {
+  items,
+  id,
+  titleId = 'faq-heading',
+  class: className,
+  variant = 'contextual',
+  filterTopics: filterTopicsProp,
+} = Astro.props;
+
+const { locale } = useLocale(Astro.currentLocale);
+
+const contextualCopy = {
+  en: CONTEXTUAL_FAQ_SECTION_COPY,
+  es: {
+    eyebrow: 'FAQ',
+    title: 'Preguntas sobre esta página',
+    subtitle: 'Respuestas sobre lo que estás leyendo. En la FAQ está el resto.',
+  },
+  de: {
+    eyebrow: 'FAQ',
+    title: 'Fragen zu dieser Seite',
+    subtitle: 'Antworten zu dem, was du gerade liest. Alle Themen stehen auf der FAQ-Seite.',
+  },
+  fr: {
+    eyebrow: 'FAQ',
+    title: 'Questions sur cette page',
+    subtitle: 'Des réponses liées à cette page. La FAQ couvre tous les sujets.',
+  },
+} as const;
+
+const fullCopy = {
+  en: SITE_FAQ_SECTION_COPY,
+  es: {
+    eyebrow: 'Todos los temas',
+    title: 'Buscar por categoría',
+    subtitle: 'Filtra planes, ESP, aim y retroceso, productos, setup y respuestas del blog.',
+  },
+  de: {
+    eyebrow: 'Alle Themen',
+    title: 'Nach Kategorie',
+    subtitle: 'Filter für Pläne, ESP, Aim und Rückstoß, Produkte, Setup und Blog-Antworten.',
+  },
+  fr: {
+    eyebrow: 'Tous les sujets',
+    title: 'Par catégorie',
+    subtitle: 'Filtre les offres, l’ESP, la visée et le recul, les produits, le setup et les réponses du blog.',
+  },
+} as const;
+
+const copy = variant === 'full' ? fullCopy[locale] : contextualCopy[locale];
+const filterTopics =
+  filterTopicsProp ?? (variant === 'full' ? SITE_FAQ_FILTER_TOPICS : faqFilterTopicsForItems(items));
+const showFilters = filterTopics.length > 1;
+---
+
+<FaqSection
+  id={id}
+  items={items}
+  eyebrow={copy.eyebrow}
+  title={copy.title}
+  subtitle={copy.subtitle}
+  titleId={titleId}
+  showFilters={showFilters}
+  filterTopics={filterTopics}
+  class={className}
+/>

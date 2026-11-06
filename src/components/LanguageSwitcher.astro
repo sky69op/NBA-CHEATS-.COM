@@ -1,0 +1,336 @@
+---
+import { getTranslations, getLocalizedPath } from '../i18n';
+/** Alternates are derived from `LOCALES` + the current pathname (see `getLocalizedPath`). */
+import { LOCALES, type SiteLocale } from '../i18n/locales';
+import Icon from './icons/Icon.astro';
+
+const locale = (Astro.currentLocale ?? 'en') as SiteLocale;
+const t = getTranslations(locale);
+const pathname = Astro.url.pathname;
+
+const options = LOCALES.map((code) => ({
+  code,
+  label: t.ui.languageNames[code],
+  href: getLocalizedPath(pathname, code),
+}));
+
+const current = options.find((o) => o.code === locale) ?? options[0];
+
+interface Props {
+  variant?: 'default' | 'compact' | 'sheet';
+  class?: string;
+}
+
+const { variant = 'default', class: className } = Astro.props;
+const compact = variant === 'compact';
+const sheet = variant === 'sheet';
+const triggerLabel = compact ? current.code.toUpperCase() : current.label;
+const currentCode = current.code.toUpperCase();
+const sheetAria = `${t.ui.languageSwitcherLabel}: ${current.label} ${currentCode}`;
+const triggerAria = compact ? sheetAria : `${t.ui.languageSwitcherLabel}: ${current.label}`;
+---
+
+{
+  sheet ? (
+    <details class:list={['lang-drawer', className]}>
+      <summary class="lang-drawer__trigger" aria-label={sheetAria}>
+        <Icon name="globe" size={16} class="lang-dropdown__icon" aria-hidden="true" />
+        <span class="lang-drawer__label">{current.label}</span>
+        <span class="lang-drawer__code">{current.code.toUpperCase()}</span>
+        <span class="lang-drawer__chevron">
+          <Icon name="chevronDown" size={16} aria-hidden="true" />
+        </span>
+      </summary>
+      <div class="lang-drawer__panel" role="menu">
+        <ul class="lang-dropdown__list">
+          {options.map((option) => (
+            <li role="none">
+              {option.code === locale ? (
+                <span class="lang-drawer__item lang-drawer__item--current" role="menuitem" aria-current="true">
+                  <span>{option.label}</span>
+                  <span class="lang-drawer__code">{option.code.toUpperCase()}</span>
+                </span>
+              ) : (
+                <a
+                  class="lang-drawer__item"
+                  href={option.href}
+                  hreflang={option.code}
+                  lang={option.code}
+                  role="menuitem"
+                >
+                  <span>{option.label}</span>
+                  <span class="lang-drawer__code">{option.code.toUpperCase()}</span>
+                </a>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </details>
+  ) : (
+    <div class:list={['lang-dropdown flex shrink-0 items-center', className]} data-variant={variant}>
+      <details class="lang-dropdown__details">
+        <summary class="lang-dropdown__trigger" aria-label={triggerAria}>
+          <Icon name="globe" size={16} class="lang-dropdown__icon" aria-hidden="true" />
+          <span class="lang-dropdown__label">{triggerLabel}</span>
+          <Icon name="chevronDown" size={14} class="lang-dropdown__chevron" aria-hidden="true" />
+        </summary>
+        <div class="lang-dropdown__panel" role="menu">
+          <ul class="lang-dropdown__list">
+            {options.map((option) => (
+              <li role="none">
+                {option.code === locale ? (
+                  <span class="lang-dropdown__item lang-dropdown__item--current" role="menuitem" aria-current="true">
+                    {option.label}
+                  </span>
+                ) : (
+                  <a
+                    class="lang-dropdown__item"
+                    href={option.href}
+                    hreflang={option.code}
+                    lang={option.code}
+                    role="menuitem"
+                  >
+                    {option.label}
+                  </a>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </details>
+    </div>
+  )
+}
+
+<script>
+  document.querySelectorAll('.lang-dropdown__details,lang-drawer').forEach((root) => {
+    const details = root as HTMLDetailsElement;
+    document.addEventListener(
+      'click',
+      (event) => {
+        if (!details.open) return;
+        const target = event.target as Node;
+        if (!details.contains(target)) details.open = false;
+      },
+      true,
+    );
+    details.querySelectorAll('.lang-dropdown__item[href]').forEach((link) => {
+      link.addEventListener('click', () => {
+        details.open = false;
+      });
+    });
+  });
+</script>
+
+<style>
+  .lang-dropdown {
+    position: relative;
+  }
+
+  .lang-dropdown__details {
+    position: relative;
+  }
+
+  .lang-dropdown__trigger {
+    display: inline-flex;
+    box-sizing: border-box;
+    height: 2.25rem;
+    min-height: 2.25rem;
+    max-width: 100%;
+    cursor: pointer;
+    list-style: none;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: 0.5rem;
+    border: 1px solid color-mix(in oklab, var(--color-border) 85%, transparent);
+    background: color-mix(in oklab, var(--color-background) 70%, transparent);
+    padding: 0 0.5rem 0 0.45rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--color-foreground);
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .lang-dropdown[data-variant='compact'] {
+    width: 100%;
+    max-width: 4.5rem;
+  }
+
+  .lang-dropdown[data-variant='compact'] .lang-dropdown__trigger {
+    width: 100%;
+    min-width: 0;
+    justify-content: center;
+    gap: 0.2rem;
+    padding: 0 0.35rem;
+  }
+
+  .lang-dropdown[data-variant='compact'] .lang-dropdown__label {
+    flex: 0 0 1.5rem;
+    width: 1.5rem;
+    max-width: none;
+    overflow: visible;
+    text-align: center;
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .lang-dropdown[data-variant='compact'] .lang-dropdown__chevron {
+    flex-shrink: 0;
+    width: 0.875rem;
+  }
+
+  .lang-dropdown__trigger::-webkit-details-marker {
+    display: none;
+  }
+
+  .lang-dropdown__trigger:hover {
+    border-color: color-mix(in oklab, var(--color-primary) 45%, var(--color-border));
+    background: color-mix(in oklab, var(--color-muted) 35%, transparent);
+  }
+
+  .lang-dropdown__details[open] .lang-dropdown__trigger {
+    border-color: color-mix(in oklab, var(--color-primary) 55%, var(--color-border));
+  }
+
+  .lang-dropdown__details[open] .lang-dropdown__chevron {
+    transform: rotate(180deg);
+  }
+
+  .lang-dropdown__chevron {
+    opacity: 0.65;
+    transition: transform 0.15s ease;
+  }
+
+  .lang-dropdown__icon {
+    flex-shrink: 0;
+    opacity: 0.85;
+  }
+
+  .lang-dropdown__label {
+    max-width: 5.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .lang-dropdown__panel {
+    position: absolute;
+    right: 0;
+    z-index: 60;
+    margin-top: 0.35rem;
+    min-width: 9.5rem;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-border);
+    background: var(--color-popover, var(--color-background));
+    padding: 0.25rem;
+    box-shadow:
+      0 10px 24px color-mix(in oklab, var(--color-foreground) 12%, transparent),
+      0 2px 6px color-mix(in oklab, var(--color-foreground) 6%, transparent);
+  }
+
+  .lang-dropdown__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .lang-dropdown__item {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    border-radius: 0.375rem;
+    padding: 0.45rem 0.55rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-foreground);
+    text-decoration: none;
+    transition: background-color 0.12s ease, color 0.12s ease;
+  }
+
+  .lang-dropdown__item:hover {
+    background: color-mix(in oklab, var(--color-muted) 55%, transparent);
+    color: var(--color-primary);
+  }
+
+  .lang-dropdown__item--current {
+    background: color-mix(in oklab, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .lang-drawer {
+    display: flex;
+    flex-direction: column-reverse;
+    width: 100%;
+  }
+
+  .lang-drawer__trigger {
+    display: flex;
+    height: 2.75rem;
+    cursor: pointer;
+    list-style: none;
+    align-items: center;
+    gap: 0.6rem;
+    border-radius: 0.75rem;
+    padding: 0 0.25rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-foreground);
+  }
+
+  .lang-drawer__trigger::-webkit-details-marker {
+    display: none;
+  }
+
+  .lang-drawer__label {
+    flex: 1;
+  }
+
+  .lang-drawer__code {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--color-muted-foreground);
+  }
+
+  .lang-drawer__chevron {
+    display: inline-flex;
+    margin-left: auto;
+    opacity: 0.7;
+    transform: rotate(180deg);
+  }
+
+  .lang-drawer__panel {
+    margin-bottom: 0.25rem;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    border: 1px solid color-mix(in oklab, var(--color-border) 70%, transparent);
+    background: color-mix(in oklab, var(--color-background) 88%, black);
+    padding: 0.25rem 0;
+  }
+
+  .lang-drawer__item {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-foreground);
+    text-decoration: none;
+  }
+
+  .lang-drawer__item:hover {
+    background: color-mix(in oklab, var(--color-muted) 45%, transparent);
+  }
+
+  .lang-drawer__item--current {
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+</style>

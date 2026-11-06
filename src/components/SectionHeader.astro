@@ -1,0 +1,28 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  desc?: string;
+  titleId?: string;
+  centered?: boolean;
+  wide?: boolean;
+  /** Page-level title only. Other sections stay h2 so each URL has one H1. */
+  level?: 'h1' | 'h2';
+}
+
+const { eyebrow, title, desc, titleId, centered = false, wide = false, level = 'h2' } = Astro.props;
+const TitleTag = level === 'h1' ? 'h1' : 'h2';
+---
+
+<header
+  class:list={[
+    'section-header space-y-0',
+    wide && 'section-header--wide',
+    centered && 'mx-auto text-center',
+  ]}
+  data-reveal="up"
+>
+  <p class="section-header__eyebrow">{eyebrow}</p>
+  <TitleTag id={titleId} class:list={['section-header__title', level === 'h1' && 'text-foreground']}>{title}</TitleTag>
+  {desc ? <p class="section-header__subtitle">{desc}</p> : null}
+</header>

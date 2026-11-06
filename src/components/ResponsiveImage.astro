@@ -1,0 +1,94 @@
+---
+import {
+  DEFAULT_IMAGE_WIDTHS,
+  HERO_IMAGE_SIZES,
+  defaultWebpSrc,
+  isRasterAsset,
+  responsiveSrcSet,
+  webpSrc,
+} from '../utils/responsiveImage';
+
+interface Props {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  loading?: 'lazy' | 'eager';
+  fetchPriority?: 'high' | 'low' | 'auto';
+  sizes?: string;
+  widths?: readonly number[];
+  class?: string;
+  desktopOnly?: boolean;
+  /** Width of the file phones should download. Tablets use 640w; desktop uses `widths`. */
+  phoneWidth?: number;
+}
+
+const {
+  src,
+  alt,
+  width,
+  height,
+  loading = 'lazy',
+  fetchPriority,
+  sizes = '(min-width: 1024px) 640px, 100vw',
+  widths = DEFAULT_IMAGE_WIDTHS,
+  class: className,
+  desktopOnly = false,
+  phoneWidth,
+} = Astro.props;
+
+const isRaster = isRasterAsset(src);
+const srcSet = responsiveSrcSet(src, widths);
+const phoneSrc = phoneWidth ? webpSrc(src, phoneWidth) : undefined;
+const tabletWidth = [...widths].sort((a, b) => a - b).find((width) => width >= 640) ?? widths[widths.length - 1];
+const tabletSrc = phoneWidth && tabletWidth ? webpSrc(src, tabletWidth) : undefined;
+const imgSrc = desktopOnly
+  ? 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
+  : phoneSrc ?? defaultWebpSrc(src, widths);
+const pictureSizes = desktopOnly ? HERO_IMAGE_SIZES : sizes;
+const pictureMedia = desktopOnly ? '(min-width: 1024px)' : undefined;
+---
+
+{
+  isRaster ? (
+    <picture>
+      {phoneSrc && tabletSrc ? (
+        <>
+          <source media="(min-width: 1024px)" type="image/webp" srcset={srcSet} sizes={pictureSizes} />
+          <source
+            media="(min-width: 640px)"
+            type="image/webp"
+            srcset={`${tabletSrc} ${tabletWidth}w`}
+            sizes={pictureSizes}
+          />
+          <source type="image/webp" srcset={`${phoneSrc} ${phoneWidth}w`} />
+        </>
+      ) : (
+        <source type="image/webp" srcset={srcSet} sizes={pictureSizes} media={pictureMedia} />
+      )}
+      <img
+        src={imgSrc}
+        srcset={desktopOnly || phoneSrc ? undefined : srcSet}
+        alt={alt ?? ''}
+        width={width}
+        height={height}
+        loading={loading}
+        decoding="async"
+        fetchpriority={fetchPriority}
+        sizes={phoneSrc ? undefined : pictureSizes}
+        class={className}
+      />
+    </picture>
+  ) : (
+    <img
+      src={src}
+      alt={alt ?? ''}
+      width={width}
+      height={height}
+      loading={loading}
+      decoding="async"
+      fetchpriority={fetchPriority}
+      class={className}
+    />
+  )
+}

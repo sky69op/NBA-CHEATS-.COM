@@ -1,0 +1,227 @@
+---
+import { useLocale } from '../i18n';
+import { SITE_NAME } from '../config/site';
+
+const { t, lp } = useLocale(Astro.currentLocale);
+import { setupStepIcons } from "../data/sectionIcons";
+import Icon from "./icons/Icon.astro";
+import { Button } from "@/components/starwind/button";
+import { Card, CardHeader, CardTitle } from "@/components/starwind/card";
+
+const why = t.whyUs;
+const lastRowIndex = why.rows.length - 1;
+---
+
+<section id="why-us" class="py-16 md:py-24" aria-labelledby="why-title">
+  <div class="mx-auto max-w-6xl px-5">
+    <header class="section-header section-header--wide" data-reveal>
+      <p class="section-header__eyebrow">{why.eyebrow}</p>
+      <h2 id="why-title" class="section-header__title">{why.title}</h2>
+      <p class="section-header__subtitle">{why.subtitle}</p>
+    </header>
+
+    {/* One copy of each row: stacked cards below lg, comparison columns from lg */}
+    <div
+      class="mt-10 flex justify-center lg:mt-14"
+      role="group"
+      aria-label={`${SITE_NAME} compared with typical providers`}
+    >
+      <div
+        class="why-compare-layout grid w-full max-w-4xl grid-cols-1 items-stretch lg:grid-cols-[minmax(0,1fr)_9.25rem_9.25rem] lg:gap-x-10 xl:max-w-5xl xl:gap-x-14"
+      >
+        <div class="mb-4 grid grid-cols-2 gap-3 px-5 text-sm lg:hidden" aria-hidden="true">
+          <span class="font-medium text-foreground">{why.usLabel}</span>
+          <span class="text-muted-foreground">{why.otherLabel}</span>
+        </div>
+        <ul class="why-compare-features flex min-w-0 list-none flex-col gap-4 p-0 lg:gap-0 lg:pe-2" role="list">
+          {
+            why.rows.map((row) => (
+              <li class="why-compare-feature-row flex flex-col justify-center gap-2 max-lg:rounded-xl max-lg:border max-lg:border-border max-lg:bg-card max-lg:p-5 max-lg:shadow-sm">
+                <p class="why-compare-feature-title font-[family-name:var(--font-heading)] text-lg font-bold leading-snug text-foreground md:text-xl">
+                  {row.title}
+                </p>
+                <p class="why-compare-feature-desc text-sm leading-relaxed text-muted-foreground">
+                  {row.desc}
+                </p>
+                <div class="why-compare-row-marks mt-2 grid grid-cols-2 gap-3 border-t border-border pt-3 lg:sr-only">
+                  <span
+                    class="flex size-9 items-center justify-center justify-self-start rounded-full bg-primary/15 ring-1 ring-primary/40"
+                    role="img"
+                    aria-label={`${why.usLabel}: included`}
+                  >
+                    <Icon name="circleCheck" size={18} />
+                  </span>
+                  <span
+                    class="flex size-9 items-center justify-center justify-self-start rounded-full bg-muted ring-1 ring-border"
+                    role="img"
+                    aria-label={`${why.otherLabel}: not included`}
+                  >
+                    <Icon name="x" size={16} />
+                  </span>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+
+        <Card
+          class="why-compare-card why-compare-us-card hidden h-full w-[9.25rem] shrink-0 flex-col gap-0 overflow-hidden py-0 ring-1 ring-primary lg:flex"
+          aria-hidden="true"
+        >
+          <CardHeader
+            class="why-compare-card-head space-y-0 border-0 bg-transparent text-center"
+          >
+            <CardTitle
+              class="w-full text-center font-[family-name:var(--font-heading)] text-base font-bold normal-case leading-snug"
+            >
+              {why.usLabel}
+            </CardTitle>
+          </CardHeader>
+          <div class="flex min-h-0 flex-1 flex-col">
+            {
+              why.rows.map((row, i) => (
+                <div
+                  class:list={[
+                    "why-compare-card-row",
+                    i === lastRowIndex && "why-compare-card-row--last",
+                  ]}
+                >
+                  <span class="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary/15 ring-1 ring-primary/40">
+                    <Icon name="circleCheck" size={20} />
+                  </span>
+                </div>
+              ))
+            }
+          </div>
+        </Card>
+
+        <Card
+          class="why-compare-card why-compare-other-card hidden h-full w-[9.25rem] shrink-0 flex-col gap-0 overflow-hidden py-0 lg:flex"
+          aria-hidden="true"
+        >
+          <CardHeader
+            class="why-compare-card-head card-title-band space-y-0 border-b text-center"
+          >
+            <CardTitle
+              class="w-full text-center font-[family-name:var(--font-heading)] text-base font-bold normal-case leading-snug text-muted-foreground"
+            >
+              {why.otherLabel}
+            </CardTitle>
+          </CardHeader>
+          <div class="flex min-h-0 flex-1 flex-col">
+            {
+              why.rows.map((row, i) => (
+                <div
+                  class:list={[
+                    "why-compare-card-row",
+                    i === lastRowIndex && "why-compare-card-row--last",
+                  ]}
+                >
+                  <span class="flex size-11 shrink-0 items-center justify-center rounded-full bg-muted/80 ring-1 ring-border">
+                    <Icon name="x" size={18} class="text-muted-foreground" />
+                  </span>
+                </div>
+              ))
+            }
+          </div>
+        </Card>
+      </div>
+    </div>
+
+    <div
+      class="mt-16 grid max-w-5xl gap-10 border-t border-border pt-12 text-left sm:grid-cols-3 sm:gap-8 lg:mx-auto lg:text-center"
+      aria-label="Platform metrics"
+      data-reveal-stagger
+    >
+      {
+        why.metrics.map((metric) => (
+          <div class="space-y-2">
+            <p class="font-[family-name:var(--font-heading)] text-4xl font-bold tracking-tight text-primary md:text-5xl">
+              {metric.value}
+            </p>
+            <p class="text-base font-semibold text-foreground">
+              {metric.title}
+            </p>
+            <p class="text-sm leading-relaxed text-muted-foreground">
+              {metric.desc}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<section
+  id="setup-guide"
+  class="deployment-section border-y border-border py-14 md:py-16 lg:py-20"
+  aria-labelledby="setup-title"
+>
+  <div class="mx-auto max-w-6xl px-5 md:px-6">
+    <header class="section-header section-header--wide deployment-header" data-reveal>
+      <p class="section-header__eyebrow">{t.setup.eyebrow}</p>
+      <h2 id="setup-title" class="section-header__title">
+        {t.setup.titleLead}{" "}
+        <span
+          class="deployment-title-highlight relative inline-block max-w-full"
+        >
+          {t.setup.titleHighlight}
+          <span class="deployment-title-underline" aria-hidden="true"></span>
+        </span>
+      </h2>
+      <p class="section-header__subtitle">{t.setup.intro}</p>
+    </header>
+
+    <div class="deployment-steps mx-auto mt-10 max-w-5xl lg:mt-12">
+      <div class="deployment-steps-track" aria-hidden="true">
+        <div class="deployment-steps-line deployment-steps-line--base"></div>
+        <div class="deployment-steps-line deployment-steps-line--progress">
+        </div>
+      </div>
+      <ol class="deployment-steps-list list-none p-0" data-reveal-stagger>
+        {
+          t.setup.steps.map((step, i) => (
+            <li class="deployment-step">
+              <div
+                class="deployment-step-marker"
+                style={`--step-col: ${i + 1}`}
+              >
+                <Icon
+                  name={setupStepIcons[i] ?? "acqCheck"}
+                  size={20}
+                  class="deployment-step-marker-icon"
+                />
+              </div>
+              <p class="deployment-step-title" style={`--step-col: ${i + 1}`}>
+                {step.title}
+              </p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+
+    <div
+      class="deployment-footer mt-8 flex flex-col items-stretch gap-3 border-t border-border/80 pt-8 sm:flex-row sm:justify-start sm:gap-4 md:mt-10 lg:justify-center"
+    >
+      <Button
+        as="a"
+        href={lp(t.setup.ctaPrimaryHref)}
+        variant="primary"
+        size="lg"
+        class="deployment-cta-primary w-full rounded-xl sm:w-auto"
+      >
+        {t.setup.ctaPrimary}
+      </Button>
+      <Button
+        as="a"
+        href={lp(t.setup.ctaSecondaryHref)}
+        variant="secondary"
+        size="lg"
+        class="deployment-cta-secondary w-full rounded-xl sm:w-auto"
+      >
+        {t.setup.ctaSecondary}
+      </Button>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,22 @@
+---
+import Icon from './icons/Icon.astro';
+import type { IconName } from './icons/types';
+
+interface Props {
+  href: string;
+  class?: string;
+  ariaLabel?: string;
+  icon?: IconName;
+}
+
+const { href, class: className, ariaLabel, icon = 'arrowRight' } = Astro.props;
+---
+
+<a href={href} class:list={['slide-reveal-btn', className]} aria-label={ariaLabel}>
+  <span class="slide-reveal-btn__icon" aria-hidden="true">
+    <Icon name={icon} size={18} class="slide-reveal-btn__svg" />
+  </span>
+  <span class="slide-reveal-btn__text">
+    <slot />
+  </span>
+</a>

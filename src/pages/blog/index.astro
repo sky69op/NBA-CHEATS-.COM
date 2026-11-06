@@ -1,0 +1,153 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import {
+  getBlogPosts,
+  getBlogTags,
+  getFeaturedBlogPost,
+  getNonFeaturedBlogPosts,
+} from '../../data/blog';
+import { useLocale } from '../../i18n';
+import { resolvePageSeo } from '../../config/seo';
+import { breadcrumbSchema, collectionPageSchema } from '../../utils/schema';
+
+const { locale, t, lp } = useLocale(Astro.currentLocale);
+import { CARD_IMAGE_WIDTHS, webpSrc } from '../../utils/responsiveImage';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import Icon from '../../components/icons/Icon.astro';
+import { blogTagIcons } from '../../data/sectionIcons';
+import type { IconName } from '../../components/icons/types';
+import { Button } from '@/components/starwind/button';
+import { ROUTES } from '../../utils/path';
+
+const seo = resolvePageSeo('/blog/', locale);
+const breadcrumbs = [
+  { name: t.common.breadcrumbHome, path: '/' },
+  { name: t.common.breadcrumbBlog, path: '/blog/' },
+];
+
+const featured = getFeaturedBlogPost(locale);
+const gridPosts = getNonFeaturedBlogPosts(locale);
+const tags = getBlogTags(locale);
+const allPosts = getBlogPosts(locale);
+const lcpPhone = featured?.image ? webpSrc(featured.image, 400) : '';
+const lcpDesktop = featured?.image ? webpSrc(featured.image, CARD_IMAGE_WIDTHS[1]) : '';
+
+const tagIcon = (tag: string): IconName => blogTagIcons[tag] ?? 'tag';
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  jsonLd={[
+    collectionPageSchema({
+      name: t.blog.title,
+      description: t.blog.subtitle,
+      url: lp('/blog/'),
+      locale,
+    }),
+    breadcrumbSchema(breadcrumbs, locale),
+  ]}
+>
+  {lcpPhone && (
+    <link slot="head" rel="preload" as="image" href={lcpPhone} type="image/webp" media="(max-width: 639px)" fetchpriority="high" />
+  )}
+  {lcpDesktop && (
+    <link slot="head" rel="preload" as="image" href={lcpDesktop} type="image/webp" media="(min-width: 640px)" fetchpriority="high" />
+  )}
+
+  <section class="py-8 md:py-12">
+    <div class="mx-auto max-w-6xl px-5">
+      <Breadcrumbs items={breadcrumbs} />
+      {featured && <BlogCard post={featured} index={0} eager showDate layout="featured" />}
+    </div>
+  </section>
+
+  <section class="border-y border-border bg-muted/20 py-12 md:py-16" aria-labelledby="blog-latest-title">
+    <div class="mx-auto max-w-6xl px-5">
+      <header class="section-header max-w-2xl" data-reveal>
+        <p class="section-header__eyebrow">{t.blog.eyebrow}</p>
+        <h1 id="blog-latest-title" class="section-header__title text-foreground">{t.blog.latestTitle}</h1>
+        <h2 class="section-header__subtitle">{t.blog.latestSubtitle}</h2>
+      </header>
+
+      <div
+        id="blog-topic-filters"
+        class="blog-topic-filters mt-8 flex flex-wrap justify-center gap-2 lg:mt-10"
+        role="toolbar"
+        aria-label={t.blog.filterToolbarAria}
+      >
+          <button
+            type="button"
+            class="blog-filter is-active inline-flex shrink-0 items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-sm font-medium shadow-xs hover:bg-muted"
+            data-blog-filter="all"
+            aria-pressed="true"
+          >
+            <span class="flex size-7 items-center justify-center rounded-full bg-muted text-primary" aria-hidden="true">
+              <Icon name="navBlog" size={15} />
+            </span>
+            {t.blog.filterAll}
+          </button>
+          {
+            tags.map((tag) => (
+              <button
+                type="button"
+                class="blog-filter inline-flex shrink-0 items-center gap-2 rounded-full border border-border bg-background px-4 py-2 text-sm font-medium shadow-xs hover:bg-muted"
+                data-blog-filter={tag}
+                aria-pressed="false"
+              >
+                <span
+                  class="flex size-7 items-center justify-center rounded-full bg-muted text-primary"
+                  aria-hidden="true"
+                >
+                  <Icon name={tagIcon(tag)} size={15} />
+                </span>
+                {tag}
+              </button>
+            ))
+          }
+      </div>
+
+      <div
+        id="blog-grid"
+        class="fill-grid mt-10 gap-8 lg:gap-x-8 lg:gap-y-10"
+        data-empty-message={allPosts.length === 0 ? t.blog.emptyArchive : t.blog.emptyFilter}
+      >
+        {gridPosts.map((post, index) => (
+          <BlogCard post={post} index={index} showDate />
+        ))}
+      </div>
+
+      <p id="blog-empty" class:list={['mt-10 text-center text-muted-foreground', allPosts.length > 0 && 'hidden']} role="status">
+        {allPosts.length === 0 ? t.blog.emptyArchive : t.blog.emptyFilter}
+      </p>
+
+      <div class="mt-12 flex flex-wrap justify-start gap-3 lg:justify-center">
+        <Button as="a" href={lp(ROUTES.home)} variant="outline">
+          <Icon name="chevronLeft" size={16} />
+          {t.notFound.backHome}
+        </Button>
+        <Button as="a" href={lp(ROUTES.productsHub)} variant="outline">
+          {locale === 'en' ? 'Product catalog' : (t.nav.find((l) => l.id === 'products')?.label ?? 'Products')}
+          <Icon name="arrowRight" size={16} />
+        </Button>
+        <Button as="a" href={lp(ROUTES.forum)} variant="outline">
+          {locale === 'en' ? 'Editorial forum' : (t.nav.find((l) => l.id === 'forum')?.label ?? 'Forum')}
+          <Icon name="messageCircle" size={16} />
+        </Button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    import { initBlogIndexFilters } from '../../scripts/blog-index.ts';
+
+    const run = () => initBlogIndexFilters();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', run, { once: true });
+    } else {
+      run();
+    }
+    document.addEventListener('astro:page-load', run);
+  </script>
+</BaseLayout>

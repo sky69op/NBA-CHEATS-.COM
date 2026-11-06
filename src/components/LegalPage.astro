@@ -1,0 +1,53 @@
+---
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Icon from './icons/Icon.astro';
+import { Button } from '@/components/starwind/button';
+import { Prose } from '@/components/starwind/prose';
+import { useLocale } from '../i18n';
+
+interface Props {
+  title: string;
+  description: string;
+  breadcrumbLabel: string;
+  sections: { heading: string; paragraphs: string[] }[];
+}
+
+const { title, description, breadcrumbLabel, sections } = Astro.props;
+const { t, lp } = useLocale(Astro.currentLocale);
+---
+
+<article class="py-8 md:py-12">
+  <div class="mx-auto max-w-3xl px-5">
+    <div class="text-left">
+    <Breadcrumbs
+      items={[
+        { name: t.common.breadcrumbHome, path: '/' },
+        { name: breadcrumbLabel, path: Astro.url.pathname },
+      ]}
+    />
+    </div>
+    <header class="mt-4 space-y-4 text-center">
+      <h1 class="text-3xl font-bold normal-case text-foreground md:text-4xl">{title}</h1>
+      <p class="text-lg leading-relaxed text-muted-foreground">{description}</p>
+    </header>
+
+    <Prose class="mt-10 max-w-none text-left">
+      {sections.map((section) => (
+        <section class="mt-8">
+          <h2>{section.heading}</h2>
+          {section.paragraphs.map((paragraph) => (
+            <p>{paragraph}</p>
+          ))}
+        </section>
+      ))}
+    </Prose>
+
+    <div class="mt-12 flex flex-wrap justify-center gap-3 border-t border-border pt-8">
+      <Button as="a" href={lp('/support/')} variant="primary" size="sm">
+        {t.common.contactSupport}
+        <Icon name="mail" size={16} />
+      </Button>
+      <Button as="a" href={lp('/')} variant="outline" size="sm">{t.notFound.backHome}</Button>
+    </div>
+  </div>
+</article>

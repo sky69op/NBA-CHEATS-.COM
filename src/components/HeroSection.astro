@@ -1,0 +1,114 @@
+---
+import { useLocale } from '../i18n';
+import { ROUTES } from '../utils/path';
+
+const { locale, t, lp } = useLocale(Astro.currentLocale);
+import { getHeroSlides } from '../data/products';
+
+const heroSlides = getHeroSlides(locale);
+import { compatibilityIcons, heroStatIcons, heroStatusPillIcons } from '../data/sectionIcons';
+import ImageSlider from './ImageSlider.astro';
+import Icon from './icons/Icon.astro';
+import { Button } from '@/components/starwind/button';
+import { Badge } from '@/components/starwind/badge';
+
+const h = t.hero;
+
+const heroMarqueePills = [
+  ...h.statusPills.map((label, i) => ({
+    label,
+    icon: heroStatusPillIcons[i] ?? 'check',
+  })),
+  ...t.compatibility.items.map((label, i) => ({
+    label,
+    icon: compatibilityIcons[i] ?? 'check',
+  })),
+];
+
+---
+
+<section
+  id="hero"
+  class="relative overflow-hidden border-b border-border"
+  aria-labelledby="hero-title"
+>
+  <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--primary)_0%,transparent_55%)] opacity-20" aria-hidden="true" />
+
+  <div class="relative mx-auto flex max-w-6xl flex-col justify-center px-5">
+    <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
+      <div class="w-full min-w-0 max-w-xl space-y-6 text-left md:space-y-7 lg:max-w-none">
+        <Badge variant="secondary" class="uppercase tracking-wider">{h.eyebrow}</Badge>
+
+        <h1
+          id="hero-title"
+          class="max-w-full text-2xl font-extrabold uppercase leading-[1.1] tracking-[0.01em] text-foreground sm:text-3xl lg:text-[2.25rem]"
+        >
+          {h.titleLead}<span class="hero-title-accent">{h.titleAccent}</span>
+        </h1>
+
+        <p class="max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
+          {h.subtitle}
+        </p>
+
+        <div class="flex flex-wrap justify-start gap-3 sm:gap-4">
+          <Button
+            as="a"
+            href={lp(ROUTES.products)}
+            data-scroll-target="products"
+            variant="primary"
+            size="lg"
+            class="rounded-xl"
+          >
+            {h.ctaPrimary}
+            <Icon name="arrowRight" size={18} />
+          </Button>
+        </div>
+      </div>
+
+      <div class="mx-auto flex w-full max-w-xl flex-col items-center gap-5 lg:mx-0 lg:max-w-none lg:items-end">
+        {heroSlides.length > 0 && (
+          <ImageSlider class="hero-slider--desktop" images={heroSlides} id="hero-slider" />
+        )}
+        <div class="grid w-full grid-cols-1 gap-2.5 sm:grid-cols-2 sm:gap-3 md:grid-cols-4 lg:grid-cols-2">
+          {h.metrics.map((m, i) => (
+            <div class="flex min-w-0 items-center gap-3 rounded-xl border border-border/80 bg-card/70 px-3 py-3 shadow-sm shadow-black/10 transition-colors hover:border-primary/40">
+              <span
+                class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/15 ring-1 ring-inset ring-primary/25"
+                aria-hidden="true"
+              >
+                <Icon name={heroStatIcons[i] ?? 'check'} size={18} />
+              </span>
+              <div class="min-w-0">
+                <p class="font-[family-name:var(--font-heading)] text-base font-bold leading-none tracking-tight text-foreground">{m.strong}</p>
+                <p class="mt-1 text-xs leading-snug text-muted-foreground [overflow-wrap:break-word]">{m.label}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="hero-marquee relative left-1/2 mt-10 w-screen max-w-[100vw] -translate-x-1/2 md:mt-12 lg:mt-14"
+    aria-label="Features and platform support"
+  >
+    <div class="hero-marquee__track">
+      {heroMarqueePills.map((pill) => (
+        <Badge variant="outline" class="group/badge shrink-0 gap-1 py-0.5 pl-1.5 pr-2.5 text-xs whitespace-nowrap">
+          <Icon name={pill.icon} size={13} />
+          {pill.label}
+        </Badge>
+      ))}
+      <span class="hero-marquee__repeat">
+        {heroMarqueePills.map((pill) => (
+          <Badge variant="outline" class="group/badge shrink-0 gap-1 py-0.5 pl-1.5 pr-2.5 text-xs whitespace-nowrap">
+            <Icon name={pill.icon} size={13} />
+            {pill.label}
+          </Badge>
+        ))}
+      </span>
+    </div>
+  </div>
+</section>
+

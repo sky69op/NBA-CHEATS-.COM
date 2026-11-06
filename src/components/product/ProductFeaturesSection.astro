@@ -1,0 +1,65 @@
+---
+import SectionHeader from '../SectionHeader.astro';
+import Icon from '../icons/Icon.astro';
+import { useLocale } from '../../i18n';
+
+interface Props {
+  features: string[];
+  productName: string;
+  section?: { eyebrow: string; title: string; desc: string };
+}
+
+const { features, productName, section } = Astro.props;
+const { locale } = useLocale(Astro.currentLocale);
+
+const localeCopy = {
+  en: {
+    eyebrow: 'Modules',
+    title: "What's included",
+    desc: `The full option list for ${productName}. Each line can be switched in the menu.`,
+  },
+  es: {
+    eyebrow: 'Módulos',
+    title: 'Qué incluye',
+    desc: `Cada módulo y overlay de ${productName}. Los activas y ajustas en el portal.`,
+  },
+  de: {
+    eyebrow: 'Module',
+    title: 'Das ist enthalten',
+    desc: `Jedes Modul und Overlay von ${productName}. Du schaltest sie im Portal.`,
+  },
+  fr: {
+    eyebrow: 'Modules',
+    title: 'Ce qui est inclus',
+    desc: `Chaque module et overlay de ${productName}. Tu les règles dans le portail.`,
+  },
+};
+
+const copy = section
+  ? { eyebrow: section.eyebrow, title: section.title, desc: section.desc }
+  : localeCopy[locale];
+---
+
+<section id="product-features" class="py-12 md:py-16" aria-labelledby="product-features-title">
+  <div class="mx-auto max-w-6xl px-5">
+    <SectionHeader
+      eyebrow={copy.eyebrow}
+      title={copy.title}
+      desc={copy.desc}
+      titleId="product-features-title"
+    />
+
+    <ul class="product-detail__features mt-10 grid gap-2 sm:grid-cols-2 lg:grid-cols-3" data-reveal-stagger>
+      {
+        features.map((feature) => (
+          <li
+            class="flex items-start gap-2.5 rounded-xl border border-border/80 bg-muted/15 px-4 py-3 text-sm text-muted-foreground transition-colors hover:border-primary/25 hover:bg-muted/30"
+          >
+            <Icon name="check" size={15} class="product-feature-check mt-0.5 shrink-0 icon-app--primary" />
+            <span>{feature}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,74 @@
+{
+  "formatVersion": 1,
+  "approval": { "conversionRequested": true, "commit": false, "push": false, "deploy": false, "submitToIndexingServices": false },
+  "site": {
+    "domain": "nbacheats.com",
+    "origin": "https://nbacheats.com",
+    "brandName": "NBA2K27 Cheats",
+    "supportEmail": "",
+    "locales": ["en", "es", "de", "fr"],
+    "defaultLocale": "en",
+    "prefixDefaultLocale": false
+  },
+  "game": {
+    "name": "NBA 2K27",
+    "shortName": "NBA 2K27",
+    "publisher": "2K",
+    "antiCheat": null,
+    "officialUrl": "https://nba.2k.com/2k27/",
+    "cheatProductName": "NBA2K27 CHEATS"
+  },
+  "brand": {
+    "logoSourcePath": null,
+    "logoAlt": "Existing violet template emblem; replacement NBA 2K27 brand artwork pending owner supply.",
+    "colors": { "background": "#0a0614", "foreground": "#ffffff", "primary": "#7c3aed" },
+    "logoAssetVersion": null,
+    "manifestAndFaviconsRequireReview": true,
+    "replaceGameplayAssets": true,
+    "preserveUtilityMediaUnlessExplicitlyReplaced": true
+  },
+  "referral": {
+    "partnerOrigin": "https://zadeyo.com",
+    "code": "SKY",
+    "urlPattern": "{partnerOrigin}/go/{code}?to={encodedProductPath}",
+    "planQueryName": "plan",
+    "planIds": ["monthly", "lifetime"],
+    "forwardIncomingQuery": true
+  },
+  "products": [
+    {
+      "dataKey": "elite", "checkoutKey": "wardogs", "enabled": true, "name": "NBA2K27 CHEATS", "pagePath": "/cheats/", "checkoutSlug": "nba-2k27", "partnerProductPath": "/products/nba-2k27", "currency": "USD",
+      "plans": [{ "id": "monthly", "priceUsd": 35, "durationDays": 30, "recommended": false }, { "id": "lifetime", "priceUsd": 150, "durationDays": null, "recommended": true }],
+      "facts": { "features": ["A partner referral destination for NBA2K27 CHEATS was supplied by the owner."], "requirements": [], "limitations": ["No vendor evidence was supplied for features, compatibility, availability, or anti-cheat status; those details must be confirmed before purchase."], "availability": null, "evidence": ["owner-intake"] }
+    },
+    {
+      "dataKey": "hwid-spoofer", "checkoutKey": "hwidSpoofer", "enabled": true, "name": "HWID SPOOFER", "pagePath": "/hwid-spoofer/", "checkoutSlug": "hwid-spoofer", "partnerProductPath": "/products/hwid-spoofer", "currency": "USD",
+      "plans": [{ "id": "monthly", "priceUsd": 50, "durationDays": 30, "recommended": false }, { "id": "lifetime", "priceUsd": 150, "durationDays": null, "recommended": true }],
+      "facts": { "features": ["A partner referral destination for HWID SPOOFER was supplied by the owner."], "requirements": [], "limitations": ["No vendor evidence was supplied for game applicability, supported hardware, or outcomes; buyers must confirm these with the partner."], "availability": null, "evidence": ["owner-intake"] }
+    },
+    {
+      "dataKey": "ugc", "checkoutKey": "ugc", "enabled": true, "name": "UGC", "pagePath": "/ugc/", "checkoutSlug": "ugc", "partnerProductPath": "/products/ugc", "currency": "USD",
+      "plans": [{ "id": "monthly", "priceUsd": 35, "durationDays": 30, "recommended": false }, { "id": "lifetime", "priceUsd": 150, "durationDays": null, "recommended": true }],
+      "facts": { "features": ["UGC means Unban & Governance Control and is an account-appeal product, as confirmed by the owner."], "requirements": [], "limitations": ["UGC does not promise account recovery and is not described as a hardware-ID product."], "availability": null, "evidence": ["owner-intake"] }
+    },
+    {
+      "dataKey": "cloud-dma", "checkoutKey": "cloudDma", "enabled": true, "name": "CLOUD DMA", "pagePath": "/cloud-dma/", "checkoutSlug": "cloud-dma", "partnerProductPath": "/products/cloud-dma", "currency": "USD",
+      "plans": [{ "id": "monthly", "priceUsd": 35, "durationDays": 30, "recommended": false }, { "id": "lifetime", "priceUsd": 150, "durationDays": null, "recommended": true }],
+      "facts": { "features": ["A partner referral destination for CLOUD DMA was supplied by the owner."], "requirements": [], "limitations": ["No Cloud DMA reference or vendor evidence was supplied, so this site cannot state NBA 2K27 applicability, requirements, or functionality."], "availability": null, "evidence": ["owner-intake"] }
+    }
+  ],
+  "contentWorkflow": {
+    "enabled": true,
+    "generator": "codex-conversion-agent",
+    "publicationDate": "2026-11-06",
+    "sources": [
+      { "id": "owner-intake", "kind": "owner", "reference": "Owner's 2026-11-06 NBA2K27 conversion intake and supplied referral URLs", "verifiedOn": "2026-11-06" },
+      { "id": "official-2k-nba2k27", "kind": "official-game", "reference": "https://newsroom.2k.com/news/ball-over-everything-in-nbar-2k27-now-available", "verifiedOn": "2026-11-06" }
+    ],
+    "gameFacts": [
+      { "id": "game.identity-official", "text": "NBA 2K27 is developed by Visual Concepts and published by 2K.", "sourceIds": ["official-2k-nba2k27"] },
+      { "id": "game.platforms", "text": "2K lists NBA 2K27 on PlayStation 5, Xbox Series X|S, PC via Steam, and Nintendo Switch 2.", "sourceIds": ["official-2k-nba2k27"] }
+    ],
+    "forumCategories": ["Product research", "Account appeals", "Purchase questions", "Compatibility checks"]
+  }
+}

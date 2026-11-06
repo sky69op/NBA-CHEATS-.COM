@@ -1,0 +1,370 @@
+import type { BlogBlock, BlogPostFull } from '../types';
+
+/** Matches `PRIMARY_CHECKOUT_PATH` in `src/config/checkout.ts` (wardogs → /go/nba-2k27/). */
+const PRIMARY_CHECKOUT_PATH = '/go/nba-2k27/';
+
+const date = '2026-11-06';
+const art = [
+  '/images/nba-2k27/nba2k27-main.webp',
+  '/images/nba-2k27/nba2k27-attributes.webp',
+  '/images/nba-2k27/nba2k27-misc.webp',
+  '/images/nba-2k27/nba2k27-main-product-card.png',
+];
+type Draft = { slug: string; title: string; tag: string; desc: string; href: string; art?: string; body: BlogBlock[] };
+const p = (text: string): BlogBlock => ({ type: 'p', text });
+const h = (text: string): BlogBlock => ({ type: 'h2', text });
+const list = (...items: string[]): BlogBlock => ({ type: 'ul', items });
+const post = (draft: Draft, index: number): BlogPostFull => ({
+  slug: draft.slug, title: draft.title, h1: draft.title, tag: draft.tag, desc: draft.desc,
+  metaTitle: draft.title, metaDescription: draft.desc, date, readTime: '6 min', featured: true,
+  author: 'NBA2K27 Cheats Editorial', image: draft.art ?? art[index % art.length],
+  imageAlt: 'NBA 2K27 editorial basketball illustration.', imageWidth: 1330, imageHeight: 840,
+  body: [...draft.body, { type: 'cta', title: 'Check the current listing', text: 'Review the selected product page and confirm current scope before purchasing.', href: draft.href }],
+});
+
+const drafts: Draft[] = [
+  {
+    slug: 'nba-2k27-auto-green-cheats-explained', title: 'NBA 2K27 Auto Green Cheats: What the Term Usually Means', tag: 'Auto Green',
+    desc: 'A plain-language guide to the Auto Green and shot-timing claims commonly used in NBA 2K27 cheat searches.', href: PRIMARY_CHECKOUT_PATH,
+    body: [
+      p('“NBA 2K27 Auto Green” is one of the most common phrases on cheat and script pages. Sellers use it for tools that claim to automate, assist, or alter shot-release timing. The label alone does not describe the method, the supported modes, the platform, or the current status of a specific listing.'),
+      h('Why the phrase gets so much search traffic'),
+      p('A green release is an instantly recognizable result, so it has become the shorthand shoppers use when looking for a shooting aid. That makes the term commercially useful, but it also attracts vague pages that mix controller scripts, overlays, macros, and game-memory tools under the same headline. Treat the exact mechanism as a product question, not an assumption.'),
+      h('Questions that separate a listing from a generic claim'),
+      list('Which NBA 2K27 platform is named on the current product page?', 'Does the listing identify the game mode or say that support varies?', 'Is the feature described as timing assistance, an automated action, or something else?', 'Is there a dated status note for the current game version?', 'What happens after a patch or an unavailable period?'),
+      h('Keep risk and capability separate'),
+      p('A claim about a shooting result is not a claim about safety, policy compliance, detection resistance, or account consequences. Online-game rules and enforcement can change. Read the game and platform rules, then ask the provider for the exact current scope in writing before you decide whether the product is suitable for you.'),
+    ],
+  },
+  {
+    slug: 'nba-2k27-cheat-menu-features-guide', title: 'NBA 2K27 Cheat Menu Features: How to Read the Claims', tag: 'Cheat Menu',
+    desc: 'Learn how to compare NBA 2K27 cheat-menu claims without assuming that a feature list applies to every plan or platform.', href: PRIMARY_CHECKOUT_PATH,
+    body: [
+      p('Search results for “NBA 2K27 cheat menu” often show long feature lists. Those lists can be useful for vocabulary, but they are not interchangeable. A menu may be described as an overlay, a loader, a panel, or a configuration screen; each label can mean something different on a different listing.'),
+      h('Start with the feature category'),
+      p('Sort the terms into categories before judging a product. Shooting terms concern releases or timing. Player-edit terms concern attributes, badges, animations, or unlocks. Visibility terms may be marketed as ESP or court awareness. A page that puts all of them together still needs to say which are included in the exact plan being offered.'),
+      h('A practical reading checklist'),
+      list('Look for a current NBA 2K27 date or version note.', 'Check whether the page names PC, console, or neither.', 'Identify included features versus examples or future requests.', 'Read the limitations and update language before the purchase button.', 'Use the support route when a feature is described only in a screenshot.'),
+      h('Do not turn marketing words into guarantees'),
+      p('Words such as “full,” “all,” “private,” or “premium” are marketing labels unless the product page defines them. They do not establish coverage for a particular mode, build, account, patch, or future update.'),
+    ],
+  },
+  {
+    slug: 'nba-2k27-attribute-changer-claims', title: 'NBA 2K27 Attribute Changer Claims: Questions to Ask First', tag: 'Attributes',
+    desc: 'Attribute-changer is a high-intent NBA 2K27 search term. Use these questions to evaluate the exact claim behind it.', href: PRIMARY_CHECKOUT_PATH,
+    body: [
+      p('“NBA 2K27 attribute changer” is a common search phrase because it promises a direct answer to a build problem. The phrase is still only a claim until a current product page explains what it changes, where it works, and what limits apply.'),
+      h('Why attribute language needs precision'),
+      p('Attributes can refer to different parts of a basketball-game experience: a displayed value, a build editor, a saved profile, a visual menu, or a claimed in-session change. A seller must identify the actual context. Without it, two pages can use the same phrase while describing entirely different things.'),
+      h('What to ask the provider'),
+      list('What does “attribute” mean on this product page?', 'Is the claim tied to a named NBA 2K27 mode?', 'Does the selected monthly or lifetime plan include the same scope?', 'Are there prerequisites, limits, or changes after updates?', 'Can support provide a current written explanation before checkout?'),
+      h('Avoid false shortcuts'),
+      p('Do not assume that an attribute claim changes progression, unlocks content, or works online. If a product’s wording is too broad to answer those questions, pause and obtain clarification rather than treating search snippets as a purchase specification.'),
+    ],
+  },
+  {
+    slug: 'nba-2k27-max-badges-cheat-questions', title: 'NBA 2K27 Max Badges Cheats: The Questions Behind the Keyword', tag: 'Badges',
+    desc: 'Max badges is a popular NBA 2K27 cheat query. Here is how to assess the claim without treating the keyword as proof.', href: PRIMARY_CHECKOUT_PATH,
+    body: [
+      p('“NBA 2K27 max badges cheats” describes a buyer intent: people want to know whether a product claims to affect badges and what that would mean for their build. The phrase does not establish that any particular listing provides it.'),
+      h('Read the noun before the promise'),
+      p('A useful product page explains the object of the claim. Does it name badges as a display option, a builder option, a saved configuration, or an active game context? If it does not, the headline has more certainty than the description.'),
+      h('A focused verification list'),
+      list('Find a dated description of the badge-related claim.', 'Check whether support and platform are named.', 'Ask whether plan choice changes access or support terms.', 'Ask whether the claim is current after the latest game update.', 'Save the written reply with the product page you relied on.'),
+      h('Why old clips are weak evidence'),
+      p('Badge terminology, user interfaces, and product listings can all change. A clip can show that someone used a phrase at one time; it does not prove that the same option is available on a current NBA 2K27 listing.'),
+    ],
+  },
+  {
+    slug: 'nba-2k27-unlock-all-cheats-explained', title: 'NBA 2K27 Unlock All Cheats: What “Unlock” Can Mean', tag: 'Unlock All',
+    desc: 'Unlock All appears on many NBA 2K27 cheat pages. Learn how to pin down exactly what an unlock claim covers.', href: PRIMARY_CHECKOUT_PATH,
+    body: [
+      p('“Unlock All” sounds clear until you ask one simple question: unlock all of what? NBA 2K27 pages use the phrase around cosmetics, animations, menus, progression, and other broad categories. A buyer needs the actual object, limits, and mode context before treating it as meaningful.'),
+      h('Turn a broad claim into a specific question'),
+      p('Write down the item you expect to be unlocked and ask support to confirm that item by name. Then ask whether the wording applies to your platform, selected plan, current game version, and intended mode. A yes-or-no answer to “does it have Unlock All?” is usually too vague.'),
+      h('Signals that a listing needs clarification'),
+      list('The page uses only “Unlock All” with no examples.', 'The claim appears in a graphic but not in written terms.', 'The page has no update date or platform note.', 'A plan selector changes price without stating whether scope changes.', 'A support answer refers only to another product or game.'),
+      h('Do not infer entitlement'),
+      p('An unlock-related phrase is not a statement about ownership, permanence, online eligibility, or account standing. Those are different questions and should never be implied by a catchy headline.'),
+    ],
+  },
+  {
+    slug: 'nba-2k27-esp-and-visibility-cheat-terms', title: 'NBA 2K27 ESP and Visibility Cheats: A Search-Term Guide', tag: 'ESP',
+    desc: 'ESP and visibility are common terms on NBA 2K27 cheat pages. This guide explains the vocabulary and the questions it leaves open.', href: PRIMARY_CHECKOUT_PATH,
+    body: [
+      p('ESP and visibility are terms borrowed from the wider cheat market. On basketball-related pages, sellers may use them for player readouts, court-awareness overlays, spacing indicators, or other claimed visual aids. The same word does not guarantee the same feature from one listing to another.'),
+      h('Why generic terminology causes confusion'),
+      p('A basketball court is not a first-person shooter map, so words such as “ESP” and “wallhack” are often repurposed as marketing language. A useful description should say what information is claimed to appear, when it appears, and what game context it concerns.'),
+      h('Ask for the concrete description'),
+      list('What visual information is claimed to be shown?', 'Is it described for a particular mode or platform?', 'Is it a currently listed option or a generic category label?', 'Does the provider publish an update note for NBA 2K27?', 'What policy and account-risk information should a buyer review?'),
+      h('Use clear product language'),
+      p('If a feature matters to your decision, ask for a direct, current explanation instead of relying on a search-result label. Clarity is more valuable than a long list of buzzwords.'),
+    ],
+  },
+  {
+    slug: 'nba-2k27-cheat-configs-and-settings', title: 'NBA 2K27 Cheat Configs and Settings: What Buyers Should Check', tag: 'Configs',
+    desc: 'Config, preset, and setting are popular NBA 2K27 cheat keywords. Learn what to clarify before relying on them.', href: PRIMARY_CHECKOUT_PATH,
+    body: [
+      p('Cheat pages often mention configs, presets, profiles, or settings. Those words suggest customization, but they do not explain whether a configuration is supplied, optional, current, platform-specific, or compatible with a particular plan.'),
+      h('Configuration is not a feature list'),
+      p('A config may mean saved preferences, a text file, a menu profile, a controller mapping, or a provider-created recommendation. It may be related to a claimed tool feature, but it should never be read as proof that the underlying feature works in a particular NBA 2K27 mode.'),
+      h('Check the basics before purchase'),
+      list('Ask what format the provider means by “config.”', 'Ask whether the current product includes it or merely references it.', 'Confirm whether a setup guide is current for NBA 2K27.', 'Ask whether updates can change settings or availability.', 'Avoid downloading files from unaffiliated pages that reuse the product name.'),
+      h('A cleaner decision rule'),
+      p('If the exact config story is important, choose only after the provider can answer it directly. If it is not written down, treat it as unresolved.'),
+    ],
+  },
+  {
+    slug: 'nba-2k27-cheats-pc-guide', title: 'NBA 2K27 Cheats on PC: A Buyer’s Research Guide', tag: 'PC Cheats',
+    desc: 'A practical research guide for NBA 2K27 PC-cheat searches: platform labels, requirements, product scope, and current status.', href: PRIMARY_CHECKOUT_PATH,
+    body: [
+      p('“NBA 2K27 cheats PC” is a broad search with a narrow buying decision behind it. A game being available on PC does not establish that every tool, feature, or plan works on every PC setup. Product compatibility must come from the current seller, not from the game’s platform listing.'),
+      h('Separate the three things being discussed'),
+      p('First, there is the game platform. Second, there is the product’s stated platform scope. Third, there are the buyer’s device and software conditions. Pages often blend those three into one sentence, which makes an answer appear more certain than it is.'),
+      h('Questions for a current PC listing'),
+      list('Is PC explicitly named for the selected NBA2K27 product?', 'Are operating-system, game-launcher, or hardware requirements documented?', 'Is the product’s status dated for the current game update?', 'Are mode coverage and limitations written down?', 'Where should a buyer obtain support if the listed requirements do not match their system?'),
+      h('Treat screenshots as context only'),
+      p('A PC screenshot can illustrate a topic. It does not prove that a feature is included, current, or available to your account. Use written, dated information for any decision that depends on compatibility.'),
+    ],
+  },
+  {
+    slug: 'nba-2k27-cheat-status-after-patches', title: 'NBA 2K27 Cheat Status After Patches: What a Status Page Should Say', tag: 'Status',
+    desc: 'How to evaluate NBA 2K27 cheat status claims after a game update without treating an undetected label as a guarantee.', href: '/support/',
+    body: [
+      p('Updates create a predictable search spike for “NBA 2K27 cheat status,” “working,” and “updated.” A status label is useful only when it identifies the product, date, relevant version, and scope. A banner with no context is not enough to make a buying decision.'),
+      h('A meaningful status update is specific'),
+      p('A useful notice distinguishes availability from compatibility and explains whether a product page, feature, platform, or setup process is affected. It also carries a date. Vague phrases such as “back,” “live,” or “undetected” do not explain what changed or what a purchaser should expect.'),
+      h('What to look for'),
+      list('The product and game are named together.', 'The notice has a visible date.', 'The update states what is known and what remains unavailable.', 'The provider gives a support route for affected customers.', 'The wording does not turn a temporary status into a future guarantee.'),
+      h('Use a time-bound source'),
+      p('Before buying around a patch, consult the current page and ask the provider whether your exact plan is affected. Save the answer rather than relying on a reposted screenshot.'),
+    ],
+  },
+  {
+    slug: 'nba-2k27-cheats-vs-controller-scripts', title: 'NBA 2K27 Cheats vs Controller Scripts: Why the Labels Matter', tag: 'Scripts',
+    desc: 'Cheats, scripts, macros, and controller tools are different labels. Learn why NBA 2K27 buyers should ask what a listing actually is.', href: '/faq/',
+    body: [
+      p('NBA 2K27 search results commonly mix cheats, scripts, macros, controller devices, mods, and overlays. These words do not reliably describe the same technical approach. The difference matters because a buyer can otherwise compare two unrelated products as if they were identical.'),
+      h('Marketing labels hide important details'),
+      p('A script may refer to automated controller input. A macro may refer to a repeated input pattern. A menu may refer to an on-screen interface. A hardware-linked product may use a different setup altogether. A listing must say what is being offered instead of relying on a high-volume keyword.'),
+      h('Use the correct comparison questions'),
+      list('What category does the provider use for this product?', 'What does the selected plan include?', 'Which device, platform, or software prerequisites are documented?', 'Is there a current setup and support path?', 'What limitations or policy risks does the provider disclose?'),
+      h('Why the distinction improves the search'),
+      p('Once you know what category you are researching, you can ask precise questions and avoid paying for a label that does not match what you intended to evaluate.'),
+    ],
+  },
+  {
+    slug: 'nba-2k27-cheat-provider-checklist', title: 'NBA 2K27 Cheat Provider Checklist Before You Buy', tag: 'Buying Guide',
+    desc: 'Use this NBA 2K27 cheat-provider checklist to compare written scope, plan terms, support access, and status information.', href: '/support/',
+    body: [
+      p('A provider comparison should begin with the page you can actually hold them to: the current product description, plan selector, terms, and support route. Search rankings and polished landing pages help you discover options; they do not replace the information that governs your purchase.'),
+      h('Build a simple comparison sheet'),
+      p('Create one row per seller and record the exact product name, destination URL, selected plan, stated platform, named features, update date, support route, and any limitation you can see. Leave a cell blank when the provider does not answer it. A blank is more useful than a guess.'),
+      h('Red flags worth pausing for'),
+      list('A feature list has no date or product-plan connection.', 'The checkout destination does not match the product page.', 'Support cannot clarify a key scope question.', 'The page promises permanent safety or outcomes.', 'Screenshots substitute for written terms.'),
+      h('A better outcome than a rushed purchase'),
+      p('This checklist is designed to expose missing information early. If the answers you need are unavailable, wait until they are available.'),
+    ],
+  },
+  {
+    slug: 'nba-2k27-hwid-spoofer-questions', title: 'NBA 2K27 HWID Spoofer: Questions to Ask Before Buying', tag: 'HWID Spoofer',
+    desc: 'A pre-purchase question list for people searching NBA 2K27 HWID spoofer products. An error message alone is not a diagnosis.', href: '/hwid-spoofer/',
+    body: [
+      p('Searches for an “NBA 2K27 HWID spoofer” usually follow a problem: an access failure, an enforcement notice, a device concern, or a broad belief that hardware identity is involved. Those situations are not interchangeable, and an error message alone does not prove what happened.'),
+      h('Start with the platform’s own notice'),
+      p('Record the exact message, date, account, platform, and support case number. Then read the relevant platform and game documentation. This keeps an assumption about hardware identity from becoming the only explanation for an issue that could have another cause.'),
+      h('Questions for the product provider'),
+      list('What is the current stated purpose of this HWID Spoofer listing?', 'What platforms and requirements are explicitly documented?', 'What is excluded from the product’s scope?', 'Does the provider claim any outcome, and is that claim written and dated?', 'Where can pre-purchase questions be answered?'),
+      h('Do not treat a purchase as a diagnosis'),
+      p('A hardware-related product page does not establish the cause of an account, connection, or installation problem. It also cannot promise an appeal, an account recovery, or avoidance of platform action.'),
+    ],
+  },
+  {
+    slug: 'nba-2k27-hwid-ban-vs-account-ban', title: 'NBA 2K27 HWID Ban vs Account Ban: Why the Difference Matters', tag: 'HWID Questions',
+    desc: 'Account action, device questions, and game errors are not interchangeable. Use this NBA 2K27 guide to keep them separate.', href: '/ugc/',
+    body: [
+      p('“HWID ban” and “account ban” are often used as if they mean the same thing. They do not. A platform notice, a game restriction, an account issue, and a hardware-identity claim each require their own evidence and support path.'),
+      h('Build an evidence trail first'),
+      p('Before changing devices, buying a utility product, or submitting an appeal, preserve the exact notice and the basic context around it. Include the relevant account, date, platform, and support correspondence. Avoid changing the story or claiming a conclusion you cannot verify.'),
+      h('Keep the product questions separate'),
+      list('UGC concerns account-appeal context and records.', 'HWID Spoofer concerns its own stated scope and requirements.', 'A game or platform support team is the authority for its own notice.', 'A connection or launch error does not automatically establish an enforcement reason.', 'No paid product should be assumed to guarantee an account result.'),
+      h('Choose the right page for the right question'),
+      p('Use UGC research for appeal-related questions. Use the HWID product page only to understand its current stated product terms. Do not merge the two into one unsupported promise.'),
+    ],
+  },
+  {
+    slug: 'ugc-nba-2k27-account-appeal-guide', title: 'NBA 2K27 Account Appeal Guide: Preparing a Clear UGC Request', tag: 'UGC',
+    desc: 'Prepare accurate records and a concise explanation for an NBA 2K27 account-appeal question. UGC means Unban & Governance Control.', href: '/ugc/',
+    body: [
+      p('On this site, UGC means Unban & Governance Control: an account-appeal product category. It is not a claim that an appeal will be approved, that an account will be restored, or that a platform will change its decision.'),
+      h('What to gather before writing an appeal'),
+      p('Collect the original notice, date, account identifier, platform, prior support case number, and any requested documentation. Keep the materials organized and use only information you can support. The goal is to make the issue easy to review, not to add unsupported theories.'),
+      h('A useful appeal structure'),
+      list('State the account and date involved.', 'Quote or attach the exact notice.', 'Explain the issue in chronological order.', 'Answer the questions the platform actually asked.', 'Request a review without promising or demanding a result.'),
+      h('What UGC content should not imply'),
+      p('An appeal service does not replace the platform’s policy or decision process. It should not be described as a ban remover, a bypass, a guarantee, or proof that the underlying action was mistaken.'),
+    ],
+  },
+  {
+    slug: 'ugc-nba-2k27-appeal-evidence-checklist', title: 'NBA 2K27 Appeal Evidence Checklist for UGC Research', tag: 'UGC',
+    desc: 'A concise evidence checklist for NBA 2K27 account-appeal research. Keep records accurate and avoid assumptions about enforcement.', href: '/ugc/',
+    body: [
+      p('An appeal is easier to understand when the record is complete. That does not change the platform’s rules or guarantee a result, but it prevents common mistakes such as missing dates, mismatched accounts, or a description that changes from one support message to another.'),
+      h('The record to keep'),
+      list('The original restriction or enforcement notice.', 'The account and platform identity involved.', 'The date and time zone if they are shown.', 'Screenshots or emails in their original form.', 'Previous case numbers and official replies.', 'A short timeline written in your own words.'),
+      h('Use neutral language'),
+      p('A strong support request describes facts. It does not claim that an error proves a particular cause, and it does not use a product category as proof that an account outcome should follow. If you do not know why an action occurred, say that you are seeking clarification.'),
+      h('How this relates to UGC'),
+      p('UGC is presented as an account-appeal category. Its current assistance scope, eligibility, and limitations must come from the current product listing or support response.'),
+    ],
+  },
+  {
+    slug: 'cloud-dma-nba-2k27-product-questions', title: 'Cloud DMA for NBA 2K27: Questions to Resolve Before Purchase', tag: 'Cloud DMA',
+    desc: 'Cloud DMA is a high-intent NBA 2K27 product term. Use this question set to clarify function, requirements, and limits first.', href: '/cloud-dma/',
+    art: '/images/nba-2k27/cloud-dma-concept-v2.png',
+    body: [
+      p('Cloud DMA appears in NBA 2K27 product searches alongside terms such as remote access, DMA, hardware, and cloud setup. Those terms are not a product specification. The current seller must explain what its specific Cloud DMA listing is, what it requires, and what it does not claim to do.'),
+      h('Clarify the category before comparing it'),
+      p('Ask the provider to describe the product in plain language. A cloud label does not tell you whether hardware is involved, what device conditions apply, whether a platform is supported, or what a purchaser receives. Do not use another provider’s explanation as a substitute.'),
+      h('Pre-purchase questions'),
+      list('What is the stated purpose of this Cloud DMA product?', 'What hardware, software, account, or network requirements are documented?', 'Which platform or game contexts are explicitly named?', 'What does the monthly plan cover and what does lifetime mean on this listing?', 'Where can a buyer receive current written support?'),
+      h('Make the decision from the written listing'),
+      p('If the technical explanation is essential to your purchase, get it in writing before checkout. A vague cloud or DMA keyword is not enough.'),
+    ],
+  },
+  {
+    slug: 'cloud-dma-vs-hwid-spoofer-nba-2k27', title: 'Cloud DMA vs HWID Spoofer for NBA 2K27: Different Product Questions', tag: 'Cloud DMA',
+    desc: 'Cloud DMA and HWID Spoofer are different NBA 2K27 product categories. Compare their stated scope without assuming shared functionality.', href: '/cloud-dma/',
+    art: '/images/nba-2k27/cloud-dma-concept-v2.png',
+    body: [
+      p('Cloud DMA and HWID Spoofer are often grouped together in search results because both appear in broader cheat-market vocabulary. Grouping them does not make them interchangeable. Each listing needs its own explanation of function, prerequisites, platform scope, plan terms, and limitations.'),
+      h('Compare claims, not labels'),
+      p('Begin with the exact product page. Record what each product says it is for. Then list the requirements and exclusions next to it. A comparison becomes unreliable the moment it assumes that a shared keyword proves shared functionality.'),
+      h('Questions that keep the comparison honest'),
+      list('What is expressly stated for Cloud DMA?', 'What is expressly stated for HWID Spoofer?', 'Does either page identify platform or device requirements?', 'Does either page explain current availability after game updates?', 'Does support confirm the exact plan and use case you are evaluating?'),
+      h('Buy only against the product you selected'),
+      p('The selected plan should remain visible through the checkout route. Confirm the destination and plan before payment rather than assuming a related utility product provides the same scope.'),
+    ],
+  },
+  {
+    slug: 'nba-2k27-cheats-monthly-vs-lifetime', title: 'NBA2K27 Cheats Monthly vs Lifetime: How to Compare the Plans', tag: 'Plans',
+    desc: 'Compare NBA2K27 Cheats monthly and lifetime plan labels using the stated price, duration, selected product, and written terms.', href: PRIMARY_CHECKOUT_PATH,
+    body: [
+      p('Plan comparisons work best when they stay precise. NBA2K27 CHEATS shows a monthly plan for 30 days and a lifetime plan. The price and label are useful facts; they do not automatically answer every question about support, updates, availability, compatibility, or future product scope.'),
+      h('Compare the selected product first'),
+      p('Make sure you are comparing the same product, not a main-product plan against a utility-product plan. Confirm the product name, checkout destination, selected term, and price on the page before you continue to checkout.'),
+      h('Questions a plan label does not answer by itself'),
+      list('What current feature scope is included?', 'Which platform or game context is named?', 'What support route applies?', 'How are update interruptions handled?', 'What does the provider mean by lifetime for this exact listing?'),
+      h('Use the plan page as a record'),
+      p('Save the product page and its plan wording before purchasing. That simple step is more reliable than remembering a promotion, a search snippet, or another seller’s policy.'),
+    ],
+  },
+  {
+    slug: 'nba-2k27-cheat-reviews-and-testimonials', title: 'NBA 2K27 Cheat Reviews: How to Read Testimonials Critically', tag: 'Reviews',
+    desc: 'Reviews and clips can help you form questions about NBA 2K27 cheat listings, but they do not prove current product scope or safety.', href: '/faq/',
+    body: [
+      p('Reviews, Discord screenshots, short clips, and comment sections are common in NBA 2K27 cheat searches. They can show the language customers use, but they are weak evidence for a current purchase decision unless the provider can connect them to a dated, verifiable product description.'),
+      h('What a review can and cannot tell you'),
+      p('A review can describe one person’s claim or experience. It cannot independently establish current feature availability, update status, compatibility, policy compliance, or a repeatable account outcome. It also cannot substitute for clear terms when the product page is vague.'),
+      h('Use reviews as prompts for questions'),
+      list('Does the current listing describe the feature mentioned in the review?', 'Is the review tied to NBA 2K27 and a visible date?', 'Does the seller explain limitations as clearly as benefits?', 'Can support answer the same question in writing?', 'Are you being shown real editorial context or only anonymous praise?'),
+      h('Why this site labels editorial content'),
+      p('Forum answers and guides on NBA2K27 Cheats are publisher-written editorial material. They are not presented as customer testimonials, votes, or live community reports.'),
+    ],
+  },
+  {
+    slug: 'nba-2k27-cheat-safety-claims', title: 'NBA 2K27 Cheat Safety Claims: What “Safe” and “Undetected” Leave Out', tag: 'Safety Claims',
+    desc: 'Learn why NBA 2K27 cheat safety and undetected claims need dates, scope, and limits—and never amount to a guarantee.', href: '/faq/',
+    body: [
+      p('Safety and undetected are among the most persuasive words in this market. They are also the least useful when they have no product name, date, scope, or limitation. A broad safety claim does not make a product permitted, consequence-free, or suitable for every game context.'),
+      h('Ask what the claim is actually attached to'),
+      p('Is the statement about one product, one feature, one platform, or one date? Is it an advertising phrase or a current service-status notice? A claim that cannot answer those basics should not control a purchase decision.'),
+      h('Keep the risk questions visible'),
+      list('Read the game and platform rules that apply to you.', 'Ask the provider for current scope and known limitations.', 'Do not assume a past status applies after an update.', 'Do not equate a product label with account protection.', 'Do not rely on anonymous posts as a guarantee.'),
+      h('What would change this assessment'),
+      p('A dated provider status, written terms, and verified product documentation can answer specific scope questions. They still cannot erase platform policies or guarantee an account outcome.'),
+    ],
+  },
+  {
+    slug: 'nba-2k27-product-research-checklist', title: 'NBA 2K27 Product Research Checklist Before Checkout', tag: 'Buying Guide',
+    desc: 'A practical NBA 2K27 product-research checklist: confirm scope, platform, plan, requirements, plan terms, and risk before checkout.', href: PRIMARY_CHECKOUT_PATH,
+    body: [
+      p('NBA2K27 CHEATS is a game-specific product. Stated plan prices are $35 for 30 days and $150 for lifetime. That does not establish current features, supported modes, platform coverage, or availability. A screen image shows context only; it is not independent proof.'),
+      h('Start with the product name, not the screenshot'),
+      p('Before checkout, identify the exact product page and list the questions that matter: NBA 2K27 applicability, platform, mode scope, and technical prerequisites. Missing requirements are unanswered questions, not silent promises.'),
+      h('Separate official game facts from seller claims'),
+      p('2K lists NBA 2K27 from Visual Concepts with PC via Steam among platforms. Official mode names help you ask precise questions; they do not verify third-party product scope. Keep official game facts, product listings, and your selected plan in separate notes.'),
+      h('Check plan terms and risk before payment'),
+      p('Confirm monthly versus lifetime scope in writing with support. Third-party software can carry account or platform risk. Read official rules and current plan terms before payment.'),
+    ],
+  },
+  {
+    slug: 'nba-2k27-plan-comparison', title: 'NBA2K27 Cheats: Monthly vs Lifetime Plan Questions', tag: 'Plans',
+    desc: 'Compare stated NBA2K27 Cheats monthly and lifetime plans, including what to confirm before payment.', href: PRIMARY_CHECKOUT_PATH,
+    body: [
+      p('Listed NBA2K27 CHEATS prices are $35 for 30 days and $150 for lifetime. These figures describe plan labels on this site; they do not establish a feature list, delivery timing, platform support, or future maintenance.'),
+      h('What the listed prices establish'),
+      p('Monthly lasts 30 days. The lifetime label needs a written explanation: product version, access period, update policy, and support boundaries. Do not infer those details from the word lifetime alone.'),
+      h('A short comparison before checkout'),
+      p('Monthly may suit a short evaluation of current plan terms. Lifetime is relevant only when scope is explained in writing. Confirm product name and selected plan at checkout before payment.'),
+      h('Questions price cannot answer'),
+      p('Price does not prove platform or mode support, post-update availability, or account outcomes. Use the [product research checklist](/blog/nba-2k27-product-research-checklist/) with the [main product page](/cheats/) and keep unanswered items explicit.'),
+    ],
+  },
+  {
+    slug: 'hwid-and-account-appeals-different-questions', title: 'HWID and Account Appeals: Why They Are Different Questions', tag: 'HWID Spoofer',
+    desc: 'Learn why an account appeal and a hardware question require different evidence, and what to confirm before buying either product.', href: '/hwid-spoofer/',
+    art: '/images/nba-2k27/cloud-dma-concept-v2.png',
+    body: [
+      p('An account restriction and a hardware-related question are not interchangeable. UGC concerns appeal context; HWID Spoofer is a separate utility whose current scope and NBA 2K27 applicability must be confirmed with support.'),
+      h('Start with what is actually known'),
+      p('Do not label an error as a hardware ban because login failed. Connection issues, account decisions, and technical problems need different evidence. Rely on the platform notice and current product documentation.'),
+      h('What UGC does—and does not—address'),
+      p('UGC means Unban & Governance Control and organizes appeal records. It does not promise recovery or alter hardware identifiers. Stated plans are $35 for 30 days or $150 lifetime; confirm scope before payment.'),
+      h('What to ask about HWID Spoofer'),
+      p('HWID Spoofer is $50 for 30 days or $150 lifetime. Ask for written requirements and limitations before changing device settings. Read the [HWID Spoofer page](/hwid-spoofer/) and [UGC page](/ugc/) as separate products.'),
+    ],
+  },
+  {
+    slug: 'third-party-software-risk-nba-2k27', title: 'Third-Party Software Risk for NBA 2K27: Rules to Read First', tag: 'Safety Claims',
+    desc: 'Separate publisher rules from product marketing for NBA 2K27. Review account risks and vendor limits before checkout.', href: '/faq/',
+    body: [
+      p('Third-party software searches mix helpful vocabulary with high-risk promises. For NBA 2K27, official publisher and platform rules can restrict unauthorized tools regardless of how a product is marketed.'),
+      h('Publisher rules come first'),
+      p('Read current NBA 2K27 and platform terms before interpreting a product page. A checkout link does not establish permission to use third-party software in every mode or on every platform.'),
+      h('Vendor limits matter too'),
+      p('Product listings can describe plan duration and listed scope without proving features, compatibility, safety, or availability. Treat broad labels as questions for support, not as guarantees.'),
+      h('Keep a simple pre-checkout record'),
+      list('Product name and selected plan.', 'Platform and mode you care about.', 'Written answer from support to your scope question.', 'Official rules you reviewed.', 'Date of the listing you relied on.'),
+    ],
+  },
+  {
+    slug: 'nba-2k27-official-sources-before-cheats-research',
+    title: 'NBA 2K27 Official Sources: What to Read Before Cheat Product Research',
+    tag: 'Research',
+    desc: 'Use publisher and platform facts as context for NBA 2K27 cheat searches. Official pages name the game and platforms; they do not verify third-party listings.',
+    href: '/about/',
+    body: [
+      p(
+        'When you research “NBA 2K27 cheats,” start with what first-party sources actually establish: who publishes the game, which platforms it is sold for, and how online features are described. Those facts help you ask precise questions on the product page; they do not verify a third-party tool’s scope, safety, or availability.',
+      ),
+      h('Separate official context from product claims'),
+      p(
+        'A studio or publisher page can list platforms such as PC via a named store and describe modes at a high level. A product page must still explain its own category, plan, requirements, and limits. Do not treat an official mode name or platform list as proof that a specific external product works in that context.',
+      ),
+      h('What official material is useful for'),
+      list(
+        'Naming the game and edition you mean when comparing listings.',
+        'Confirming which platforms the title is marketed for before you ask about PC-only or console-only scope.',
+        'Understanding that online services and enforcement policies exist independently of any seller’s headline.',
+        'Building a checklist of questions to send to support before checkout.',
+      ),
+      h('What it does not replace'),
+      p(
+        'Official pages do not replace a current written description from support, a dated status note, or answers about compatibility, detection, account risk, or refund policy. Keep those threads separate and ask for missing details instead of filling gaps from marketing language.',
+      ),
+    ],
+  },
+];
+
+export const enBlogArticles: BlogPostFull[] = drafts.map(post);

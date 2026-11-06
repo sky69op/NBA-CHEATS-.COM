@@ -1,0 +1,263 @@
+---
+import '../../styles/forum.css';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Icon from '../../components/icons/Icon.astro';
+import { getForumCategories, getForumPosts } from '../../data/forum/locale';
+import { getBlogPosts, getBlogPostTimestamp } from '../../data/blog';
+import { resolvePageSeo } from '../../config/seo';
+import { breadcrumbSchema, collectionPageSchema } from '../../utils/schema';
+import { useLocale } from '../../i18n';
+import { formatForumRelative } from '../../utils/forumTime';
+
+const buildNow = new Date();
+import BrandLogo from '../../components/BrandLogo.astro';
+
+const { locale, t, lp } = useLocale(Astro.currentLocale);
+const f = t.pages.forum;
+const seo = resolvePageSeo('/forum/', locale);
+const breadcrumbs = [
+  { name: t.common.breadcrumbHome, path: '/' },
+  { name: t.common.breadcrumbForum, path: '/forum/' },
+];
+const categoryLabels: Record<string, string> = {
+  ...(f.categoryLabels ?? {}),
+  General: f.categoryGeneral,
+  'Guides & Builds': f.categoryGuides,
+  'Patch Talk': f.categoryPatch,
+  Community: f.categoryCommunity,
+};
+function forumCategoryLabel(category: string): string {
+  return categoryLabels[category] ?? category;
+}
+const forumPosts = getForumPosts(locale);
+const forumCategories = getForumCategories(locale);
+const blogPosts = getBlogPosts(locale);
+const categoryKey = (name: string) => name.toLowerCase().replace(/[^a-z0-9]/g, '');
+const sourceTimestamp = (path?: string) => {
+  const slug = path?.split('/').filter(Boolean).at(-1);
+  const article = blogPosts.find((item) => item.slug === slug);
+  return article ? getBlogPostTimestamp(article.date) : 0;
+};
+---
+
+<BaseLayout title={seo.title} description={seo.description} jsonLd={[
+  collectionPageSchema({ name: f.title, description: seo.description, url: lp('/forum/'), locale }),
+  breadcrumbSchema(breadcrumbs, locale),
+]}>
+  <section class="forum-page py-8 md:py-12">
+    <div class="mx-auto max-w-6xl px-5">
+      <Breadcrumbs items={breadcrumbs} />
+      <header class="forum-hero">
+        <div>
+          <p class="section-header__eyebrow">{f.eyebrow}</p>
+          <h1 class="text-foreground">{f.title}</h1>
+          <h2 class="forum-hero__copy">{f.description}</h2>
+        </div>
+        <div class="forum-hero__actions">
+          <a class="forum-create" href={lp('/products/')}><Icon name="navProducts" size={17} /> {t.nav.find((l) => l.id === 'products')?.label ?? 'Product'}</a>
+          <a class="forum-create forum-create--muted" href={lp('/support/')}><Icon name="headphones" size={17} /> {t.nav.find((l) => l.id === 'support')?.label ?? 'Support'}</a>
+        </div>
+      </header>
+
+      <div class="forum-layout">
+        <main class="forum-main" aria-label={f.postsAria}>
+          <div class="forum-toolbar">
+            <div class="forum-sort" role="group" aria-label={f.sortAria}>
+              <button class="is-active" type="button" data-forum-sort="featured" aria-pressed="true">{f.sortPopular}</button>
+              <button type="button" data-forum-sort="latest" aria-pressed="false">{f.sortLatest}</button>
+              <button type="button" data-forum-sort="top" aria-pressed="false">{f.sortTop}</button>
+            </div>
+          </div>
+
+          <div class="forum-category-filters" role="group" aria-label={f.filterAria}>
+            <button type="button" class="is-active" data-forum-filter="all" aria-pressed="true"><Icon name="layers" size={14} /> {f.filterAll}</button>
+            {forumCategories.map((category) => (
+              <button type="button" data-forum-filter={categoryKey(category.name)} aria-pressed="false"><Icon name={category.icon} size={14} /> {categoryLabels[category.name] ?? category.name}</button>
+            ))}
+          </div>
+          <p class="forum-results-count" data-forum-visible-count>{forumPosts.length} {f.resultsCount}</p>
+
+          <div class="forum-post-list" aria-live="polite">
+            {forumPosts.map((post, index) => (
+              <article class="forum-post-card" data-forum-card data-post-slug={post.slug} data-upvotes={post.upvotes} data-category={categoryKey(post.category)} data-comments={post.commentsCount} data-published={Date.parse(post.published) || sourceTimestamp(post.sourcePath)} data-order={index}>
+                <div class="forum-vote" aria-label={f.voteAria}>
+                  <button class="forum-vote__up" type="button" data-vote-up aria-label={f.upvoteAria}><Icon name="chevronDown" size={16} /></button>
+                  <strong data-vote-count>{post.upvotes}</strong>
+                  <button type="button" disabled aria-label={f.downvoteUnavailableAria}><Icon name="chevronDown" size={16} /></button>
+                </div>
+                <div class="forum-post-card__body">
+                  <div class="forum-post-meta">
+                    <span class={`forum-community-avatar tone-${post.categoryTone}`}><Icon name="users" size={15} /></span>
+                    <a href="#communities" class="forum-community-name">{forumCategoryLabel(post.category)}</a>
+                    <span>·</span><span><Icon name="userRound" size={13} /> u/{post.author}</span><span>·</span><span>{formatForumRelative(post.published, buildNow)}</span>
+                  </div>
+                  <a class="forum-post-title" href={lp(`/forum/${post.slug}/`)}>{post.title}</a>
+                  <p class="forum-post-excerpt">{post.excerpt}</p>
+                  {post.sourceTitle && <p class="forum-source">{f.fromGuide} <a href={lp(post.sourcePath ?? '/blog/')}>{post.sourceTitle}</a></p>}
+                  <div class="forum-post-actions">
+                    <span class="forum-flair">{f.closedThread}</span>
+                    <span class="forum-flair">{f.closedBy}</span>
+                    {post.flair && <span class={`forum-flair tone-${post.categoryTone}`}>{post.flair}</span>}
+                    <a href={lp(`/forum/${post.slug}/`)}><Icon name="messageCircle" size={15} /> {post.commentsCount} {f.comments}<span class="sr-only">: {post.title}</span></a>
+                    <a class="forum-read-link" href={lp(`/forum/${post.slug}/`)}><Icon name="arrowRight" size={15} /> {f.readDiscussion}: {post.title}</a>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+          <p class="forum-empty" data-forum-empty hidden={forumPosts.length > 0}>{forumPosts.length === 0 ? f.emptyArchive : f.empty}</p>
+          <nav class="forum-pagination" aria-label={f.paginationAria} data-forum-pagination hidden>
+            <button type="button" data-page-previous aria-label={f.pagePrevious}>{f.pagePrevious}</button>
+            <div class="forum-pagination__pages" data-page-buttons></div>
+            <button type="button" data-page-next aria-label={f.pageNext}>{f.pageNext}</button>
+            <span class="forum-pagination__status" data-page-status aria-live="polite"></span>
+          </nav>
+        </main>
+
+        <aside class="forum-sidebar">
+          <section class="forum-side-card forum-about" id="community-guidelines">
+            <div class="forum-side-card__banner"></div>
+            <div class="forum-about__content">
+              <div class="forum-about__title"><span class="forum-community-avatar forum-community-avatar--brand"><BrandLogo size={34} /></span><p>{f.sidebarTitle}</p></div>
+              <p>{f.sidebarIntro}</p>
+              <div class="forum-stats"><span><b>{forumPosts.length}</b> {f.statsDiscussions}</span><span><b>{forumCategories.length}</b> {f.statsTopics}</span></div>
+              <a class="forum-join" href={lp('/blog/')}>{f.exploreAllGuides}</a>
+            </div>
+          </section>
+          <section class="forum-side-card" id="communities">
+            <p class="forum-side-heading">{f.communitiesHeading}</p>
+            <ul class="forum-community-list">
+              {forumCategories.map((category) => (
+                <li><a href={lp('/forum/')} data-forum-filter={categoryKey(category.name)}><span class={`forum-community-avatar tone-${category.tone}`} aria-hidden="true"><Icon name={category.icon} size={15} /></span><span><b>{categoryLabels[category.name] ?? category.name}</b></span><Icon name="chevronRight" size={15} /></a></li>
+              ))}
+            </ul>
+            <a class="forum-text-link" href={lp('/forum/')} data-forum-filter="all">{f.browseAllCommunities} <Icon name="arrowRight" size={14} /></a>
+          </section>
+          <section class="forum-side-card forum-rules">
+            <p class="forum-side-heading">{f.guidelinesHeading}</p>
+            <ol><li>{f.guideline1}</li><li>{f.guideline2}</li><li>{f.guideline3}</li></ol>
+            <a href="#community-guidelines">{f.readFullGuidelines} <Icon name="arrowRight" size={14} /></a>
+          </section>
+          <p class="forum-sidebar-foot">{f.sidebarFoot}<br />© {new Date().getFullYear()} {f.sidebarTitle}</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+  <script>
+    const cards = [...document.querySelectorAll<HTMLElement>('[data-forum-card]')];
+    const sortButtons = [...document.querySelectorAll<HTMLButtonElement>('[data-forum-sort]')];
+    const filterButtons = [...document.querySelectorAll<HTMLElement>('[data-forum-filter]')];
+    const list = document.querySelector<HTMLElement>('.forum-post-list');
+    const pagination = document.querySelector<HTMLElement>('[data-forum-pagination]');
+    const pageButtons = document.querySelector<HTMLElement>('[data-page-buttons]');
+    const pageStatus = document.querySelector<HTMLElement>('[data-page-status]');
+    const visibleCount = document.querySelector<HTMLElement>('[data-forum-visible-count]');
+    const emptyState = document.querySelector<HTMLElement>('[data-forum-empty]');
+    const previousButton = document.querySelector<HTMLButtonElement>('[data-page-previous]');
+    const nextButton = document.querySelector<HTMLButtonElement>('[data-page-next]');
+    const pageSize = 20;
+    let currentPage = 1;
+    let activeFilter = new URLSearchParams(window.location.search).get('category') ?? 'all';
+    if (window.location.search) {
+      history.replaceState(null, '', window.location.pathname);
+    }
+
+    function updateForum() {
+      const sort = sortButtons.find((button) => button.getAttribute('aria-pressed') === 'true')?.dataset.forumSort ?? 'featured';
+      const ordered = [...cards].sort((a, b) => {
+        if (sort === 'latest') return Number(b.dataset.published) - Number(a.dataset.published);
+        if (sort === 'top') {
+          const aTitle = a.querySelector<HTMLAnchorElement>('.forum-post-title')?.textContent ?? '';
+          const bTitle = b.querySelector<HTMLAnchorElement>('.forum-post-title')?.textContent ?? '';
+          return aTitle.localeCompare(bTitle);
+        }
+        return Number(a.dataset.order) - Number(b.dataset.order);
+      });
+      const matching = ordered.filter((card) => {
+        const matchesCategory = activeFilter === 'all' || card.dataset.category === activeFilter;
+        return matchesCategory;
+      });
+      const pageCount = Math.max(1, Math.ceil(matching.length / pageSize));
+      currentPage = Math.min(currentPage, pageCount);
+      const firstVisible = (currentPage - 1) * pageSize;
+      const visibleCards = new Set(matching.slice(firstVisible, firstVisible + pageSize));
+
+      ordered.forEach((card) => {
+        card.hidden = !visibleCards.has(card);
+        list?.append(card);
+      });
+
+      if (visibleCount) visibleCount.textContent = `${matching.length} ${matching.length === 1 ? 'discussion' : 'discussions'}`;
+      if (emptyState) emptyState.hidden = matching.length > 0;
+      if (pagination) pagination.hidden = matching.length <= pageSize;
+      if (pageStatus) pageStatus.textContent = matching.length
+        ? `Showing ${firstVisible + 1} to ${Math.min(firstVisible + pageSize, matching.length)} of ${matching.length}`
+        : '0 discussions';
+      if (previousButton) previousButton.disabled = currentPage <= 1;
+      if (nextButton) nextButton.disabled = currentPage >= pageCount;
+      if (pageButtons) {
+        pageButtons.replaceChildren(...Array.from({ length: pageCount }, (_, index) => {
+          const button = document.createElement('button');
+          const page = index + 1;
+          button.type = 'button';
+          button.textContent = String(page);
+          button.setAttribute('aria-label', `Page ${page}`);
+          if (page === currentPage) button.setAttribute('aria-current', 'page');
+          button.addEventListener('click', () => {
+            currentPage = page;
+            updateForum();
+          });
+          return button;
+        }));
+      }
+    }
+
+    sortButtons.forEach((button) => button.addEventListener('click', () => {
+      sortButtons.forEach((item) => {
+        const active = item === button;
+        item.classList.toggle('is-active', active);
+        item.setAttribute('aria-pressed', String(active));
+      });
+      currentPage = 1;
+      updateForum();
+    }));
+
+    filterButtons.forEach((button) => button.addEventListener('click', (event) => {
+      if (button instanceof HTMLAnchorElement) event.preventDefault();
+      activeFilter = button.dataset.forumFilter ?? 'all';
+      filterButtons.forEach((item) => {
+        const active = item === button || item.dataset.forumFilter === activeFilter;
+        item.classList.toggle('is-active', active);
+        item.setAttribute('aria-pressed', String(active));
+      });
+      currentPage = 1;
+      updateForum();
+    }));
+
+    previousButton?.addEventListener('click', () => {
+      currentPage = Math.max(1, currentPage - 1);
+      updateForum();
+    });
+    nextButton?.addEventListener('click', () => {
+      currentPage += 1;
+      updateForum();
+    });
+
+    const initialFilter = filterButtons.find((button) => button.dataset.forumFilter === activeFilter);
+    if (initialFilter) {
+      filterButtons.forEach((item) => {
+        const active = item === initialFilter;
+        item.classList.toggle('is-active', active);
+        item.setAttribute('aria-pressed', String(active));
+      });
+    } else {
+      activeFilter = 'all';
+    }
+    updateForum();
+  </script>
+  <script>
+    import { initForumVotes } from '../../scripts/forum-votes.ts';
+    initForumVotes();
+  </script>
+</BaseLayout>

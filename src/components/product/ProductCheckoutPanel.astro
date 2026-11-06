@@ -1,0 +1,256 @@
+---
+import type { ProductPage } from '../../data/products';
+import {
+  checkoutUrlWithPlan,
+  formatPlanPrice,
+  getProductPlans,
+  type ProductPlanId,
+} from '../../data/productPricing';
+import CircleFilled from '@tabler/icons/filled/circle.svg';
+import Icon from '../icons/Icon.astro';
+import ProductIconWell from './ProductIconWell.astro';
+import { Button } from '@/components/starwind/button';
+import {
+  radioControl,
+  radioGroup,
+  radioIndicator,
+  radioItem,
+  radioWrapper,
+} from '@/components/starwind/radio-group/variants';
+import { useLocale } from '../../i18n';
+
+interface Props {
+  product: ProductPage;
+}
+
+const { product } = Astro.props;
+const { t } = useLocale(Astro.currentLocale);
+const plans = getProductPlans(product.slug);
+const planCopy = (id: ProductPlanId) => {
+  if (id === 'weekly') return { label: t.products.planWeekly, priceNote: t.products.planWeeklyNote };
+  if (id === 'monthly') return { label: t.products.planMonthly, priceNote: t.products.planPerMonth };
+  if (id === 'lifetime') return { label: t.products.planLifetime, priceNote: t.products.planOneTimeNote };
+  return { label: t.products.planOneTime, priceNote: t.products.planOneTimeNote };
+};
+const eliteMonthlyNote: Record<string, string> = {
+  en: '30 days',
+  es: '30 días',
+  de: '30 Tage',
+  fr: '30 jours',
+};
+const localizedPlans = plans.map((plan) => {
+  const copy = planCopy(plan.id);
+  const locale = Astro.currentLocale ?? 'en';
+  const priceNote =
+    product.slug === 'elite' && plan.id === 'monthly'
+      ? (eliteMonthlyNote[locale] ?? eliteMonthlyNote.en)
+      : copy.priceNote;
+  return {
+    ...plan,
+    ...copy,
+    priceNote,
+    badge: plan.id === 'lifetime' ? t.products.bestValue : plan.badge,
+  };
+});
+const defaultPlan = localizedPlans.find((plan) => plan.recommended) ?? localizedPlans[0]!;
+const isSinglePlan = localizedPlans.length === 1;
+---
+
+<aside
+  id="checkout"
+  class="product-checkout text-left lg:sticky lg:top-24"
+  aria-labelledby={`checkout-${product.slug}`}
+  data-product-checkout
+  data-buy-url={product.buyUrl}
+  data-plans={JSON.stringify(localizedPlans)}
+>
+  <div class="product-checkout__card flex h-full flex-col overflow-hidden rounded-2xl border border-primary/35 bg-card shadow-md ring-1 ring-primary/15">
+    <div class="card-title-band flex items-center justify-start gap-3 px-5 py-4 text-left">
+      <ProductIconWell name="acqPackage" iconSize={20} class="bg-primary/15" />
+      <div class="min-w-0 text-left">
+        <p class="text-xs font-medium uppercase tracking-wider text-muted-foreground">{t.products.checkoutEyebrow}</p>
+        <p id={`checkout-${product.slug}`} class="text-base font-semibold leading-snug">
+          {isSinglePlan ? t.products.checkoutSingle : t.products.checkoutSelect}
+        </p>
+      </div>
+    </div>
+
+    <div class="product-checkout__body flex flex-1 flex-col gap-5 px-5 pb-5 pt-5">
+      <div
+        class={radioGroup({ orientation: 'vertical', class: 'product-checkout__plans' })}
+        data-sw-radio-group
+        data-value={defaultPlan.id}
+        data-size="md"
+        role="radiogroup"
+        aria-label={isSinglePlan ? t.products.checkoutSingle : t.products.checkoutSelect}
+      >
+        {
+          localizedPlans.map((plan) => {
+            const selected = plan.id === defaultPlan.id;
+            return (
+              <label class="product-checkout__plan flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-border bg-background p-3.5 transition-colors has-data-checked:border-primary has-data-checked:bg-primary/10">
+                <span class="flex min-w-0 items-center gap-3">
+                  <span class={radioWrapper()} data-slot="radio-group-item-wrapper">
+                    <span
+                      class={radioItem()}
+                      data-sw-radio
+                      data-value={plan.id}
+                      role="radio"
+                      aria-label={plan.label}
+                      tabindex={selected ? 0 : -1}
+                      aria-checked={selected ? 'true' : 'false'}
+                      data-checked={selected ? '' : undefined}
+                      data-unchecked={selected ? undefined : ''}
+                    >
+                      <span class={radioControl({ variant: 'primary' })} data-slot="radio-group-item-control">
+                        <span
+                          class={radioIndicator()}
+                          data-slot="radio-group-item-indicator"
+                          data-checked={selected ? '' : undefined}
+                          data-unchecked={selected ? undefined : ''}
+                        >
+                          <CircleFilled />
+                        </span>
+                      </span>
+                    </span>
+                  </span>
+                  <span class="flex min-w-0 flex-wrap items-center gap-1.5">
+                    <span class="text-sm font-medium">{plan.label}</span>
+                    {
+                      plan.badge && (
+                        <span class="shrink-0 rounded-full bg-primary px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wide text-primary-foreground">
+                          {plan.badge}
+                        </span>
+                      )
+                    }
+                  </span>
+                </span>
+                <span class="shrink-0 text-sm font-semibold tabular-nums text-foreground">
+                  {formatPlanPrice(plan.priceUsd)}
+                </span>
+              </label>
+            );
+          })
+        }
+      </div>
+
+      <div class="flex items-end justify-between gap-3 border-t border-border pt-4">
+        <span class="text-xs font-medium uppercase tracking-wider text-muted-foreground">{t.products.checkoutTotal}</span>
+        <p class="text-right font-[family-name:var(--font-heading)] text-2xl font-bold leading-none text-primary">
+          <span data-checkout-total>{formatPlanPrice(defaultPlan.priceUsd)}</span>
+          <span class="block text-sm font-medium text-muted-foreground" data-checkout-note>
+            {defaultPlan.priceNote}
+          </span>
+        </p>
+      </div>
+
+      <Button
+        as="a"
+        href={checkoutUrlWithPlan(product.buyUrl, defaultPlan.id)}
+        variant="primary"
+        size="lg"
+        class="w-full rounded-xl"
+        data-checkout-buy
+      >
+        {t.products.buyNow}
+        <Icon name="arrowRight" size={17} />
+      </Button>
+    </div>
+  </div>
+</aside>
+
+<script>
+  const initProductCheckoutPanels = () => {
+    document.querySelectorAll('[data-product-checkout]').forEach((root) => {
+      if (root.hasAttribute('data-checkout-bound')) return;
+      root.setAttribute('data-checkout-bound', '');
+
+      const buyUrl = root.getAttribute('data-buy-url');
+      const plansRaw = root.getAttribute('data-plans');
+      if (!buyUrl || !plansRaw) return;
+
+      type Plan = { id: string; priceUsd: number; priceNote: string; recommended?: boolean };
+      let plans: Plan[] = [];
+      try {
+        plans = JSON.parse(plansRaw) as Plan[];
+      } catch {
+        return;
+      }
+
+      const group = root.querySelector('[data-sw-radio-group]');
+      const totalEl = root.querySelector('[data-checkout-total]');
+      const noteEl = root.querySelector('[data-checkout-note]');
+      const buyBtn = root.querySelector<HTMLAnchorElement>('[data-checkout-buy]');
+      if (!group || !totalEl || !noteEl || !buyBtn) return;
+
+      const featuredId = plans.find((plan) => plan.recommended)?.id ?? plans[0]?.id;
+
+      const sync = () => {
+        const planId = group.getAttribute('data-value') || featuredId;
+        const plan = plans.find((p) => p.id === planId) ?? plans[0];
+        if (!plan) return;
+
+        totalEl.textContent = `$${plan.priceUsd}`;
+        noteEl.textContent = plan.priceNote;
+        const separator = buyUrl.includes('?') ? '&' : '?';
+        buyBtn.href = `${buyUrl}${separator}plan=${plan.id}`;
+        document.querySelectorAll<HTMLAnchorElement>('[data-checkout-buy-mobile]').forEach((link) => {
+          link.href = buyBtn.href;
+        });
+      };
+
+      const selectPlan = (radio: Element) => {
+        const planId = radio.getAttribute('data-value');
+        if (!planId) return;
+        group.setAttribute('data-value', planId);
+        group.querySelectorAll('[data-sw-radio]').forEach((el) => {
+          const on = el === radio;
+          el.toggleAttribute('data-checked', on);
+          el.toggleAttribute('data-unchecked', !on);
+          el.setAttribute('aria-checked', on ? 'true' : 'false');
+          if (el instanceof HTMLElement) el.tabIndex = on ? 0 : -1;
+          const dot = el.querySelector('[data-slot="radio-group-item-indicator"]');
+          if (!dot) return;
+          dot.toggleAttribute('data-checked', on);
+          dot.toggleAttribute('data-unchecked', !on);
+        });
+        sync();
+      };
+
+      group.addEventListener('click', (event) => {
+        const target = event.target;
+        if (!(target instanceof Element)) return;
+        const radio =
+          target.closest('[data-sw-radio]') ?? target.closest('label')?.querySelector('[data-sw-radio]');
+        if (radio) selectPlan(radio);
+      });
+
+      group.addEventListener('keydown', (event) => {
+        if (!(event instanceof KeyboardEvent)) return;
+        if (event.key === ' ' || event.key === 'Enter') {
+          const radio = event.target instanceof Element ? event.target.closest('[data-sw-radio]') : null;
+          if (radio) { event.preventDefault(); selectPlan(radio); }
+          return;
+        }
+        if (!['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight'].includes(event.key)) return;
+        const radios = [...group.querySelectorAll('[data-sw-radio]')];
+        if (!radios.length) return;
+        const current = Math.max(
+          0,
+          radios.findIndex((el) => el.getAttribute('aria-checked') === 'true'),
+        );
+        const delta = event.key === 'ArrowDown' || event.key === 'ArrowRight' ? 1 : -1;
+        const next = radios[(current + delta + radios.length) % radios.length];
+        if (!next) return;
+        event.preventDefault();
+        selectPlan(next);
+        if (next instanceof HTMLElement) next.focus();
+      });
+
+      sync();
+    });
+  };
+
+  initProductCheckoutPanels();
+  document.addEventListener('astro:after-swap', initProductCheckoutPanels);
+</script>

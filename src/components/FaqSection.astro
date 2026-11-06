@@ -1,0 +1,153 @@
+---
+import type { SiteFaqItem, FaqTopic } from '../data/faq';
+import { useLocale } from '../i18n';
+import SectionHeader from './SectionHeader.astro';
+import Icon from './icons/Icon.astro';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/starwind/accordion';
+
+interface Props {
+  items: SiteFaqItem[];
+  eyebrow?: string;
+  title?: string;
+  subtitle?: string;
+  titleId?: string;
+  showFilters?: boolean;
+  filterTopics?: FaqTopic[];
+  centered?: boolean;
+  /** FAQ column alignment (product pages use left) */
+  contentAlign?: 'left' | 'center';
+  id?: string;
+  class?: string;
+}
+
+const {
+  items,
+  eyebrow = 'FAQ',
+  title = 'Straight answers before checkout.',
+  subtitle = 'Compatibility, bans and access, no vague promises.',
+  titleId = 'faq-heading',
+  showFilters = false,
+  filterTopics,
+  centered = false,
+  contentAlign = 'center',
+  id: sectionId,
+  class: className,
+} = Astro.props;
+
+const { locale } = useLocale(Astro.currentLocale);
+
+const topicLabelsByLocale: Record<string, Record<FaqTopic, string>> = {
+  en: {
+    all: 'All',
+    plans: 'Plans',
+    esp: 'ESP & loot',
+    aim: 'Aim & recoil',
+    safety: 'Anti-cheat',
+    products: 'Products',
+    blog: 'Blog',
+    setup: 'Setup',
+  },
+  es: {
+    all: 'Todo',
+    plans: 'Planes',
+    esp: 'ESP y botín',
+    aim: 'Aim y retroceso',
+    safety: 'Antitrampas',
+    products: 'Productos',
+    blog: 'Blog',
+    setup: 'Configuración',
+  },
+  de: {
+    all: 'Alle',
+    plans: 'Pläne',
+    esp: 'ESP und Loot',
+    aim: 'Ziel und Rückstoß',
+    safety: 'Anti-Cheat',
+    products: 'Produkte',
+    blog: 'Blog',
+    setup: 'Einrichtung',
+  },
+  fr: {
+    all: 'Tout',
+    plans: 'Offres',
+    esp: 'ESP et butin',
+    aim: 'Visée et recul',
+    safety: 'Anti-triche',
+    products: 'Produits',
+    blog: 'Blog',
+    setup: 'Configuration',
+  },
+};
+
+const topicLabels = topicLabelsByLocale[locale] ?? topicLabelsByLocale.en;
+
+const filters = filterTopics ?? (['all', 'plans', 'esp', 'aim', 'safety', 'products'] as FaqTopic[]);
+---
+
+<section
+  id={sectionId}
+  class:list={['py-16 md:py-24', className]}
+  aria-labelledby={titleId}
+  data-faq-section={showFilters ? '' : undefined}
+>
+  <div class="mx-auto max-w-6xl px-5">
+    <div class:list={[contentAlign === 'center' && 'mx-auto max-w-3xl', contentAlign === 'left' && 'product-detail__narrow max-w-3xl']}>
+    <SectionHeader
+      eyebrow={eyebrow}
+      title={title}
+      desc={subtitle}
+      titleId={titleId}
+      centered={centered}
+    />
+
+    {
+      showFilters && (
+        <div
+          class:list={[
+            'faq-filter-row relative z-10 mt-8 flex flex-wrap gap-x-3 gap-y-8',
+            contentAlign === 'center' ? 'justify-center' : 'justify-start',
+          ]}
+          data-faq-filters
+          data-reveal
+        >
+          {filters.map((topic, i) => (
+            <button
+              type="button"
+              class:list={[
+                'faq-filter-chip inline-flex min-h-10 items-center rounded-full border border-border px-4 text-xs font-medium text-muted-foreground transition-colors hover:border-primary hover:text-foreground',
+                { 'is-active': i === 0 },
+              ]}
+              data-faq-filter={topic}
+            >
+              {topicLabels[topic]}
+            </button>
+          ))}
+        </div>
+      )
+    }
+
+    <Accordion type="single" collapsible class="mt-8 w-full" data-faq-list data-reveal-stagger>
+      {items.map((faq, i) => (
+        <div data-faq-topic={faq.topic}>
+          <AccordionItem value={`faq-${i}`}>
+            <AccordionTrigger class="text-left">
+              <span class="flex items-center gap-2">
+                <Icon name={faq.icon} size={16} class="shrink-0" />
+                <span>{faq.q}</span>
+              </span>
+            </AccordionTrigger>
+            <AccordionContent>
+              <div class="prose prose-sm dark:prose-invert max-w-none text-muted-foreground" set:html={faq.aHtml ?? faq.a} />
+            </AccordionContent>
+          </AccordionItem>
+        </div>
+      ))}
+    </Accordion>
+    </div>
+  </div>
+</section>

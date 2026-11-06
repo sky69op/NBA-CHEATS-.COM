@@ -1,0 +1,33 @@
+---
+/** Markup-only drawer root (JS init is deferred in `src/scripts/deferred-starwind.ts`). */
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'div'> & {
+  defaultOpen?: boolean;
+  closeOnEscape?: boolean;
+  closeOnOutsideInteract?: boolean;
+  modal?: boolean;
+};
+
+const {
+  defaultOpen = false,
+  closeOnEscape = true,
+  closeOnOutsideInteract = true,
+  modal = true,
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<div
+  data-sw-drawer
+  data-default-open={defaultOpen ? 'true' : undefined}
+  data-close-on-escape={closeOnEscape ? 'true' : 'false'}
+  data-close-on-outside-interact={closeOnOutsideInteract ? 'true' : 'false'}
+  data-modal={modal ? 'true' : 'false'}
+  data-state={defaultOpen ? 'open' : 'closed'}
+  class={className}
+  {...rest}
+>
+  <slot />
+</div>

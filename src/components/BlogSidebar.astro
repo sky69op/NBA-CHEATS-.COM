@@ -1,0 +1,222 @@
+---
+import '../styles/blog-sidebar.css';
+import Icon from './icons/Icon.astro';
+import { blogPostPath, ROUTES } from '../utils/path';
+import { HWID_CHECKOUT_PATH, PRIMARY_CHECKOUT_PATH } from '../config/checkout';
+import { HWID_SPOOFER_SLUG, isUtilityEnabled } from '../config/catalog';
+import { useLocale } from '../i18n';
+
+import { getCatalog } from '../data/catalog';
+
+const { locale, t, lp } = useLocale(Astro.currentLocale);
+const b = t.blog;
+import type { BlogPostFull } from '../data/blog';
+import type { IconName } from './icons/types';
+import { Badge } from '@/components/starwind/badge';
+import { Button } from '@/components/starwind/button';
+
+interface Props {
+  post: BlogPostFull;
+  related: BlogPostFull[];
+  class?: string;
+}
+
+const { post, related, class: className } = Astro.props;
+
+const tocCount = post.body.filter((b) => b.type === 'h2').length;
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+const toc = post.body
+  .filter((block) => block.type === 'h2' || block.type === 'h3')
+  .map((block) => ({
+    level: block.type as 'h2' | 'h3',
+    text: 'text' in block ? block.text : '',
+    id: slugify('text' in block ? block.text : ''),
+  }));
+
+const forumNav = t.nav.find((link) => link.id === 'forum');
+const supportNav = t.nav.find((link) => link.id === 'support');
+
+const englishSidebarAnchor: Record<string, string> = {
+  [ROUTES.cheats]: 'Main product listing',
+  [ROUTES.hwidSpoofer]: 'HWID Spoofer requirements',
+  [ROUTES.ugc]: 'UGC appeal workflow',
+  [ROUTES.cloudDma]: 'Cloud DMA setup requirements',
+  [ROUTES.forum]: 'Editorial forum archive',
+  [ROUTES.support]: 'Order support desk',
+};
+const sidebarLabel = (href: string, fallback: string) =>
+  locale === 'en' ? englishSidebarAnchor[href] ?? fallback : fallback;
+
+const productLinks: { label: string; href: string; icon: IconName }[] = [
+  ...getCatalog(locale).map((entry) => ({ label: sidebarLabel(entry.path, entry.shortName), href: entry.path, icon: entry.icon })),
+  { label: sidebarLabel(ROUTES.forum, forumNav?.label ?? 'Forum'), href: ROUTES.forum, icon: 'messageCircle' },
+  { label: sidebarLabel(ROUTES.support, supportNav?.label ?? 'Support'), href: ROUTES.support, icon: 'headphones' },
+];
+---
+
+<aside
+  class:list={[
+    'blog-sidebar min-w-0 lg:sticky lg:top-[calc(var(--floating-nav-clearance)+0.5rem)] lg:max-h-[calc(100vh-var(--floating-nav-clearance)-1rem)] lg:self-start lg:overflow-y-auto lg:overflow-x-hidden lg:pr-0.5',
+    className,
+  ]}
+  aria-label={b.sidebarAria}
+>
+  {
+    toc.length > 0 && (
+      <section class="blog-sidebar__block" aria-labelledby="blog-sidebar-toc-title">
+        <p id="blog-sidebar-toc-title" class="blog-sidebar__heading">
+          <Icon name="layers" size={14} class="text-primary" aria-hidden="true" />
+          <span class="blog-sidebar__heading-text">{b.tocTitle}</span>
+          {tocCount > 0 && (
+            <Badge variant="secondary" size="sm" class="h-5 shrink-0 rounded-full px-1.5 tabular-nums text-[10px]">
+              {tocCount}
+            </Badge>
+          )}
+        </p>
+        <nav aria-label="Table of contents">
+          <ul class="blog-sidebar__toc-list" data-blog-toc>
+            {toc.map((item) => (
+              <li class:list={[item.level === 'h3' && 'blog-sidebar__toc-item--nested']}>
+                <button
+                  type="button"
+                  class="blog-sidebar__toc-link blog-toc-link truncate"
+                  data-toc-target={item.id}
+                  title={item.text}
+                >
+                  {item.text}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </section>
+    )
+  }
+
+  {
+    related.length > 0 && (
+      <section class="blog-sidebar__block" aria-labelledby="blog-sidebar-related-title">
+        <p id="blog-sidebar-related-title" class="blog-sidebar__heading">
+          <Icon name="navBlog" size={14} class="text-primary" aria-hidden="true" />
+          {b.relatedTitle}
+        </p>
+        <ul class="blog-sidebar__list">
+          {related.map((item) => (
+            <li>
+              <a href={lp(blogPostPath(item.slug))} class="blog-sidebar__link" title={item.title}>
+                <Icon name="arrowUpRight" size={13} class="shrink-0 opacity-70" aria-hidden="true" />
+                <span class="blog-sidebar__truncate">{item.title}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  <section class="blog-sidebar__block blog-sidebar__block--shop" aria-labelledby="blog-sidebar-products-title">
+    <p id="blog-sidebar-products-title" class="blog-sidebar__heading">
+      <Icon name="navProducts" size={14} class="text-primary" aria-hidden="true" />
+      {t.products.title}
+    </p>
+    <ul class="blog-sidebar__list">
+      {productLinks.map((link) => (
+        <li>
+          <a href={lp(link.href)} class="blog-sidebar__link" title={link.label}>
+            <Icon name={link.icon} size={13} class="shrink-0 text-primary" aria-hidden="true" />
+            <span class="blog-sidebar__truncate">{link.label}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <Button
+      as="a"
+      href={PRIMARY_CHECKOUT_PATH}
+      variant="primary"
+      size="sm"
+      class="blog-sidebar__cta mt-2.5 w-full min-w-0 justify-start"
+    >
+      <span class="truncate">{b.buyCta}</span>
+      <Icon name="arrowRight" size={16} class="shrink-0" />
+    </Button>
+    {isUtilityEnabled(HWID_SPOOFER_SLUG) && (
+      <Button
+        as="a"
+        href={HWID_CHECKOUT_PATH}
+        variant="outline"
+        size="sm"
+        class="blog-sidebar__cta mt-2 w-full min-w-0 justify-start"
+      >
+        <span class="truncate">{b.buyHwidCta}</span>
+        <Icon name="arrowRight" size={16} class="shrink-0" />
+      </Button>
+    )}
+  </section>
+</aside>
+
+<script>
+  const tocRoot = document.querySelector('[data-blog-toc]');
+  if (tocRoot) {
+    const links = [...tocRoot.querySelectorAll<HTMLButtonElement>('[data-toc-target]')];
+    const headings = links
+      .map((link) => document.getElementById(link.getAttribute('data-toc-target')!))
+      .filter((el): el is HTMLElement => Boolean(el));
+
+    const setActiveLink = (activeLink: HTMLButtonElement) => {
+      links.forEach((item) => {
+        const active = item === activeLink;
+        item.classList.toggle('is-active', active);
+        if (active) {
+          item.setAttribute('aria-current', 'location');
+        } else {
+          item.removeAttribute('aria-current');
+        }
+      });
+    };
+
+    let tocScrollLockUntil = 0;
+
+    links.forEach((link) => {
+      link.addEventListener('click', () => {
+        const id = link.getAttribute('data-toc-target');
+        if (!id) return;
+        setActiveLink(link);
+        tocScrollLockUntil = Date.now() + 900;
+        document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    if (headings.length > 0) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          if (Date.now() < tocScrollLockUntil) return;
+
+          const visible = entries
+            .filter((entry) => entry.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+          if (!visible) return;
+
+          const active = links.find(
+            (link) => link.getAttribute('data-toc-target') === visible.target.id,
+          );
+          if (active) setActiveLink(active);
+        },
+        { rootMargin: '-20% 0px -55% 0px', threshold: [0, 0.25, 0.5, 1] },
+      );
+
+      headings.forEach((heading) => observer.observe(heading));
+
+      if (!links.some((link) => link.classList.contains('is-active')) && links[0]) {
+        setActiveLink(links[0]);
+      }
+    }
+  }
+</script>

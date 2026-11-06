@@ -1,0 +1,53 @@
+---
+import type { ForumPost } from '../../data/forum/types';
+import SectionHeader from '../SectionHeader.astro';
+import { Button } from '@/components/starwind/button';
+import Icon from '../icons/Icon.astro';
+import { ROUTES } from '../../utils/path';
+import { useLocale } from '../../i18n';
+
+interface Props {
+  threads: ForumPost[];
+}
+
+const { threads } = Astro.props;
+const { t, lp } = useLocale(Astro.currentLocale);
+const f = t.pages.forum;
+---
+
+{
+  threads.length > 0 && (
+    <section class="border-t border-border bg-background py-16 md:py-24" aria-labelledby="related-discussions-heading">
+      <div class="mx-auto max-w-6xl px-5">
+        <SectionHeader
+          eyebrow={f.eyebrow}
+          title={f.readDiscussion}
+          desc={f.description}
+          titleId="related-discussions-heading"
+        />
+
+        <ul class="mt-10 space-y-4">
+          {threads.map((thread) => (
+            <li>
+              <a
+                href={lp(`/forum/${thread.slug}/`)}
+                class="block rounded-xl border border-border bg-card px-5 py-4 transition-colors hover:border-primary/35"
+              >
+                <span class="text-xs font-semibold uppercase tracking-wide text-primary">{thread.category}</span>
+                <b class="mt-1 block font-[family-name:var(--font-heading)] text-base text-foreground">{thread.title}</b>
+                <span class="mt-2 block text-sm text-muted-foreground line-clamp-2">{thread.excerpt}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <div class="mt-10 flex justify-start lg:justify-center">
+          <Button as="a" href={lp(ROUTES.forum)} variant="outline" class="rounded-full">
+            {f.browseAllCommunities}
+            <Icon name="arrowRight" size={17} />
+          </Button>
+        </div>
+      </div>
+    </section>
+  )
+}

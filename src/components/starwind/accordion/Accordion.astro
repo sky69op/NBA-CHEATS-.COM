@@ -1,0 +1,30 @@
+---
+import AccordionRootStatic from '../internal/AccordionRootStatic.astro';
+import type { HTMLAttributes } from "astro/types";
+import { accordion } from "./variants";
+
+type Props = HTMLAttributes<"div"> & {
+  type?: "single" | "multiple";
+  defaultValue?: string | string[];
+  collapsible?: boolean;
+};
+
+const {
+  type = "single",
+  defaultValue,
+  collapsible = true,
+  class: className,
+  ...rest
+} = Astro.props;
+---
+
+<AccordionRootStatic
+  class={accordion({ class: className })}
+  type={type}
+  defaultValue={defaultValue}
+  collapsible={collapsible}
+  {...rest}
+  data-slot="accordion"
+>
+  <slot />
+</AccordionRootStatic>

@@ -1,0 +1,96 @@
+{
+  "eyebrow": "Shop",
+  "title": "Produkte für {gameName}: Cheats und Utilities",
+  "subtitle": "Vier Produkte für {gameName}. Vergleichen Sie den genannten Umfang, die Pläne und die Anforderungen vor der Zahlung.",
+  "trust": [
+    "Getrennte Produktzwecke",
+    "Monats- oder Lifetime-Pläne",
+    "Checkout mit gewähltem Plan",
+    "Umfangsbestätigung erforderlich"
+  ],
+  "featuredEyebrow": "Hauptprodukt",
+  "from": "Ab",
+  "priceLabel": "Preis",
+  "lifetime": "Lifetime",
+  "perMonth": "/ Monat",
+  "utilitiesEyebrow": "Utilities",
+  "utilitiesTitle": "Separate Produkte zum Prüfen",
+  "utilitiesDesc": "Jede Utility hat eigenen Zweck, Plantarife, Grenzen und Checkout. Leiten Sie die Anforderungen eines Produkts nicht von einem anderen ab.",
+  "chooserEyebrow": "Unsicher?",
+  "chooserTitle": "Welches Produkt brauche ich?",
+  "chooserDesc": "Starten Sie mit dem Produktzweck und bestätigen Sie den aktuellen Listing-Umfang vor dem Checkout.",
+  "scenarios": [
+    {
+      "slug": "elite",
+      "need": "Ich möchte das spielspezifische NBA2K27 CHEATS-Listing und aktuelle Produktdetails prüfen.",
+      "answer": "{cheatProduct}"
+    },
+    {
+      "slug": "hwid-spoofer",
+      "need": "Ich möchte eine separate HWID-Utility prüfen und deren tatsächlichen Umfang sowie NBA-2K27-Anwendbarkeit klären.",
+      "answer": "HWID Spoofer"
+    },
+    {
+      "slug": "ugc",
+      "need": "Ich brauche ein Kontoberufungsprodukt und verstehe, dass die Plattform entscheidet.",
+      "answer": "UGC"
+    },
+    {
+      "slug": "cloud-dma",
+      "need": "Ich muss aktuelle Cloud-DMA-Anforderungen und Funktion auf der Produktseite klären.",
+      "answer": "Cloud DMA"
+    }
+  ],
+  "compareEyebrow": "Vergleichen",
+  "compareTitle": "Produkte nebeneinander vergleichen",
+  "compareDesc": "Vergleichen Sie Plantarife und genannten Zweck. Anforderungen, Lieferung und Kompatibilität müssen im aktuellen Produktlisting bestätigt werden.",
+  "compareRows": [
+    {
+      "label": "Am besten für",
+      "values": {
+        "elite": "NBA-2K27-Produktforschung",
+        "hwid-spoofer": "Separate Hardware-Utility-Recherche",
+        "ugc": "Kontoberufungs-Produktforschung",
+        "cloud-dma": "Cloud-DMA-Produktforschung"
+      }
+    },
+    {
+      "label": "Lieferung",
+      "values": {
+        "elite": "Im Checkout bestätigen",
+        "hwid-spoofer": "Im Checkout bestätigen",
+        "ugc": "Im Checkout bestätigen",
+        "cloud-dma": "Im Checkout bestätigen"
+      }
+    },
+    {
+      "label": "Windows",
+      "values": {
+        "elite": "Nicht geliefert",
+        "hwid-spoofer": "Nicht geliefert",
+        "ugc": "Nicht geliefert",
+        "cloud-dma": "Nicht geliefert"
+      }
+    },
+    {
+      "label": "Sicherheitseinstellungen",
+      "values": {
+        "elite": "Im Checkout bestätigen",
+        "hwid-spoofer": "Im Checkout bestätigen",
+        "ugc": "Im Checkout bestätigen",
+        "cloud-dma": "Im Checkout bestätigen"
+      }
+    }
+  ],
+  "ctaTitle": "Noch unschlüssig?",
+  "ctaDesc": "Nutzen Sie den Support, um Umfang, Anforderungen und Plantarife vor der Zahlung zu bestätigen.",
+  "ctaSupport": "Support fragen",
+  "menuHeading": "Produkte",
+  "menuViewAll": "Alle Produkte vergleichen",
+  "menuTaglines": {
+    "elite": "NBA-2K27-Plan und Produktforschung",
+    "hwid-spoofer": "HWID-Umfang zu klären",
+    "ugc": "Kontoberufungskontext",
+    "cloud-dma": "Cloud-DMA-Anforderungen zu klären"
+  }
+}

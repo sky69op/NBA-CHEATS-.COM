@@ -1,0 +1,110 @@
+---
+import type { ProductSlide } from '../data/products';
+import ResponsiveImage from './ResponsiveImage.astro';
+import Icon from './icons/Icon.astro';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/starwind/carousel';
+import { useLocale } from '../i18n';
+
+interface Props {
+  images: ProductSlide[];
+  id?: string;
+  /** First frame is above-the-fold on product pages (LCP). */
+  priority?: boolean;
+}
+
+const { images, id = 'product-screenshots', priority = true } = Astro.props;
+const { locale, t } = useLocale(Astro.currentLocale);
+const previewUi = {
+  en: { region: 'Product preview', previous: 'Previous preview', next: 'Next preview' },
+  es: { region: 'Vista previa del producto', previous: 'Vista previa anterior', next: 'Vista previa siguiente' },
+  de: { region: 'Produktvorschau', previous: 'Vorherige Vorschau', next: 'Nächste Vorschau' },
+  fr: { region: 'Aperçu du produit', previous: 'Aperçu précédent', next: 'Aperçu suivant' },
+}[locale];
+const slides = images.filter((slide) => slide.src);
+const multiple = slides.length > 1;
+
+function isVideo(slide: ProductSlide) {
+  return Boolean(slide.videoSrc) || slide.kind === 'video';
+}
+---
+
+<div class="media-slider" id={id} data-media-slider>
+  <Carousel
+    autoInit={false}
+    opts={{
+      loop: multiple,
+      align: 'start',
+      breakpoints: { '(max-width: 1023px)': { active: false } },
+    }}
+    class="media-slider__frame"
+    aria-label={previewUi.region}
+  >
+    <CarouselContent>
+      {
+        slides.map((slide, i) => (
+          <CarouselItem>
+            <figure class="media-slider__slide">
+              {isVideo(slide) && slide.videoSrc ? (
+                <video
+                  class="media-slider__media"
+                  poster={slide.src}
+                  controls
+                  playsinline
+                  preload={i === 0 ? 'metadata' : 'none'}
+                  data-media-video
+                  aria-label={slide.alt}
+                >
+                  <source src={slide.videoSrc} />
+                </video>
+              ) : (
+                <ResponsiveImage
+                  src={slide.src}
+                  alt={slide.alt}
+                  width={slide.width ?? 960}
+                  height={slide.height ?? 540}
+                  loading={priority && i === 0 ? 'eager' : 'lazy'}
+                  fetchPriority={priority && i === 0 ? 'high' : undefined}
+                  widths={[640, 800, 960]}
+                  sizes="(min-width: 1024px) 760px, calc(100vw - 2.5rem)"
+                  phoneWidth={400}
+                  class="media-slider__media"
+                />
+              )}
+            </figure>
+          </CarouselItem>
+        ))
+      }
+    </CarouselContent>
+    {
+      multiple && (
+        <>
+          <button
+            type="button"
+            class="media-slider__nav media-slider__nav--prev"
+            data-sw-carousel-previous
+            aria-label={previewUi.previous}
+          >
+            <Icon name="chevronLeft" size={18} />
+          </button>
+          <button
+            type="button"
+            class="media-slider__nav media-slider__nav--next"
+            data-sw-carousel-next
+            aria-label={previewUi.next}
+          >
+            <Icon name="chevronRight" size={18} />
+          </button>
+        </>
+      )
+    }
+  </Carousel>
+</div>
+{
+  multiple && (
+    <p class="media-slider__swipe-hint">
+      <Icon name="chevronLeft" size={14} />
+      <span>{t.products.swipeHint}</span>
+      <Icon name="chevronRight" size={14} class="media-slider__swipe-nudge" />
+    </p>
+  )
+}

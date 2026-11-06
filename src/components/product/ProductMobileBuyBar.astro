@@ -1,0 +1,98 @@
+---
+import type { ProductPage } from '../../data/products';
+import { checkoutUrlWithPlan, formatPlanPrice, getFeaturedPlan, getProductPlans } from '../../data/productPricing';
+import Icon from '../icons/Icon.astro';
+import { useLocale } from '../../i18n';
+
+interface Props {
+  product: ProductPage;
+  productName: string;
+}
+
+const { product, productName } = Astro.props;
+const { locale, t } = useLocale(Astro.currentLocale);
+const plans = getProductPlans(product.slug);
+const fromPrice = Math.min(...plans.map((plan) => plan.priceUsd));
+const featured = getFeaturedPlan(product.slug);
+const buyHref = featured ? checkoutUrlWithPlan(product.buyUrl, featured.id) : product.buyUrl;
+const fromLabel = { en: 'From', es: 'Desde', de: 'Ab', fr: 'Dès' }[locale];
+---
+
+<div class="product-buy-bar lg:hidden" data-product-buy-bar hidden>
+  <div class="product-buy-bar__inner">
+    <div class="min-w-0">
+      <p class="truncate text-sm font-semibold text-foreground">{productName}</p>
+      <p class="text-xs text-muted-foreground">
+        {fromLabel} <span class="font-semibold text-foreground">{formatPlanPrice(fromPrice)}</span>
+      </p>
+    </div>
+    <a href={buyHref} rel="sponsored" class="product-buy-bar__cta" data-checkout-buy-mobile>
+      {t.products.buyNow}
+      <Icon name="arrowRight" size={16} />
+    </a>
+  </div>
+</div>
+
+<style>
+  .product-buy-bar {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 40;
+    padding: 0.625rem 1rem max(0.625rem, env(safe-area-inset-bottom));
+    border-top: 1px solid var(--border);
+    background: color-mix(in oklch, var(--background) 92%, transparent);
+    backdrop-filter: blur(14px);
+    transform: translateY(100%);
+    transition: transform 0.25s ease;
+  }
+
+  .product-buy-bar.is-visible {
+    transform: translateY(0);
+  }
+
+  .product-buy-bar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    max-width: 42rem;
+    margin-inline: auto;
+  }
+
+  .product-buy-bar__cta {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 0.375rem;
+    border-radius: 0.75rem;
+    padding: 0.625rem 1rem;
+    background: var(--cta, var(--primary));
+    color: var(--cta-foreground, var(--primary-foreground));
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .product-buy-bar__cta:hover {
+    background: var(--cta-hover, var(--primary-accent));
+  }
+</style>
+
+<script>
+  const initBuyBar = () => {
+    const bar = document.querySelector<HTMLElement>('[data-product-buy-bar]');
+    const checkout = document.querySelector('[data-product-checkout]');
+    if (!bar || !checkout || bar.hasAttribute('data-bound')) return;
+    bar.setAttribute('data-bound', '');
+    bar.hidden = false;
+
+    new IntersectionObserver(([entry]) => {
+      if (!entry) return;
+      const scrolledPast = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+      bar.classList.toggle('is-visible', scrolledPast);
+    }).observe(checkout);
+  };
+
+  initBuyBar();
+  document.addEventListener('astro:after-swap', initBuyBar);
+</script>

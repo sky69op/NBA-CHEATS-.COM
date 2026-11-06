@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroSection from '../components/HeroSection.astro';
+import FeaturesSection from '../components/FeaturesSection.astro';
+import WhySetupSection from '../components/WhySetupSection.astro';
+import ProductsSection from '../components/ProductsSection.astro';
+import ContentSections from '../components/ContentSections.astro';
+import { useLocale } from '../i18n';
+import { resolvePageSeo } from '../config/seo';
+import { faqPageSchema, organizationSchema, websiteSchema } from '../utils/schema';
+import { getLandingFaqs } from '../data/faq';
+import { getHeroSlides } from '../data/products';
+import { HERO_DESKTOP_MQ, HERO_IMAGE_SIZES, HERO_IMAGE_WIDTHS, responsiveSrcSet, webpSrc } from '../utils/responsiveImage';
+
+const { locale, t } = useLocale(Astro.currentLocale);
+const seo = resolvePageSeo('/', locale);
+const homeFaqs = getLandingFaqs(locale);
+const heroSlide = getHeroSlides(locale)[0];
+const heroLcpImage = heroSlide ? webpSrc(heroSlide.src, HERO_IMAGE_WIDTHS[0]!) : '';
+/** Must match the slider's `<source>` so the preload and the render pick the same file. */
+const heroLcpSrcSet = heroSlide ? responsiveSrcSet(heroSlide.src, HERO_IMAGE_WIDTHS) : '';
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  jsonLd={[
+    websiteSchema(locale, t.site.description),
+    organizationSchema(locale),
+    faqPageSchema(
+      homeFaqs.map((f, i) => ({ num: String(i + 1).padStart(2, '0'), q: f.q, a: f.a.replace(/<[^>]+>/g, '') })),
+      locale,
+    ),
+  ]}
+>
+  <link
+    slot="head"
+    rel="preload"
+    as="image"
+    href={heroLcpImage}
+    imagesrcset={heroLcpSrcSet}
+    imagesizes={HERO_IMAGE_SIZES}
+    media={HERO_DESKTOP_MQ}
+    type="image/webp"
+    fetchpriority="high"
+  />
+  <HeroSection />
+  <FeaturesSection />
+  <ProductsSection />
+  <WhySetupSection />
+  <ContentSections />
+</BaseLayout>

@@ -1,0 +1,281 @@
+{
+  "formatVersion": 1,
+  "purpose": "Example intake only. Copy for a future commercial game-cheats conversion, prioritizing the confirmed game's cheats keyword and product-relevant search intent while preserving the four-product architecture. Apply docs/content-workflow.md's commercial-positioning review. The website runtime does not read this file; content:prepare reads an explicitly supplied filled copy.",
+  "approval": {
+    "conversionRequested": false,
+    "commit": false,
+    "push": false,
+    "deploy": false,
+    "submitToIndexingServices": false
+  },
+  "site": {
+    "domain": "example.invalid",
+    "origin": "https://example.invalid",
+    "brandName": "REPLACE_WITH_CONFIRMED_BRAND",
+    "supportEmail": "support@example.invalid",
+    "locales": [
+      "en",
+      "es",
+      "de",
+      "fr"
+    ],
+    "defaultLocale": "en",
+    "prefixDefaultLocale": false
+  },
+  "game": {
+    "name": "REPLACE_WITH_CONFIRMED_GAME",
+    "shortName": "REPLACE_WITH_GAME_SHORT_NAME",
+    "publisher": null,
+    "antiCheat": null,
+    "officialUrl": null,
+    "cheatProductName": "REPLACE_WITH_PRODUCT_NAME"
+  },
+  "brand": {
+    "logoSourcePath": null,
+    "logoAlt": null,
+    "colors": {
+      "background": null,
+      "foreground": null,
+      "primary": null
+    },
+    "logoAssetVersion": null,
+    "manifestAndFaviconsRequireReview": true,
+    "replaceGameplayAssets": true,
+    "preserveUtilityMediaUnlessExplicitlyReplaced": true
+  },
+  "referral": {
+    "partnerOrigin": "https://partner.example.invalid",
+    "code": "REPLACE_WITH_REFERRAL_CODE",
+    "urlPattern": "{partnerOrigin}/go/{code}?to={encodedProductPath}",
+    "planQueryName": "plan",
+    "planIds": [
+      "monthly",
+      "lifetime"
+    ],
+    "forwardIncomingQuery": true
+  },
+  "products": [
+    {
+      "dataKey": "elite",
+      "checkoutKey": "wardogs",
+      "enabled": true,
+      "name": "REPLACE_WITH_MAIN_PRODUCT_NAME",
+      "pagePath": "/cheats/",
+      "checkoutSlug": "REPLACE_WITH_NEW_GAME_CHECKOUT_SLUG",
+      "partnerProductPath": "/products/REPLACE_WITH_NEW_PRODUCT_SLUG",
+      "currency": "USD",
+      "plans": [
+        {
+          "id": "monthly",
+          "priceUsd": null,
+          "durationDays": null,
+          "recommended": false
+        },
+        {
+          "id": "lifetime",
+          "priceUsd": null,
+          "durationDays": null,
+          "recommended": true
+        }
+      ],
+      "facts": {
+        "features": [],
+        "requirements": [],
+        "limitations": [],
+        "availability": null,
+        "evidence": []
+      }
+    },
+    {
+      "dataKey": "hwid-spoofer",
+      "checkoutKey": "hwidSpoofer",
+      "enabled": true,
+      "name": "HWID Spoofer",
+      "pagePath": "/hwid-spoofer/",
+      "checkoutSlug": "hwid-spoofer",
+      "partnerProductPath": "/products/hwid-spoofer",
+      "currency": "USD",
+      "plans": [
+        {
+          "id": "monthly",
+          "priceUsd": null,
+          "durationDays": null,
+          "recommended": false
+        },
+        {
+          "id": "lifetime",
+          "priceUsd": null,
+          "durationDays": null,
+          "recommended": true
+        }
+      ],
+      "facts": {
+        "features": [],
+        "requirements": [],
+        "limitations": [],
+        "availability": null,
+        "evidence": []
+      }
+    },
+    {
+      "dataKey": "ugc",
+      "checkoutKey": "ugc",
+      "enabled": true,
+      "name": "UGC",
+      "pagePath": "/ugc/",
+      "checkoutSlug": "ugc",
+      "partnerProductPath": "/products/ugc",
+      "currency": "USD",
+      "plans": [
+        {
+          "id": "monthly",
+          "priceUsd": null,
+          "durationDays": null,
+          "recommended": false
+        },
+        {
+          "id": "lifetime",
+          "priceUsd": null,
+          "durationDays": null,
+          "recommended": true
+        }
+      ],
+      "facts": {
+        "features": [],
+        "requirements": [],
+        "limitations": [],
+        "availability": null,
+        "evidence": []
+      }
+    },
+    {
+      "dataKey": "skin-changer",
+      "checkoutKey": "skinChanger",
+      "enabled": true,
+      "name": "Skin Changer",
+      "pagePath": "/skin-changer/",
+      "checkoutSlug": "skin-changer",
+      "partnerProductPath": "/products/skin-changer",
+      "currency": "USD",
+      "plans": [
+        {
+          "id": "monthly",
+          "priceUsd": null,
+          "durationDays": null,
+          "recommended": false
+        },
+        {
+          "id": "lifetime",
+          "priceUsd": null,
+          "durationDays": null,
+          "recommended": true
+        }
+      ],
+      "facts": {
+        "features": [],
+        "requirements": [],
+        "limitations": [],
+        "availability": null,
+        "evidence": []
+      }
+    }
+  ],
+  "content": {
+    "rewriteHomepageAndMainProduct": true,
+    "reviewUtilityCopyAndAllTranslations": true,
+    "rewriteBlogAndForumForGame": true,
+    "slugMigrationMap": {},
+    "reviewRelatedContentReferences": true,
+    "reviewPageSeoSchemaHreflangSitemapRobots": true
+  },
+  "deployment": {
+    "target": "cloudflare-workers-static-assets",
+    "workerName": "REPLACE_WITH_WORKER_NAME",
+    "domains": [
+      "example.invalid",
+      "www.example.invalid"
+    ],
+    "assetsBinding": "ASSETS",
+    "assetsDirectory": "./dist",
+    "indexNowEnabledDuringLocalBuild": false
+  },
+  "applyTo": {
+    "identity": [
+      "src/config/site-url.mjs",
+      "src/config/site.ts",
+      "src/config/game.ts",
+      "src/config/brand.ts"
+    ],
+    "design": [
+      "src/styles/global.css",
+      "src/styles/starwind.css",
+      "public/site.webmanifest"
+    ],
+    "products": [
+      "src/config/catalog.ts",
+      "src/data/products.ts",
+      "src/data/productPricing.ts",
+      "src/data/products/locales"
+    ],
+    "checkout": [
+      "src/config/checkout.ts",
+      "src/config/checkout-redirects.mjs",
+      "scripts/generate-static-redirects.mjs"
+    ],
+    "localization": [
+      "src/i18n/en.ts",
+      "src/i18n/dictionaries",
+      "src/i18n/pageSeo",
+      "src/data/catalogCopy/locales",
+      "src/data/faq/locales"
+    ],
+    "editorial": [
+      "src/data/blog/posts",
+      "src/data/forum",
+      "src/data/products.ts"
+    ],
+    "seo": [
+      "src/config/seo.ts",
+      "src/config/pageSeo.ts",
+      "src/config/keywords.ts",
+      "src/config/pageKeywordAlt.ts",
+      "src/config/hreflang.ts",
+      "src/config/sitemap.ts",
+      "src/utils/schema.ts"
+    ],
+    "media": [
+      "public/images/gameplay",
+      "src/config/gameplayMedia.ts",
+      "src/data/products.ts",
+      "public/images/brand"
+    ],
+    "hosting": [
+      "wrangler.toml"
+    ],
+    "validation": [
+      "src/config/validation.ts",
+      "src/config/protected-media.json"
+    ],
+    "contentWorkflow": [
+      "docs/content-workflow.md",
+      "scripts/content-workflow.mjs"
+    ]
+  },
+  "unresolvedInputs": [
+    "All REPLACE_WITH values and .invalid URLs",
+    "All null values and empty fact/evidence arrays require confirmation, not invented defaults",
+    "Lifetime term definition and actual vendor availability",
+    "Authorized brand/gameplay assets; Codex generates and reviews all four content locales",
+    "Explicit action authorization for deployment or indexing, if later requested",
+    "Update forbiddenReferences for the previous brand/domain; retain protected hashes unless artwork replacement is authorized",
+    "For a requested new-site conversion, enable contentWorkflow, supply evidence source records and product evidence IDs, actual publication date and the existing/rebranded forum categories; no supplied articles/threads are needed"
+  ],
+  "contentWorkflow": {
+    "enabled": false,
+    "generator": "codex-conversion-agent",
+    "publicationDate": null,
+    "sources": [],
+    "gameFacts": [],
+    "forumCategories": []
+  }
+}

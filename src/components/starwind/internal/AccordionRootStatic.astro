@@ -1,0 +1,28 @@
+---
+/** Markup-only accordion root (JS init is deferred in `src/scripts/deferred-starwind.ts`). */
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'div'> & {
+  type?: 'single' | 'multiple';
+  defaultValue?: string | string[];
+  collapsible?: boolean;
+};
+
+const { type = 'single', defaultValue, collapsible = true, class: className, ...rest } = Astro.props;
+
+const defaultValueAttribute = Array.isArray(defaultValue)
+  ? JSON.stringify(defaultValue)
+  : defaultValue;
+---
+
+<div
+  data-sw-accordion
+  data-type={type}
+  data-default-value={defaultValueAttribute}
+  data-collapsible={String(collapsible)}
+  data-state="closed"
+  class={className}
+  {...rest}
+>
+  <slot />
+</div>

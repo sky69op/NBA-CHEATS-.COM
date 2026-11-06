@@ -1,0 +1,31 @@
+---
+import Icon from './icons/Icon.astro';
+import { Button } from '@/components/starwind/button';
+import { useLocale } from '../i18n';
+import { localizePath } from '../i18n/paths';
+import type { SiteLocale } from '../i18n/locales';
+
+interface Props {
+  title: string;
+  html: string;
+  href: string;
+}
+
+const { title, html, href } = Astro.props;
+const { t, locale } = useLocale(Astro.currentLocale);
+const checkoutHref = localizePath(href, locale as SiteLocale);
+---
+
+<aside class="blog-post-cta not-prose my-8" aria-label={title}>
+  <div class="blog-post-cta__icon" aria-hidden="true">
+    <Icon name="package" size={20} />
+  </div>
+  <div class="blog-post-cta__body">
+    <h3 class="blog-post-cta__title">{title}</h3>
+    <div class="blog-post-cta__text" set:html={html} />
+    <Button as="a" href={checkoutHref} variant="primary" size="sm" class="blog-post-cta__btn justify-start">
+      {t.products.buyNow}
+      <Icon name="arrowRight" size={16} />
+    </Button>
+  </div>
+</aside>

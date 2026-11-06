@@ -1,0 +1,81 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProductDetail from '../ProductDetail.astro';
+import { getProductPage } from '../../data/products';
+import { getFeaturedPlan, checkoutUrlWithPlan } from '../../data/productPricing';
+import { resolvePageSeo } from '../../config/seo';
+import { PRODUCTS_HUB_PATH } from '../../config/site';
+import { UTILITY_PRODUCT_PATHS, type UtilityProductSlug } from '../../config/catalog';
+import { breadcrumbSchema, productSchema } from '../../utils/schema';
+import { useLocale } from '../../i18n';
+import { webpSrc } from '../../utils/responsiveImage';
+
+interface Props {
+  slug: UtilityProductSlug;
+}
+
+const { slug } = Astro.props;
+const { locale, t, lp } = useLocale(Astro.currentLocale);
+const product = getProductPage(slug, locale);
+
+if (!product) {
+  throw new Error(`Missing product data for "${slug}" in src/data/products.ts`);
+}
+
+const pagePath = UTILITY_PRODUCT_PATHS[slug];
+const defaultPlan = getFeaturedPlan(product.slug);
+const productsLabel = t.nav.find((link) => link.id === 'products')?.label ?? t.common.breadcrumbProducts;
+const breadcrumbs = [
+  { name: t.common.breadcrumbHome, path: '/' },
+  { name: productsLabel, path: PRODUCTS_HUB_PATH },
+  { name: product.title, path: pagePath },
+];
+const seo = resolvePageSeo(pagePath, locale);
+const lcpSlide = product.images.find((slide) => slide.src);
+const lcpPhone = lcpSlide ? webpSrc(lcpSlide.src, 400) : '';
+const lcpDesktop = lcpSlide ? webpSrc(lcpSlide.src, 640) : '';
+const backLabel = {
+  en: 'Back to all products',
+  es: 'Volver a todos los productos',
+  de: 'Zurück zu allen Produkten',
+  fr: 'Retour à tous les produits',
+}[locale];
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  ogImage={lcpSlide?.src}
+  ogImageAlt={lcpSlide?.alt}
+  ogImageWidth={lcpSlide?.width}
+  ogImageHeight={lcpSlide?.height}
+  jsonLd={[
+    productSchema({
+      name: product.title,
+      description: product.desc,
+      url: lp(pagePath),
+      offerUrl: defaultPlan ? checkoutUrlWithPlan(product.buyUrl, defaultPlan.id) : product.buyUrl,
+      image: product.images[0]?.src,
+      sku: product.slug,
+      locale,
+      priceUsd: defaultPlan?.priceUsd,
+    }),
+    breadcrumbSchema(breadcrumbs, locale),
+  ]}
+>
+  {lcpPhone && (
+    <link slot="head" rel="preload" as="image" href={lcpPhone} type="image/webp" media="(max-width: 639px)" fetchpriority="high" />
+  )}
+  {lcpDesktop && (
+    <link slot="head" rel="preload" as="image" href={lcpDesktop} type="image/webp" media="(min-width: 640px)" fetchpriority="high" />
+  )}
+  <ProductDetail product={product} breadcrumbs={breadcrumbs} />
+
+  <section class="border-t border-border pb-12 pt-6">
+    <div class="mx-auto max-w-6xl px-5">
+      <a href={lp(PRODUCTS_HUB_PATH)} class="inline-flex min-h-8 items-center px-1 text-sm font-medium text-primary-text hover:underline">
+        {backLabel}
+      </a>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,15 @@
+---
+import UtilityProductPage from '../../components/product/UtilityProductPage.astro';
+import { UTILITY_PRODUCT_PATHS, UTILITY_PRODUCT_SLUGS, type UtilityProductSlug } from '../../config/catalog';
+
+export function getStaticPaths() {
+  return UTILITY_PRODUCT_SLUGS.map((slug) => ({
+    params: { utility: UTILITY_PRODUCT_PATHS[slug].replace(/^\/|\/$/g, '') },
+    props: { slug },
+  }));
+}
+
+const { slug } = Astro.props as { slug: UtilityProductSlug };
+---
+
+<UtilityProductPage slug={slug} />

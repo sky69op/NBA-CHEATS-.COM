@@ -1,0 +1,34 @@
+---
+import DrawerRootStatic from '../internal/DrawerRootStatic.astro';
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"div"> & {
+  defaultOpen?: boolean;
+  closeOnEscape?: boolean;
+  closeOnOutsideInteract?: boolean;
+  modal?: boolean;
+};
+
+const {
+  defaultOpen = false,
+  closeOnEscape = true,
+  closeOnOutsideInteract = true,
+  modal = true,
+  class: className,
+  ...rest
+} = Astro.props;
+
+const rootClassName = className;
+---
+
+<DrawerRootStatic
+  class={rootClassName}
+  defaultOpen={defaultOpen}
+  closeOnEscape={closeOnEscape}
+  closeOnOutsideInteract={closeOnOutsideInteract}
+  modal={modal}
+  {...rest}
+  data-slot="sheet"
+>
+  <slot />
+</DrawerRootStatic>

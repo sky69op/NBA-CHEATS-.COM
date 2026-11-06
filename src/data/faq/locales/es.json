@@ -1,0 +1,142 @@
+[
+  {
+    "id": "status",
+    "q": "¿Dónde reviso la información actual del producto NBA 2K27?",
+    "a": "Revise la página de producto pertinente y contacte con soporte para confirmar disponibilidad o requisitos actuales antes del pago."
+  },
+  {
+    "id": "after-buy",
+    "q": "¿Qué pasa después de comprar?",
+    "a": "El pago abre el flujo de compra actual. Revise los términos y requisitos vigentes antes de pagar."
+  },
+  {
+    "id": "ban-risk",
+    "q": "¿Puede el software de terceros de NBA 2K27 dar lugar a medidas sobre la cuenta?",
+    "a": "Sí. Las reglas del editor y de la plataforma pueden restringir software de terceros no autorizado. Lea los términos oficiales de NBA 2K27 y de la plataforma antes del pago."
+  },
+  {
+    "id": "platforms",
+    "q": "¿Qué plataformas están admitidas?",
+    "a": "Consulte la página de producto actual y la documentación del proveedor para sistemas operativos y requisitos compatibles."
+  },
+  {
+    "id": "license-move",
+    "q": "¿Puedo trasladar mi licencia a un PC nuevo?",
+    "a": "Las políticas de licencia y dispositivo no están documentadas en este sitio. Pregunte al soporte las reglas vigentes de traslado, restablecimiento o hardware antes de pagar."
+  },
+  {
+    "id": "products-page",
+    "q": "¿Dónde figuran el catálogo y las utilidades?",
+    "a": "El catálogo de NBA 2K27 está en la <a href=\"/products/\">página de productos NBA2K27 CHEATS</a>: {productList}. Cada página describe sus funciones y abre el pago desde esa página."
+  },
+  {
+    "id": "ugc-what",
+    "q": "¿Qué hace UGC con una cuenta restringida?",
+    "a": "El <a href=\"/ugc/\">flujo de apelación de cuenta UGC</a> (Unban & Governance Control) ayuda a organizar un recurso. La decisión la toma el editor; no se promete un resultado favorable."
+  },
+  {
+    "id": "ugc-guarantee",
+    "q": "¿UGC promete levantar una suspensión?",
+    "a": "No. UGC da formato a las pruebas y al mensaje. Un revisor decide cada caso. Algunas suspensiones no se revocan. No se promete una reversión."
+  },
+  {
+    "id": "ugc-vs-hwid",
+    "q": "¿Es un límite de cuenta o un bloqueo en este PC?",
+    "a": "Una restricción de perfil o cuenta entra en el <a href=\"/ugc/\">ámbito de apelación de cuenta UGC</a>. Las cuestiones de hardware son aparte; el <a href=\"/hwid-spoofer/\">ámbito HWID Spoofer</a> no promete ningún resultado sobre la cuenta."
+  },
+  {
+    "id": "utility-requirements",
+    "q": "¿Qué configuración de Windows necesitan las utilidades?",
+    "a": "Los requisitos varían según el producto. Consulte la página de producto vigente del proveedor y pregunte a soporte antes de cambiar Windows o el firmware."
+  },
+  {
+    "id": "what-is-esp",
+    "q": "¿Qué significan en NBA 2K27 las búsquedas relacionadas con ESP?",
+    "a": "ESP es un término genérico de software de terceros. No garantiza funciones actuales, compatibilidad ni seguridad de cuenta. Lea el <a href=\"/cheats/\">alcance del producto ESP NBA 2K27</a> del listado vigente."
+  },
+  {
+    "id": "esp-vs-aim",
+    "q": "¿Cuál es la diferencia entre ESP y aimbot?",
+    "a": "En el vocabulario habitual de cheats, las etiquetas tipo ESP suelen usarse para información superpuesta y las tipo aimbot para asistencia de puntería. Para NBA 2K27, trate ambas como términos de marketing hasta que el <a href=\"/cheats/\">listado actual de NBA2K27 CHEATS</a> indique qué incluye su plan elegido."
+  },
+  {
+    "id": "elite-slots",
+    "q": "¿Por qué el cheat se vende como compilación privada?",
+    "a": "«Privado» suele ser una etiqueta de marketing. Este sitio no verifica cupos, rapidez de parches ni soporte del desarrollador; pregunte al soporte qué significa en el listado vigente antes de pagar."
+  },
+  {
+    "id": "stream-proof",
+    "q": "¿Puede OBS capturar mi superposición?",
+    "a": "La captura depende de cómo esté implementado el producto y no se verifica aquí. Parta de que una retransmisión o grabación puede mostrar superposiciones hasta que el soporte lo confirme para su configuración."
+  },
+  {
+    "id": "build-status",
+    "q": "¿Seguirá la compilación en línea tras cada parche?",
+    "a": "No. Las actualizaciones del juego o de protección pueden cambiar la disponibilidad en cualquier momento. Lea el listado actual y los avisos oficiales antes de una sesión; si el estado no está claro, pregunte al soporte."
+  },
+  {
+    "id": "esp-safer",
+    "q": "¿El ESP es más discreto que el aimbot?",
+    "a": "El ESP puede ser menos llamativo que un aimbot al máximo. Sigue siendo un truco. Dejar la asistencia de puntería desactivada no lo excluye de la revisión del anti-cheat."
+  },
+  {
+    "id": "hwid-when",
+    "q": "¿Cuándo corresponde abrir la página del HWID Spoofer?",
+    "a": "Los <a href=\"/hwid-spoofer/\">detalles del producto HWID Spoofer</a> aplican a un bloqueo por ID de hardware: otros PCs aceptan el inicio de sesión y este lo rechaza. Se renuevan números de serie de disco, direcciones MAC, IDs de GPU y valores relacionados; incluye un limpiador. Una cuenta que sigue sancionada no queda restablecida por esto."
+  },
+  {
+    "id": "external-loader",
+    "q": "¿Se inyecta el cargador en la carpeta del juego?",
+    "a": "No deduzca el método técnico solo del marketing. Revise el <a href=\"/cheats/\">alcance del software NBA 2K27</a>; las sanciones de cuenta siguen siendo posibles."
+  },
+  {
+    "id": "blog-vs-cheats",
+    "q": "¿Este artículo sustituye al aviso de estado en vivo?",
+    "a": "No. Las guías explican un tema. Revise los <a href=\"/cheats/\">requisitos del producto NBA 2K27</a> y las reglas oficiales del juego antes de decidir."
+  },
+  {
+    "id": "blog-setup",
+    "q": "¿Adónde llevan las guías del blog para comprar?",
+    "a": "Las guías enlazan la <a href=\"/cheats/\">información de compra NBA 2K27</a>. El pago utiliza nuestra redirección segura. Siga la vía de entrega que describa la documentación vigente del producto."
+  },
+  {
+    "id": "who-cheats",
+    "q": "¿Quién debería revisar NBA 2K27 Cheats?",
+    "a": "Quienes investigan el alcance declarado, requisitos, términos y riesgos antes de pagar."
+  },
+  {
+    "id": "vac-update",
+    "q": "¿Qué hago tras una actualización del anti-cheat?",
+    "a": "Lea el listado actual y los avisos oficiales del juego o la plataforma. Asuma que el estado y la compatibilidad pueden cambiar; si tras una actualización hay dudas, espere y pregunte al soporte antes de abrir el juego."
+  },
+  {
+    "id": "discord-help",
+    "q": "¿Cómo obtengo ayuda con la instalación?",
+    "a": "Para soporte, incluya el correo del pedido, la versión de Windows, el producto exacto y el texto del error visible. No comparta credenciales."
+  },
+  {
+    "id": "pmc-scav-raids",
+    "q": "¿Una categoría de producto cubre todos los modos de NBA 2K27?",
+    "a": "No asuma que una categoría amplia cubre todos los modos. Pregunte al soporte el alcance declarado actual antes del pago."
+  },
+  {
+    "id": "zoom-hack",
+    "q": "¿Qué opciones cubren ESP y wallhack?",
+    "a": "Las páginas de búsqueda pueden agrupar superposiciones bajo lenguaje tipo ESP o «wallhack». Para NBA 2K27, el <a href=\"/cheats/\">listado de NBA2K27 CHEATS</a> debe nombrar lo incluido; este sitio no afirma campos concretos de superposición."
+  },
+  {
+    "id": "trigger-bot",
+    "q": "¿Incluye el producto silent aimbot?",
+    "a": "A veces los listados mencionan aimbot, silent aim o opciones tipo sin retroceso. Este sitio no verifica menús ni interruptores; confirme qué incluye su plan en el <a href=\"/cheats/\">listado actual de NBA2K27 CHEATS</a>."
+  },
+  {
+    "id": "private-cheats",
+    "q": "¿Qué debe significar “privado” en una página de NBA 2K27?",
+    "a": "Trate “privado” como una etiqueta de marketing salvo que la página explique alcance, términos y límites con precisión."
+  },
+  {
+    "id": "faq-more",
+    "q": "¿Dónde está el FAQ completo?",
+    "a": "Respuestas breves están en la página de inicio y en cada página de producto. El <a href=\"/faq/\">FAQ completo</a> reúne el conjunto; las <a href=\"/blog/\">guías del blog</a> amplían temas cuando se publican."
+  }
+]

@@ -1,0 +1,62 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { CHEATS_PRIMARY_SLUG } from '../../config/catalog';
+import { getProductPage } from '../../data/products';
+import { resolvePageSeo } from '../../config/seo';
+import { breadcrumbSchema, productSchema } from '../../utils/schema';
+import ProductDetail from '../../components/ProductDetail.astro';
+import { useLocale } from '../../i18n';
+import { getFeaturedPlan, checkoutUrlWithPlan } from '../../data/productPricing';
+import { PRODUCT_BASE, PRODUCTS_HUB_PATH } from '../../config/site';
+import { webpSrc } from '../../utils/responsiveImage';
+
+const { locale, t, lp } = useLocale(Astro.currentLocale);
+const product = getProductPage(CHEATS_PRIMARY_SLUG, locale);
+
+if (!product) {
+  return Astro.redirect(lp('/'));
+}
+
+const pagePath = PRODUCT_BASE;
+const defaultPlan = getFeaturedPlan(product.slug);
+const productsLabel = t.nav.find((link) => link.id === 'products')?.label ?? t.common.breadcrumbProducts;
+const breadcrumbs = [
+  { name: t.common.breadcrumbHome, path: '/' },
+  { name: productsLabel, path: PRODUCTS_HUB_PATH },
+  { name: t.cheats.title, path: pagePath },
+];
+const seo = resolvePageSeo(pagePath, locale);
+const lcpSlide = product.images.find((slide) => slide.src);
+const lcpPhone = lcpSlide ? webpSrc(lcpSlide.src, 400) : '';
+const lcpDesktop = lcpSlide ? webpSrc(lcpSlide.src, 640) : '';
+---
+
+<BaseLayout
+  title={seo.title}
+  description={seo.description}
+  ogImage={lcpSlide?.src}
+  ogImageAlt={lcpSlide?.alt}
+  ogImageWidth={lcpSlide?.width}
+  ogImageHeight={lcpSlide?.height}
+  jsonLd={[
+    productSchema({
+      name: product.title,
+      description: product.subtitle || product.desc,
+      url: lp(pagePath),
+      offerUrl: defaultPlan ? checkoutUrlWithPlan(product.buyUrl, defaultPlan.id) : product.buyUrl,
+      image: product.images[0]?.src,
+      sku: product.slug,
+      locale,
+      priceUsd: defaultPlan?.priceUsd,
+    }),
+    breadcrumbSchema(breadcrumbs, locale),
+  ]}
+>
+  {lcpPhone && (
+    <link slot="head" rel="preload" as="image" href={lcpPhone} type="image/webp" media="(max-width: 639px)" fetchpriority="high" />
+  )}
+  {lcpDesktop && (
+    <link slot="head" rel="preload" as="image" href={lcpDesktop} type="image/webp" media="(min-width: 640px)" fetchpriority="high" />
+  )}
+  <ProductDetail product={product} breadcrumbs={breadcrumbs} />
+</BaseLayout>
