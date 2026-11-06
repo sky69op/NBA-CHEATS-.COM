@@ -157,7 +157,3 @@
 /go/ugc/  https://zadeyo.com/go/SKY?to=%2Fproducts%2Fugc  302
 /go/shop  https://zadeyo.com/go/SKY?to=%2Fshop  302
 /go/shop/  https://zadeyo.com/go/SKY?to=%2Fshop  302
-/forum/  /forum/  301  query=category
-/es/forum/  /es/forum/  301  query=category
-/de/forum/  /de/forum/  301  query=category
-/fr/forum/  /fr/forum/  301  query=category

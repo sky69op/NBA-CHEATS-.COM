@@ -1,6 +1,7 @@
 # Cloudflare Workers + static assets. The dashboard deploy command is
 # `npx wrangler deploy`, which runs the build below first.
-name = "nbacheats-com"
+# Match the Workers Builds default from the GitHub repo name (avoids CI name mismatch warnings).
+name = "nba-cheats--com"
 main = "workers/site.js"
 compatibility_date = "2026-09-12"
 

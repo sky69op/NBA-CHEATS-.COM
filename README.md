@@ -22,6 +22,8 @@ npm run deploy:cf
 
 `wrangler.toml` runs `npm run build` automatically when you deploy; explicit `npm run build` above matches CI and catches build errors early.
 
+The Worker `name` matches the default from a connected **GitHub → Workers Builds** project (repo `NBA-CHEATS-.COM` → `nba-cheats--com`) so the dashboard does not override it with a warning.
+
 ### Cloudflare Pages (static only)
 
 If you use **Pages** instead of the Worker in this repo: **Build command** `npm run build`, **Output directory** `dist`, **Node** 22.x. You would not use `wrangler.toml` routes from the Worker path unless you add a Pages project that mirrors the same build.

@@ -12,9 +12,9 @@ for (const [from, to] of PATH_REDIRECTS.entries()) {
 for (const [from, to] of CHECKOUT_PATH_REDIRECTS.entries()) {
   lines.push(`${from}  ${to}  302`);
 }
-for (const forumPath of ['/forum/', '/es/forum/', '/de/forum/', '/fr/forum/']) {
-  lines.push(`${forumPath}  ${forumPath}  301  query=category`);
-}
+// Netlify supports a 4th token (`query=...`); Cloudflare Workers/Pages `_redirects` only allows
+// 2–3 tokens. Forum `?category=` / `?sort=` / `?page=` canonicalization is handled in `workers/site.js`
+// (and Astro middleware locally) via `resolveForumQueryRedirect`, not in this file.
 
 const out = path.join('public', '_redirects');
 fs.writeFileSync(out, `${lines.join('\n')}\n`);
