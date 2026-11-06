@@ -1,5 +1,5 @@
 /**
- * Keyword homes. Full assignment: KEYWORD_MAP.md at repo root.
+ * Keyword homes (see product/blog routing in this file).
  * Primary aligns with homepage H1. These constants are not rendered on pages.
  */
 export const PRIMARY_KEYWORD = 'NBA2K27 Cheats';

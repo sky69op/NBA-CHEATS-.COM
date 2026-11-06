@@ -43,3 +43,36 @@ lh-q*.png
 
 # Conversion-only content drafts; approved provenance is kept in content/manifest.json.
 .content/
+
+# --- Not required for production build / hosting (keep locally; do not push) ---
+# Intake / audit artifacts
+audit-evidence/
+
+# Internal conversion & QA documentation
+docs/
+
+# Part 3 translation overlays + generator inputs (site copy lives under src/)
+content/part3/
+
+# Owner / agent workflow notes at repo root
+/AGENTS.md
+/PROJECT_RULES.md
+/START_HERE.md
+/PROJECT_STATUS.md
+/CONTENT_INVENTORY.json
+/KEYWORD_MAP.md
+
+# Part 3 i18n pipeline scripts (optional local maintenance)
+scripts/generate-part3-commercial-de-fr.mjs
+scripts/part3-apply-commercial-i18n.mjs
+scripts/part3-build-translation-overlays.mjs
+scripts/part3-fix-overlay-tokens.mjs
+scripts/part3-generate-locale-posts.mjs
+scripts/reconcile-commercial-pack.mjs
+scripts/data/part3-commercial-locales.mjs
+
+# Node test files for scripts (not part of `npm run build`)
+scripts/**/*.test.mjs
+
+# Editor-only
+.vscode/
