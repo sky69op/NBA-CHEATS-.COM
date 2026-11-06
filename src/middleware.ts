@@ -14,7 +14,7 @@ export const onRequest = defineMiddleware((context, next) => {
       : `${checkoutTarget}${search}`;
     return new Response(null, {
       status: 302,
-      headers: { Location: destination, 'X-Robots-Tag': 'noindex, follow', 'Cache-Control': 'no-store' },
+      headers: { Location: destination, 'Cache-Control': 'no-store' },
     });
   }
 

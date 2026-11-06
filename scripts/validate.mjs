@@ -83,7 +83,6 @@ export function validateSite(distDir, config) {
     const description = singleMeta('description');
     const noindex = meta('robots').some((v) => /\bnoindex\b/i.test(v));
     if (expected && noindex === expected.indexable) error(route, 'robots/indexability disagrees with site config');
-    if (checkout && !noindex) error(route, 'checkout must be noindex');
     const h1 = nodes.filter((n) => n.tagName === 'h1');
     if (h1.length !== 1 || !textContent(h1[0]).trim()) error(route, 'requires one nonempty H1');
     if (expected) {
@@ -242,7 +241,6 @@ export function validateSite(distDir, config) {
     return matches[0] && !matches[0].allow;
   };
   for (const url of indexable) if (blocked(new URL(url).pathname)) error('/robots.txt', `blocks indexable page ${url}`);
-  for (const route of Object.keys(config.checkouts)) if (!blocked(route)) error('/robots.txt', `checkout not disallowed ${route}`);
   for (const [from, to] of Object.entries(config.redirects)) {
     const destination = follow(from);
     if (!destination) error(from, 'redirect loop');

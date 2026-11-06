@@ -291,8 +291,8 @@
     "intro": "Comience leyendo los detalles actuales del producto y la información oficial NBA 2K27. Trate los requisitos faltantes como una pregunta que debe hacer antes de realizar el pago.",
     "ctaPrimary": "Comparar planes",
     "ctaSecondary": "Lea las preguntas frecuentes sobre la configuración",
-    "ctaPrimaryHref": "/trucos/",
-    "ctaSecondaryHref": "/preguntas frecuentes/",
+    "ctaPrimaryHref": "/cheats/",
+    "ctaSecondaryHref": "/faq/",
     "steps": [
       {
         "step": "Paso 1",
@@ -533,9 +533,9 @@
     "titleHighlight": "perfil guardado.",
     "subtitle": "Cuatro pasos desde el banner de estado hasta un perfil del portal que podrá cargar la próxima vez.",
     "ctaLabel": "Elige tu plan",
-    "ctaHref": "/trucos/",
+    "ctaHref": "/cheats/",
     "ctaSecondary": "Preguntas frecuentes sobre la configuración",
-    "ctaSecondaryHref": "/preguntas frecuentes/",
+    "ctaSecondaryHref": "/faq/",
     "items": [
       {
         "num": "01",

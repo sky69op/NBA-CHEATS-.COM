@@ -85,14 +85,14 @@ const robots = fs.readFileSync(path.join(root, 'public/robots.txt'), 'utf8');
 if (!robots.includes(`Sitemap: ${SITE_URL}/sitemap.xml`)) {
   failures.push('robots.txt sitemap line wrong');
 }
-if (!robots.includes('Disallow: /go/')) failures.push('robots missing /go/ disallow');
+if (/\bDisallow:\s*\/go\/?/i.test(robots)) failures.push('robots.txt should not disallow /go/ (audit tools expect full allowlist)');
 
 const rss = fs.readFileSync(path.join(dist, 'rss.xml'), 'utf8');
 if (!rss.includes(SITE_URL)) failures.push('RSS missing site URL');
 
 const sm = fs.readFileSync(path.join(dist, 'sitemap.xml'), 'utf8');
-if (sm.includes('/go/') || sm.includes('/privacy/') || sm.includes('/terms/')) {
-  failures.push('sitemap contains non-indexable URL');
+if (sm.includes('/go/')) {
+  failures.push('sitemap contains checkout URL');
 }
 const smCount = (sm.match(/<loc>/g) ?? []).length;
 
@@ -189,7 +189,7 @@ for (const rel of staleGameplay) {
 }
 
 const privacy = readHtml('/privacy/');
-if (!privacy.includes('noindex')) failures.push('privacy not noindex');
+if (!/meta name="robots" content="index/i.test(privacy)) failures.push('privacy should use indexable robots meta');
 
 console.log(
   JSON.stringify(

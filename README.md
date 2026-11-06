@@ -28,6 +28,8 @@ The Worker `name` matches the default from a connected **GitHub → Workers Buil
 
 If you use **Pages** instead of the Worker in this repo: **Build command** `npm run build`, **Output directory** `dist`, **Node** 22.x. You would not use `wrangler.toml` routes from the Worker path unless you add a Pages project that mirrors the same build.
 
+**Third-party SEO tools** (e.g. Seobility) on a **`*.pages.dev`** preview URL often flag “canonical mismatch”: page `<link rel="canonical">` and `hreflang` still point at the **production host** (`https://nbacheats.com/...` from `src/config/site-url.mjs`). That is expected until the real domain is attached. For scores that assume “URL = canonical,” scan **`https://nbacheats.com/`** after DNS is live, or accept the warning on previews.
+
 ## Develop
 
 ```bash

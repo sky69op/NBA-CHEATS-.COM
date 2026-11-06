@@ -195,9 +195,7 @@ export default {
     if (checkout) {
       const location =
         query && checkout.includes('?') ? `${checkout}${query.replace('?', '&')}` : `${checkout}${query}`;
-      const response = redirect(location, 302);
-      response.headers.set('X-Robots-Tag', 'noindex, follow');
-      return response;
+      return redirect(location, 302);
     }
 
     const localeRoute = resolveLocaleRoutingRedirect(pathname);

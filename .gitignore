@@ -71,8 +71,10 @@ scripts/part3-generate-locale-posts.mjs
 scripts/reconcile-commercial-pack.mjs
 scripts/data/part3-commercial-locales.mjs
 
-# Node test files for scripts (not part of `npm run build`)
+# Node test files for scripts (optional local); keep redirect/Worker tests versioned
 scripts/**/*.test.mjs
+!scripts/middleware.test.mjs
+!scripts/routing.test.mjs
 
 # Editor-only
 .vscode/

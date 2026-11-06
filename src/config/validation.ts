@@ -31,7 +31,7 @@ export function validationConfig() {
     };
     for (const [path, seo] of Object.entries(t.pageSeo)) {
       if (!isProductHrefEnabled(path)) continue;
-      add(path, seo.title, seo.description, !['/privacy/', '/terms/'].includes(path));
+      add(path, seo.title, seo.description);
     }
     for (const post of getBlogPosts(locale)) {
       const metadata = editorialSeo(post.slug, locale);

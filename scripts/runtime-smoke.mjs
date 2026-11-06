@@ -45,7 +45,6 @@ try {
     const prefix = locale === config.defaultLocale ? '' : '/' + locale;
     const response = await request(`${prefix}${route}?plan=${plan}`, 302, `${target}&plan=${plan}`);
     assert.equal(response.headers.get('cache-control'), 'no-store');
-    assert.match(response.headers.get('x-robots-tag'), /noindex/);
   }
   for (const locale of config.locales) {
     const prefix = locale === config.defaultLocale ? '' : '/' + locale;

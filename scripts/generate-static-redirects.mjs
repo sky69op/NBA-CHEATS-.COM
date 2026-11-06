@@ -22,10 +22,6 @@ console.log(`Wrote ${lines.length - 1} redirect rules → ${out}`);
 
 const robots = `User-agent: *
 Allow: /
-Disallow: /go/
-Disallow: /es/go/
-Disallow: /de/go/
-Disallow: /fr/go/
 
 Sitemap: ${SITE_URL}/sitemap.xml
 `;
@@ -41,35 +37,35 @@ const GO_PAGE_COPY = {
   '/go/nba-2k27/': {
     title: 'Continue to NBA2K27 Cheats checkout',
     description:
-      'This noindex page redirects you to secure checkout for NBA2K27 Cheats. It is not listed in search.',
+      'This page forwards your browser to secure checkout for NBA2K27 Cheats. Use product pages for full information.',
     h1: 'Continue to NBA2K27 Cheats',
     h2: 'Secure checkout for NBA2K27 Cheats',
   },
   '/go/hwid-spoofer/': {
     title: 'Continue to HWID Spoofer checkout',
     description:
-      'This noindex page redirects you to secure checkout for the HWID Spoofer. It is not listed in search.',
+      'This page forwards your browser to secure checkout for the HWID Spoofer. Use product pages for full information.',
     h1: 'Continue to HWID Spoofer checkout',
     h2: 'Secure checkout for the HWID Spoofer',
   },
   '/go/cloud-dma/': {
     title: 'Continue to Cloud DMA checkout',
     description:
-      'This noindex page redirects you to secure checkout for Cloud DMA. It is not listed in search.',
+      'This page forwards your browser to secure checkout for Cloud DMA. Use product pages for full information.',
     h1: 'Continue to Cloud DMA checkout',
     h2: 'Secure checkout for Cloud DMA',
   },
   '/go/shop/': {
     title: 'Continue to shop',
     description:
-      'This noindex page redirects you to the shop for orders and support. It is not listed in search.',
+      'This page forwards your browser to the shop for orders and support.',
     h1: 'Continue to shop',
     h2: 'Shop and support',
   },
   '/go/ugc/': {
     title: 'Continue to the UGC checkout page',
     description:
-      'This noindex page redirects you to secure checkout for UGC recovery tools. It is not listed in search.',
+      'This page forwards your browser to secure checkout for UGC recovery tools. Use product pages for full information.',
     h1: 'Continue to the UGC checkout page',
     h2: 'Secure checkout for UGC recovery',
   },
@@ -94,7 +90,7 @@ for (const [from, to] of CHECKOUT_PATH_REDIRECTS.entries()) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex, follow">
+<meta name="robots" content="index, follow">
 <title>${title}</title>
 <meta name="description" content="${description}">
 <noscript><meta http-equiv="refresh" content="0;url=${href}"></noscript>

@@ -1,8 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /go/
-Disallow: /es/go/
-Disallow: /de/go/
-Disallow: /fr/go/
 
 Sitemap: https://nbacheats.com/sitemap.xml

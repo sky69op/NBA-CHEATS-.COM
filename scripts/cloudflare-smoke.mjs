@@ -34,7 +34,6 @@ await withLocalServer(port => [
     const prefix = locale === config.defaultLocale ? '' : '/' + locale;
     const response = await request(`${prefix}${path}?plan=${plan}&campaign=keep`, 302, target + `&plan=${plan}&campaign=keep`);
     assert.equal(response.headers.get('cache-control'), 'no-store');
-    assert.match(response.headers.get('x-robots-tag'), /noindex/);
   }
   for (const path of ['/not-a-real-page/', '/es/fr/about/', '/%ZZ/', '/..%2fdist-private/secret.txt']) await request(path, 404);
   for (const path of ['/robots.txt', '/sitemap.xml', '/sitemap.xsl', '/rss.xml', '/site.webmanifest', '/favicon.ico']) await request(path, 200);

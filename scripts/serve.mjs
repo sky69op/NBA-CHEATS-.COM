@@ -254,7 +254,6 @@ const server = http.createServer((req, res) => {
     res.writeHead(302, {
       ...SECURITY_HEADERS,
       Location: location,
-      'X-Robots-Tag': 'noindex, follow',
       'Cache-Control': 'no-store',
     });
     res.end();

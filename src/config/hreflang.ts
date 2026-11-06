@@ -39,8 +39,5 @@ export function isIndexablePath(pathname: string): boolean {
   if (path === '/en/' || path.startsWith('/en/')) return false;
   if (/^\/(es|de|fr)\/go(\/|$)/.test(path)) return false;
 
-  const base = stripLocalePrefix(path);
-  if (base === '/privacy/' || base === '/terms/') return false;
-
   return true;
 }
