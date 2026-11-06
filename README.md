@@ -1,6 +1,30 @@
 # nbacheats.com
 
-Static Astro 7 site (en, es, de, fr). Production output is **`dist/`** (generated; not committed). Deploy by installing dependencies and running the build on your host (for example Cloudflare Pages: **Build command** `npm run build`, **Output directory** `dist`).
+Static Astro 7 site (en, es, de, fr). Production output is **`dist/`** (generated; not committed).
+
+Hosting is **Cloudflare** (see `wrangler.toml`: Workers + static assets from `dist/`). Nixpacks/Railway-style build files are not used.
+
+## Deploy (Cloudflare Workers)
+
+From the repo root, with [Wrangler](https://developers.cloudflare.com/workers/wrangler/install-and-update/) authenticated (`npx wrangler login` once):
+
+```bash
+npm ci
+npm run build
+npx wrangler deploy
+```
+
+Or in one step:
+
+```bash
+npm run deploy:cf
+```
+
+`wrangler.toml` runs `npm run build` automatically when you deploy; explicit `npm run build` above matches CI and catches build errors early.
+
+### Cloudflare Pages (static only)
+
+If you use **Pages** instead of the Worker in this repo: **Build command** `npm run build`, **Output directory** `dist`, **Node** 22.x. You would not use `wrangler.toml` routes from the Worker path unless you add a Pages project that mirrors the same build.
 
 ## Develop
 

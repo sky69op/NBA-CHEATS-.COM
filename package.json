@@ -20,7 +20,7 @@
     "content:install": "node scripts/content-workflow.mjs install",
     "preview": "astro preview --host 0.0.0.0",
     "start": "node scripts/serve.mjs",
-    "test:local-hosts": "node --test scripts/local-preview-host.test.mjs",
+    "deploy:cf": "npm run build && npx wrangler deploy",
     "astro": "astro",
     "optimize:images": "node scripts/optimize-images.mjs",
     "brand:assets": "node scripts/generate-brand-assets.mjs"
