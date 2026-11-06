@@ -88,9 +88,9 @@ const hreflangAlternates = noindex ? [] : hreflangAlternatesForPath(Astro.url.pa
 const ogLocaleAlternates = (['en', 'es', 'de', 'fr'] as const).filter((code) => code !== locale);
 const ogLocaleAlternateValues = ogLocaleAlternates.map((code) => ogLocaleMap[code]);
 const ogImageUrl = absoluteAssetUrl(ogImage);
-const robotsContent = noindex
-  ? 'noindex, follow'
-  : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
+// Keep indexable pages to a plain "index, follow". Some third-party audit UIs misparse
+// Google's extended preview/snippet tokens and falsely report noindex even when the meta is indexable.
+const robotsContent = noindex ? 'noindex, follow' : 'index, follow';
 
 const brandLogoAlt = resolveBrandLogoAlt(Astro.url.pathname, locale);
 const layoutBasePath = normalizeSeoPath(stripLocalePrefix(Astro.url.pathname));

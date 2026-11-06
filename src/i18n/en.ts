@@ -40,7 +40,7 @@ export const en: Translations = {
     titleLead: 'NBA2K27 ',
     titleAccent: 'Cheats',
     subtitle:
-      'Compare the NBA2K27 CHEATS listing with separate HWID Spoofer, UGC, and Cloud DMA pages. Product availability, compatibility, and functionality need confirmation with support.',
+      'Private loader for PC, clear monthly and lifetime plans, and separate pages when you need HWID Spoofer, UGC, or Cloud DMA. Review the live listing, then confirm availability and what is included with support before you pay.',
     ctaPrimary: 'Review products',
     metrics: [
       { label: 'Game', strong: 'NBA 2K27' },

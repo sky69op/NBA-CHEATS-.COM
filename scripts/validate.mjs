@@ -120,6 +120,9 @@ export function validateSite(distDir, config) {
           if (!config.pages[target]?.indexable || !pages.has(target)) error(route, `hreflang target missing/noindex ${target}`);
           else if (!pages.get(target).links('alternate').some((n) => n.attr.hreflang === expected.locale && n.attr.href === canonical)) error(route, `nonreciprocal hreflang ${target}`);
         }
+        // Seobility-class rule: the page language must appear in hreflang with href === canonical (self-reference).
+        const selfAlternate = alternates.find((n) => n.attr.hreflang === expected.locale)?.attr.href;
+        if (selfAlternate !== canonical) error(route, 'hreflang self must match canonical');
       } else if (alternates.length) error(route, 'noindex page advertises hreflang');
     }
     for (const n of nodes) {
